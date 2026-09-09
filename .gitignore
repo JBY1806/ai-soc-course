@@ -1,0 +1,35 @@
+# 설치 파일, 압축 원본, 모델/데이터 (다시 받을 수 있는 큰 파일)
+*.exe
+*.msi
+*.zip
+*.7z
+*.tar
+*.gz
+*.onnx
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+
+# 데이터셋 폴더
+**/dataset/
+**/datasets/
+**/data/
+
+# Python 캐시, 가상환경
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# 에디터, OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# 참고 폴더 전체: 참고용으로 받은 자료, GitHub에 올리지 않음
+참고/

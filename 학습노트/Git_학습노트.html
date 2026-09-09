@@ -1,0 +1,291 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Git 학습노트 — 처음 쓰는 사람용</title>
+<style>
+:root{--navy:#0d1b3e;--navy2:#345;--ink:#1c2434;--muted:#5b647a;--paper:#f6f7fb;--card:#fff;--line:#e3e7f0;--red:#e8332a;--blue:#1769d6;--blue-soft:#eaf2fe;--amber:#b9810b;--amber-soft:#fdf3df;--gray-soft:#f1f3f8;--green:#1f7a4d;--green-soft:#e7f6ee;--term:#14171f;--term-ink:#d6dbe6;}
+@media (prefers-color-scheme:dark){:root{--navy:#c9d6f5;--navy2:#93a6d6;--ink:#e7eaf1;--muted:#9aa4bb;--paper:#12141a;--card:#1b1e26;--line:#2c313c;--blue-soft:#16243a;--amber-soft:#332a12;--gray-soft:#20242e;--green-soft:#12291d;--term:#0b0d12;--term-ink:#d6dbe6;}}
+*{box-sizing:border-box}
+body{font-family:'Apple SD Gothic Neo','Pretendard','Malgun Gothic',-apple-system,sans-serif;background:var(--paper);color:var(--ink);margin:0;line-height:1.62;font-size:15px}
+.top{background:var(--navy);color:#fff;padding:20px 0}
+@media (prefers-color-scheme:dark){.top{background:#0b0d12}}
+.top-in{max-width:1180px;margin:0 auto;padding:0 22px}
+.brand{font-size:12px;letter-spacing:.04em;opacity:.85;font-weight:800}
+.brand .dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-right:6px}
+.top h1{font-size:21px;margin:6px 0 4px;color:#fff}
+.top .sub{font-size:13px;opacity:.82}
+.top .meta{margin-top:9px;display:flex;gap:7px;flex-wrap:wrap}
+.tag{font-size:11px;background:rgba(255,255,255,.13);border-radius:99px;padding:2px 10px}
+.tag.warn{background:var(--red)}
+.layout{max-width:1180px;margin:0 auto;padding:0 22px;display:grid;grid-template-columns:230px 1fr;gap:26px}
+@media (max-width:860px){.layout{grid-template-columns:1fr}.toc{display:none}}
+.toc{position:sticky;top:16px;margin-top:24px;max-height:calc(100vh - 32px);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px;align-self:start}
+.toc h4{margin:6px 0 6px;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.toc-list{list-style:none;margin:0 0 4px;padding:0;font-size:13px}
+.toc-list li{margin:0}
+.toc-list a{display:flex;gap:8px;align-items:flex-start;color:var(--ink);text-decoration:none;padding:5px 6px;border-radius:8px}
+.toc-list a:hover{background:var(--gray-soft)}
+.toc-n{display:inline-flex;width:19px;height:19px;flex:0 0 19px;align-items:center;justify-content:center;background:var(--red);color:#fff;border-radius:6px;font-size:11px;font-weight:800;margin-top:2px}
+.toc-n.start{background:var(--blue)}
+.toc-n.gray{background:var(--navy2)}
+.main{margin-top:20px;padding-bottom:80px;min-width:0}
+h2{font-size:18px;color:var(--navy);margin:34px 0 8px;border-bottom:2px solid var(--line);padding-bottom:5px;scroll-margin-top:14px}
+h2:first-child{margin-top:4px}
+h3{font-size:15px;color:var(--navy);margin:20px 0 6px}
+.qa{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:10px 16px;margin:10px 0}
+.qa .q{font-weight:800;margin-bottom:4px}
+.qa .q::before{content:"Q. ";color:var(--blue)}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--gray-soft);white-space:nowrap}
+.tbl{overflow-x:auto}
+b{color:var(--navy)}
+.memo{background:var(--amber-soft);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13.5px}
+.memo::before{content:"🔑 비유  ";font-weight:800;color:var(--amber)}
+.warn{background:#fdeceb;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13.5px}
+@media (prefers-color-scheme:dark){.warn{background:#3a1c1a}}
+.warn::before{content:"⚠ 주의  ";font-weight:800;color:var(--red)}
+.ok{background:var(--green-soft);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13.5px}
+.ok::before{content:"✅ 한 줄  ";font-weight:800;color:var(--green)}
+.todo{background:var(--blue-soft);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13.5px}
+.todo::before{content:"👉 직접 해보기  ";font-weight:800;color:var(--blue)}
+code{background:var(--gray-soft);padding:1px 5px;border-radius:4px;font-size:13px;font-family:Consolas,'D2Coding',monospace}
+pre{background:var(--term);color:var(--term-ink);border-radius:10px;padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.55;font-family:Consolas,'D2Coding',monospace;margin:8px 0}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .c{color:#8b93a7}
+pre .g{color:#7ed49a}
+pre .r{color:#ff8a80}
+.step{display:flex;gap:10px;margin:8px 0;align-items:flex-start}
+.step .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+@media (prefers-color-scheme:dark){.step .n{background:#345;color:#fff}}
+.step div{flex:1}
+.check{list-style:none;padding:0;margin:8px 0}
+.check li{padding:5px 0 5px 28px;position:relative}
+.check li::before{content:"☐";position:absolute;left:4px;top:4px;color:var(--muted)}
+.backtop{position:fixed;right:18px;bottom:18px;background:var(--navy);color:#fff;border-radius:99px;padding:8px 14px;font-size:12px;text-decoration:none;opacity:.9}
+.small{font-size:12.5px;color:var(--muted)}
+.kbd{display:inline-block;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;font-size:12px;background:var(--card)}
+</style></head><body>
+<header class="top"><div class="top-in">
+<div class="brand"><span class="dot"></span> AI 시스템반도체 설계 (2기) · 개인 학습노트</div>
+<h1>Git 학습노트 — 처음 쓰는 사람용</h1>
+<div class="sub">Claude Code와 대화하며 정리한 내용 · 새 질문이 생기면 이어서 추가 · 비전공자 눈높이</div>
+<div class="meta"><span class="tag warn">개인 학습용</span><span class="tag">최초 작성 2026-09-09</span><span class="tag">좌측 목차로 이동</span><span class="tag">내 폴더: C:\Users\kccistc\Developer</span></div>
+</div></header>
+
+<div class="layout">
+<nav class="toc">
+<h4>시작</h4>
+<ul class="toc-list">
+<li><a href="#s0"><span class="toc-n start">0</span>지금 내 상태</a></li>
+<li><a href="#s1"><span class="toc-n start">1</span>Git이 뭐야</a></li>
+<li><a href="#s2"><span class="toc-n start">2</span>단어 6개</a></li>
+</ul>
+<h4>실전</h4>
+<ul class="toc-list">
+<li><a href="#s3"><span class="toc-n">3</span>처음 한 번만: 설정</a></li>
+<li><a href="#s4"><span class="toc-n">4</span>매일 쓰는 명령 4개</a></li>
+<li><a href="#s5"><span class="toc-n">5</span>git status 읽는 법</a></li>
+<li><a href="#s6"><span class="toc-n">6</span>GitHub에 올리기</a></li>
+<li><a href="#s7"><span class="toc-n">7</span>하루 루틴</a></li>
+</ul>
+<h4>참고</h4>
+<ul class="toc-list">
+<li><a href="#s8"><span class="toc-n gray">8</span>실수했을 때</a></li>
+<li><a href="#s9"><span class="toc-n gray">9</span>교육장 PC 주의</a></li>
+<li><a href="#s10"><span class="toc-n gray">10</span>용어 사전</a></li>
+<li><a href="#s11"><span class="toc-n gray">11</span>다음에 배울 것</a></li>
+</ul>
+</nav>
+
+<main class="main">
+
+<h2 id="s0">0. 지금 내 상태 (2026-09-09 기준)</h2>
+<div class="tbl"><table>
+<tr><th>항목</th><th>상태</th></tr>
+<tr><td>작업 폴더</td><td><code>C:\Users\kccistc\Developer</code></td></tr>
+<tr><td><code>git init</code></td><td>완료. 폴더 안에 숨김 폴더 <code>.git</code>이 생겼고, 기존 파일은 그대로다.</td></tr>
+<tr><td><code>.gitignore</code></td><td>완료. exe, zip, onnx 같은 큰 원본 7개(약 600MB)는 제외. 관리 대상은 코드와 문서 23개(4.2MB).</td></tr>
+<tr><td><code>CLAUDE.md</code></td><td>완료. Developer와 Lec_python에 하나씩. Claude가 대화 시작 때 자동으로 읽는 메모.</td></tr>
+<tr><td>이름/이메일 설정</td><td><b>아직</b>. 3번 참고.</td></tr>
+<tr><td>첫 commit</td><td><b>아직</b>. 4번 참고.</td></tr>
+<tr><td>GitHub 업로드</td><td><b>아직</b>. 6번 참고. GitHub 계정이 필요하다.</td></tr>
+</table></div>
+<div class="ok">남은 순서는 <b>설정(3) → add/commit(4) → GitHub(6)</b> 세 단계다. 이 노트의 3, 4, 6번을 위에서부터 따라가면 된다.</div>
+
+<h2 id="s1">1. Git이 뭐야</h2>
+<div class="qa"><div class="q">Git이 뭔지 한 줄로?</div>
+<div>내 폴더의 <b>"버전 기록" 도구</b>다. 작업하다가 "여기까지 저장"을 찍어두면 언제든 그 시점으로 돌아갈 수 있고, 누가 언제 뭘 바꿨는지 전부 남는다.</div>
+<div class="memo">게임 세이브 포인트. 한 판 하다가 세이브를 찍고, 망하면 그 세이브로 돌아온다. Git은 코드 폴더에 세이브 포인트를 찍는 도구다.</div></div>
+
+<div class="qa"><div class="q">Git이랑 GitHub는 뭐가 달라?</div>
+<div><b>Git</b>은 내 PC에 설치된 프로그램이고, <b>GitHub</b>는 그 기록을 인터넷에 올려두는 사이트다. Git만 써도 되지만, 그러면 기록이 이 PC에만 있어서 PC가 초기화되면 같이 사라진다. GitHub에 올려야 백업이 되고, 남에게 보여줄 수도 있다.</div>
+<div class="tbl"><table><tr><th></th><th>Git</th><th>GitHub</th></tr>
+<tr><td>어디에</td><td>내 PC</td><td>인터넷(구글 드라이브 같은 것)</td></tr>
+<tr><td>역할</td><td>버전 기록을 만든다</td><td>그 기록을 보관하고 공개한다</td></tr>
+<tr><td>없으면</td><td>버전 기록 자체가 없음</td><td>백업이 없고, 포트폴리오로 못 보여줌</td></tr></table></div></div>
+
+<div class="qa"><div class="q">왜 배워야 해?</div>
+<div>회사에서 코드는 전부 Git으로 관리한다. 반도체 설계(Verilog)도 마찬가지다. 신입이 Git을 못 쓰면 첫날부터 막힌다. 그리고 GitHub 주소 하나로 "내가 7개월간 뭘 했는지"를 보여줄 수 있어서 <b>취업용 포트폴리오</b> 자체가 된다. 강사님이 미리 해보라고 한 이유가 이거다.</div></div>
+
+<h2 id="s2">2. 꼭 알아야 할 단어 6개</h2>
+<div class="tbl"><table>
+<tr><th>단어</th><th>뜻</th><th>비유</th></tr>
+<tr><td><b>저장소</b> (repository, repo)</td><td>Git이 관리하는 폴더 하나. 지금은 <code>Developer</code> 폴더가 저장소다.</td><td>세이브 파일이 들어있는 게임 하나</td></tr>
+<tr><td><b>커밋</b> (commit)</td><td>"여기까지 저장" 한 번. 메모(메시지)를 같이 남긴다.</td><td>세이브 포인트 하나</td></tr>
+<tr><td><b>스테이징</b> (staging, add)</td><td>커밋에 넣을 파일을 고르는 단계. <code>git add</code>로 올린다.</td><td>장바구니. 담아둔 것만 계산(커밋)된다</td></tr>
+<tr><td><b>브랜치</b> (branch)</td><td>작업 줄기. 처음엔 하나(main)만 쓰면 된다.</td><td>세이브 슬롯. 나중에 여러 개 쓴다</td></tr>
+<tr><td><b>원격</b> (remote, origin)</td><td>GitHub에 있는 내 저장소의 주소. 보통 이름을 <code>origin</code>이라고 붙인다.</td><td>클라우드 저장 위치</td></tr>
+<tr><td><b>push / pull</b></td><td>push는 내 PC → GitHub로 올리기, pull은 GitHub → 내 PC로 내려받기.</td><td>업로드 / 다운로드</td></tr>
+</table></div>
+<div class="ok">흐름은 항상 같다. <b>파일 수정 → add(장바구니) → commit(세이브) → push(업로드)</b>.</div>
+
+<h2 id="s3">3. 처음 한 번만 하는 설정</h2>
+<div class="qa"><div class="q">왜 이름과 이메일을 알려줘야 해?</div>
+<div>커밋마다 "누가 했는지"가 남기 때문이다. 한 번 설정하면 계속 쓴다. 이 PC는 공용이라 <b>이 폴더에만</b> 적용되게 한다(<code>--global</code>을 붙이지 않는다).</div>
+<pre><code>git config user.name "이름 또는 GitHub 아이디"
+git config user.email "boyun1806@gmail.com"</code></pre>
+<div class="small">확인: <code>git config user.name</code> 을 치면 방금 넣은 이름이 나온다.</div></div>
+
+<div class="qa"><div class="q">git init은 뭘 한 거야?</div>
+<div>폴더 안에 숨김 폴더 <code>.git</code>을 만들어서 "지금부터 이 폴더의 변경 이력을 기록하겠다"고 켠 것이다. <b>기존 파일은 하나도 지워지거나 바뀌지 않는다.</b> "초기화"라는 번역 때문에 뭔가 지우는 것처럼 들리지만 아니다. 이미 완료했으니 다시 칠 필요 없다.</div></div>
+
+<div class="qa"><div class="q">.gitignore는 뭐야?</div>
+<div>"이 파일들은 기록에서 빼라"는 목록이다. 파일을 지우는 게 아니라 <b>Git이 못 본 척하게</b> 하는 것이다. 설치파일(exe), 데이터셋(zip), 모델(onnx)처럼 크고 다시 받을 수 있는 건 뺀다. GitHub는 파일 하나가 100MB를 넘으면 아예 거부한다.</div>
+<div class="ok">내가 직접 쓴 <code>.py</code>, <code>.ipynb</code>, <code>.md</code>만 올라가면 된다. 강사가 준 원본은 안 올려도 된다.</div></div>
+
+<div class="qa"><div class="q">브랜치 이름을 main으로 바꾸라던데?</div>
+<div>Git 기본 이름은 <code>master</code>인데 GitHub 기본 이름은 <code>main</code>이다. 맞춰두면 나중에 헷갈릴 일이 없다. 첫 커밋을 하기 전이라도 상관없다.</div>
+<pre><code>git branch -M main</code></pre></div>
+
+<h2 id="s4">4. 매일 쓰는 명령 4개</h2>
+<div class="tbl"><table>
+<tr><th>명령</th><th>뜻</th><th>언제</th></tr>
+<tr><td><code>git status</code></td><td>지금 뭐가 바뀌었는지 보기</td><td>헷갈릴 때마다. 아무리 쳐도 해가 없다</td></tr>
+<tr><td><code>git add .</code></td><td>바뀐 파일 전부를 저장 대상(장바구니)에 올리기</td><td>저장하기 직전</td></tr>
+<tr><td><code>git commit -m "메모"</code></td><td>저장 찍기. 메모에 뭘 했는지 적는다</td><td>실습 하나 끝날 때, 하루 끝날 때</td></tr>
+<tr><td><code>git push</code></td><td>GitHub에 올리기</td><td>commit 후. 하루 한 번이면 충분</td></tr>
+</table></div>
+
+<h3>커밋 메시지는 어떻게 써?</h3>
+<div>미래의 내가 봤을 때 "아 그거" 하고 알 수 있으면 된다. 한국어로 써도 된다.</div>
+<pre><code>git commit -m "딥러닝 1일차: 퍼셉트론, 선형회귀 예제 실습"
+git commit -m "파이썬 모듈/패키지 실습 정리"
+git commit -m "CLAUDE.md, .gitignore 추가"</code></pre>
+<div class="warn"><code>-m</code> 뒤에 따옴표를 빼먹으면 편집기가 열리면서 멈춘다. 그럴 땐 <span class="kbd">Esc</span> 누르고 <code>:q!</code> 치고 <span class="kbd">Enter</span>로 빠져나온 뒤 다시 치면 된다.</div>
+
+<div class="todo">지금 순서대로 쳐본다. 3번 설정을 먼저 했다면 아래 4줄이 첫 커밋이다.
+<pre><code>git add .
+git status          <span class="c">← 파일들이 초록색 "Changes to be committed"로 바뀌었는지 확인</span>
+git commit -m "과정 시작: 파이썬 1주차, 딥러닝 실습 파일 정리"
+git status          <span class="c">← "nothing to commit, working tree clean" 이 나오면 성공</span></code></pre></div>
+
+<h2 id="s5">5. git status 읽는 법</h2>
+<div>가장 많이 보게 될 화면이다. 나오는 문장별로 뜻을 알아두면 무서울 게 없다.</div>
+
+<h3>오늘 본 화면 (첫 커밋 전)</h3>
+<pre><code>On branch master              <span class="c">← 작업 줄기 이름. main으로 바꾸면 여기가 main이 된다</span>
+No commits yet                <span class="c">← 저장을 한 번도 안 찍었다</span>
+Untracked files:              <span class="c">← Git이 아직 지켜보지 않는 파일들</span>
+        .gitignore
+        CLAUDE.md
+        Lec_python/           <span class="c">← 폴더 통째로 표시됨. 제외한 zip/exe는 안 보이는 게 정상</span>
+nothing added to commit       <span class="c">← 장바구니가 비어 있다</span></code></pre>
+
+<h3>앞으로 보게 될 문장들</h3>
+<div class="tbl"><table>
+<tr><th>문장</th><th>뜻</th><th>할 일</th></tr>
+<tr><td><code>Untracked files</code></td><td>새로 만든 파일. Git이 모른다</td><td><code>git add .</code></td></tr>
+<tr><td><code>Changes not staged for commit</code> / <span class="r">빨간색 modified</span></td><td>있던 파일을 고쳤는데 장바구니에 안 담았다</td><td><code>git add .</code></td></tr>
+<tr><td><code>Changes to be committed</code> / <span class="g">초록색</span></td><td>장바구니에 담겼다. 커밋 준비 끝</td><td><code>git commit -m "..."</code></td></tr>
+<tr><td><code>nothing to commit, working tree clean</code></td><td>바뀐 게 없다. 전부 저장됐다</td><td>없음. 좋은 상태</td></tr>
+<tr><td><code>Your branch is ahead of 'origin/main' by 1 commit</code></td><td>커밋은 했는데 GitHub에 아직 안 올렸다</td><td><code>git push</code></td></tr>
+</table></div>
+<div class="ok">빨강은 "아직 안 담음", 초록은 "담음", clean은 "끝". 이 세 가지만 구분하면 된다.</div>
+
+<h2 id="s6">6. GitHub에 올리기 (첫 1회)</h2>
+<div class="step"><div class="n">1</div><div><b>GitHub 계정 만들기.</b> <code>github.com</code>에서 Sign up. 아이디는 이력서에 들어갈 수 있으니 장난스럽지 않게. 이미 있으면 건너뛴다.</div></div>
+<div class="step"><div class="n">2</div><div><b>저장소 만들기.</b> 로그인 후 오른쪽 위 <b>+</b> → <b>New repository</b>. 이름은 예를 들어 <code>ai-soc-course</code>. <b>Public</b>(공개)으로 하면 포트폴리오로 바로 쓸 수 있고, 부담되면 Private로 시작해서 나중에 바꿔도 된다. <b>"Add a README file" 체크는 하지 않는다</b>(이미 내 PC에 파일이 있으므로). Create.</div></div>
+<div class="step"><div class="n">3</div><div><b>내 PC 저장소에 GitHub 주소 연결.</b> 만들어진 페이지에 나오는 주소(<code>https://github.com/아이디/ai-soc-course.git</code>)를 복사해서:
+<pre><code>git remote add origin https://github.com/아이디/ai-soc-course.git
+git remote -v        <span class="c">← 주소가 두 줄 나오면 연결 성공</span></code></pre></div></div>
+<div class="step"><div class="n">4</div><div><b>첫 push.</b> 처음 한 번만 <code>-u origin main</code>을 붙인다. 그다음부터는 <code>git push</code>만 치면 된다.
+<pre><code>git push -u origin main</code></pre>
+브라우저 창이 뜨면서 GitHub 로그인을 요구한다. 로그인하면 자동으로 이어진다.</div></div>
+<div class="step"><div class="n">5</div><div><b>확인.</b> 브라우저에서 저장소 페이지를 새로고침하면 내 파일들이 보인다. 이 주소가 곧 포트폴리오 주소다.</div></div>
+<div class="warn">공용 PC에서는 GitHub 로그인 정보가 이 PC에 남을 수 있다. 9번 참고.</div>
+
+<h2 id="s7">7. 하루 루틴</h2>
+<div>실습이 끝나는 시점에 아래 순서대로 친다. 3분이면 끝난다.</div>
+<ul class="check">
+<li>Colab에서 한 노트북이 있으면 다운로드해서 해당 과목 폴더에 넣는다 (파일 → 다운로드 → .ipynb)</li>
+<li><code>git status</code> 로 뭐가 바뀌었는지 본다</li>
+<li><code>git add .</code></li>
+<li><code>git commit -m "날짜/과목: 오늘 한 것"</code></li>
+<li><code>git push</code></li>
+<li>GitHub 페이지에서 올라갔는지 한 번 본다</li>
+</ul>
+<div class="ok">"status → add → commit → push". 손에 익을 때까지 이 노트 보고 쳐도 된다. 3주면 안 보고 친다.</div>
+
+<h2 id="s8">8. 실수했을 때</h2>
+<div class="qa"><div class="q">엉뚱한 파일을 add 해버렸어</div>
+<div>장바구니에서만 빼면 된다. 파일은 그대로 있다.</div>
+<pre><code>git restore --staged 파일이름</code></pre></div>
+
+<div class="qa"><div class="q">커밋 메시지에 오타가 났어 (아직 push 전)</div>
+<pre><code>git commit --amend -m "고친 메시지"</code></pre></div>
+
+<div class="qa"><div class="q">파일을 잘못 고쳤는데 마지막 커밋 상태로 되돌리고 싶어</div>
+<div>아직 add도 안 한 상태라면:</div>
+<pre><code>git restore 파일이름</code></pre>
+<div class="warn">이건 정말로 내가 고친 내용이 날아간다. 되돌리고 싶은 게 맞는지 한 번 더 생각하고 친다.</div></div>
+
+<div class="qa"><div class="q">push가 거부됐어 (large file / exceeds 100MB)</div>
+<div>큰 파일이 커밋에 들어간 것이다. 그 파일을 <code>.gitignore</code>에 추가하고, 장바구니에서 뺀 뒤 다시 커밋한다. 이미 커밋에 들어갔으면 Claude에게 파일 이름을 알려주고 같이 푼다.</div></div>
+
+<div class="qa"><div class="q">지금까지 뭘 저장했는지 보고 싶어</div>
+<pre><code>git log --oneline        <span class="c">← 커밋 목록을 한 줄씩. q 를 누르면 빠져나온다</span></code></pre></div>
+
+<div class="qa"><div class="q">뭔가 꼬인 것 같은데 뭔지 모르겠어</div>
+<div><code>git status</code> 결과를 통째로 Claude에게 붙여넣는다. Claude Code에서는 명령 앞에 <code>!</code>를 붙이면(<code>! git status</code>) 결과가 바로 대화에 들어간다. 무슨 명령을 쳐도 <b>파일이 지워지는 명령은 거의 없으니</b> 겁먹지 않아도 된다.</div></div>
+
+<h2 id="s9">9. 교육장 PC 주의사항</h2>
+<div class="tbl"><table>
+<tr><th>위험</th><th>대처</th></tr>
+<tr><td>PC가 초기화되면 폴더가 사라진다</td><td>하루 한 번 push. GitHub에 있으면 다른 PC에서 <code>git clone 주소</code> 한 줄로 전부 되살릴 수 있다</td></tr>
+<tr><td>다른 사람이 이 PC로 내 GitHub에 push할 수 있다</td><td>이름/이메일은 <code>--global</code> 없이 폴더에만 설정. 하루 끝나면 Windows 자격 증명 관리자에서 github 항목 삭제(제어판 → 자격 증명 관리자 → Windows 자격 증명)</td></tr>
+<tr><td>Claude 계정도 이 PC에 로그인돼 있다</td><td>하루 끝날 때 Claude Code에서 <code>/logout</code></td></tr>
+<tr><td>Claude의 메모리(기억)도 이 PC에만 있다</td><td>오래 갈 정보는 <code>CLAUDE.md</code>에 적는다. 그건 폴더 안 파일이라 GitHub에 같이 올라간다</td></tr>
+</table></div>
+
+<h2 id="s10">10. 용어 사전</h2>
+<div class="tbl"><table>
+<tr><th>용어</th><th>영어</th><th>한 줄 뜻</th></tr>
+<tr><td>저장소</td><td>repository, repo</td><td>Git이 관리하는 폴더</td></tr>
+<tr><td>커밋</td><td>commit</td><td>저장 한 번. 메시지가 붙는다</td></tr>
+<tr><td>스테이징 / 장바구니</td><td>staging area, index</td><td>다음 커밋에 들어갈 파일 목록</td></tr>
+<tr><td>추적 안 됨</td><td>untracked</td><td>Git이 아직 모르는 새 파일</td></tr>
+<tr><td>수정됨</td><td>modified</td><td>알고 있던 파일이 바뀜</td></tr>
+<tr><td>브랜치</td><td>branch</td><td>작업 줄기. 기본은 main</td></tr>
+<tr><td>원격</td><td>remote</td><td>GitHub 쪽 저장소. 이름은 보통 origin</td></tr>
+<tr><td>푸시</td><td>push</td><td>내 PC → GitHub</td></tr>
+<tr><td>풀</td><td>pull</td><td>GitHub → 내 PC</td></tr>
+<tr><td>클론</td><td>clone</td><td>GitHub 저장소를 새 PC에 통째로 내려받기</td></tr>
+<tr><td>로그</td><td>log</td><td>커밋 목록</td></tr>
+<tr><td>무시 목록</td><td>.gitignore</td><td>기록에서 뺄 파일 목록</td></tr>
+<tr><td>작업 폴더 깨끗함</td><td>working tree clean</td><td>바뀐 게 없음. 전부 저장됨</td></tr>
+</table></div>
+
+<h2 id="s11">11. 다음에 배울 것 (지금은 몰라도 됨)</h2>
+<div class="tbl"><table>
+<tr><th>주제</th><th>언제 필요해지나</th></tr>
+<tr><td><code>git pull</code>, <code>git clone</code></td><td>집 PC와 교육장 PC를 오갈 때</td></tr>
+<tr><td>브랜치 만들기 / 합치기 (branch, merge)</td><td>프로젝트 실습에서 팀원과 같이 작업할 때</td></tr>
+<tr><td>Pull Request</td><td>팀 프로젝트에서 내 코드를 검토받을 때. 회사에서 매일 쓴다</td></tr>
+<tr><td>README.md 잘 쓰기</td><td>포트폴리오 저장소 첫 화면. 취업 준비 때 다듬는다</td></tr>
+<tr><td>충돌 해결 (conflict)</td><td>두 사람이 같은 파일을 고쳤을 때</td></tr>
+</table></div>
+<div class="ok">1개월차엔 <b>status, add, commit, push</b> 네 개만 몸에 익히면 충분하다. 나머지는 필요할 때 이 노트에 이어서 추가한다.</div>
+
+</main>
+</div>
+<a class="backtop" href="#s0">↑ 맨 위</a>
+</body></html>
