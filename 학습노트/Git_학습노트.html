@@ -251,8 +251,8 @@ git remote -v        <span class="c">← 주소가 두 줄 나오면 연결 성�
 <div class="tbl"><table>
 <tr><th>위험</th><th>대처</th></tr>
 <tr><td>PC가 초기화되면 폴더가 사라진다</td><td>하루 한 번 push. GitHub에 있으면 다른 PC에서 <code>git clone 주소</code> 한 줄로 전부 되살릴 수 있다</td></tr>
-<tr><td>다른 사람이 이 PC로 내 GitHub에 push할 수 있다</td><td>이름/이메일은 <code>--global</code> 없이 폴더에만 설정. 하루 끝나면 Windows 자격 증명 관리자에서 github 항목 삭제(제어판 → 자격 증명 관리자 → Windows 자격 증명)</td></tr>
-<tr><td>Claude 계정도 이 PC에 로그인돼 있다</td><td>하루 끝날 때 Claude Code에서 <code>/logout</code></td></tr>
+<tr><td>다른 사람이 이 PC로 내 GitHub에 push할 수 있다</td><td>이름/이메일은 <code>--global</code> 없이 폴더에만 설정. <b>자리 바뀌기 전에</b> Windows 자격 증명 관리자에서 <code>git:https://github.com</code> 항목 제거(윈도우 검색 → 자격 증명 관리자 → Windows 자격 증명). 다른 반이 같은 PC를 쓰는 게 확인되면 매일.</td></tr>
+<tr><td>Claude 계정도 이 PC에 로그인돼 있다</td><td>위와 같은 타이밍에 Claude Code에서 <code>/logout</code></td></tr>
 <tr><td>Claude의 메모리(기억)도 이 PC에만 있다</td><td>오래 갈 정보는 <code>CLAUDE.md</code>에 적는다. 그건 폴더 안 파일이라 GitHub에 같이 올라간다</td></tr>
 </table></div>
 
