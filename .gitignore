@@ -33,3 +33,33 @@ Thumbs.db
 
 # 참고 폴더 전체: 참고용으로 받은 자료, GitHub에 올리지 않음
 참고/
+
+# 라즈베리파이 SD카드 이미지, 보드용 모델, 보드용 실행파일 (2026-09-14 추가)
+*.img
+*.tflite
+linux_aarch64_benchmark_model
+
+# 집 노트북 Claude 대화 기록 이전 자료: 개인 대화 기록이 들어 있어 GitHub에 올리지 않음
+교육장_대화전체_이전/
+
+# 가위바위보 데이터셋 이미지(약 3,000장)와 21MB csv: 강사 자료라 다시 받을 수 있음
+**/RPS_Dataset*/
+**/files/blood.csv
+
+# 산학 R&D 최종제출자료: 팀원 업무일지·협약기업 보고서 포함. 저장소 공개 상태라 제외 (2026-09-15). 비공개 전환 후 필요하면 해제
+산학_RnD_최종제출자료/
+
+# 개인 문서 백업(이력서·대화·메모리). GitHub에 올리지 않는다.
+백업4_이력서·대화·메모리_막판/
+
+# 생성물·촬영 원본 (직접 만든 스크립트만 관리한다)
+Lec_python/2/데이터셋_확장/RPS_Dataset_YOLO_v2/
+Lec_python/2/데이터셋_확장/RPS_Dataset_YOLO_v2.zip
+Lec_python/2/데이터셋_확장/captures/
+# 촬영 원본은 어느 폴더에 두든 git에 올리지 않는다.
+# 저장소가 public이고, 사진에 얼굴이 들어가기 때문이다.
+captures/
+Lec_python/RPS1/
+
+*.zip.old
+*.plugin
