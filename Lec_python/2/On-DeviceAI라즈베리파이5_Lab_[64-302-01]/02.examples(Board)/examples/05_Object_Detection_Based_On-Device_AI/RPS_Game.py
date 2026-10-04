@@ -26,7 +26,13 @@
 #  설정
 # ─────────────────────────────────────────────────────────────
 DEFAULT_MODEL  = 'my_best_int8.tflite'
-CONF_TH        = 0.4     # 신뢰도 문턱값
+CONF_TH        = 0.10    # 신뢰도 문턱값
+#   0.4 -> 0.10 으로 낮췄다. 시험지 120장으로 실측한 결과다(2026-09-18).
+#     0.40 : 판정 정확도 90.3% / 판정을 내린 자세 25.8%
+#     0.10 : 판정 정확도 78.4% / 판정을 내린 자세 80.8%
+#   0.35~0.10 구간에서 정확도는 78~81%로 거의 평평한데 판정 비율만 2.6배 오른다.
+#   0.05 로 더 내리면 정확도가 72.4%로 꺾이므로 0.10 이 최적점이다.
+#   손이 없는 배경 사진 15장에서는 어느 값에서도 오검출이 0개였다.
 IOU_TH         = 0.45    # NMS 겹침 문턱값
 IMG_SIZE       = 320     # 모델 입력 크기 (학습 때 imgsz와 같아야 한다)
 
@@ -54,7 +60,10 @@ MIRROR         = True    # 화면을 거울처럼 좌우 반전. 사람이 보�
 #   근본 해결은 얼굴이 함께 찍힌 사진을 배경(background)으로 학습시키는 것이다.
 #   임시 방편을 켜면 3단계 예외 처리(손 3개 안내)가 화면에 안 나타나므로,
 #   과제 시연 때는 False로 두고 카메라 각도로 얼굴을 빼는 편이 낫다.
-USE_TOP2       = False
+USE_TOP2       = True
+#   CONF_TH 를 0.10 으로 낮추면 박스가 3개 이상 나오는 자세가 생긴다.
+#   이 값이 False 면 그때 게임이 'Too many hands' 로 판정을 거부한다.
+#   위 실측은 '신뢰도 높은 2개'를 고른 기준이므로 같이 켜야 그 수치가 나온다.
 
 # 웹캠이 영상을 보내는 형식(FOURCC, 네 글자 코드).
 #   'MJPG' = Motion-JPEG. 카메라가 한 장씩 JPEG으로 압축해서 USB로 보낸다.
@@ -458,15 +467,20 @@ try:
         boxes = detect(frame)
 
         # 임시 방편: 3개 이상 잡히면 신뢰도가 높은 2개만 남긴다
-        if USE_TOP2 and len(boxes) > 2:
+        # 추려 내기 전의 개수를 남겨 둔다.
+        #   USE_TOP2 로 2개만 남기더라도 "몇 개가 보였는지"는 알려 줘야 한다.
+        #   그렇지 않으면 3단계 예외 처리(손이 2개가 아닐 때 안내)가 화면에서 사라진다.
+        n_found = len(boxes)
+        if USE_TOP2 and n_found > 2:
             boxes = sorted(boxes, key=lambda b: -b[5])[:2]
 
         # ── 3단계 예외 처리 : 지금 화면의 상태를 문구로 만든다 ──
-        if len(boxes) < 2:
-            status = 'Need 2 hands (found %d)' % len(boxes)
+        if n_found < 2:
+            status = 'Need 2 hands (found %d)' % n_found
             status_color = RED
-        elif len(boxes) > 2:
-            status = 'Too many hands (%d). Show only 2' % len(boxes)
+        elif n_found > 2:
+            # 추려서 판정은 계속하되, 손이 더 보였다는 사실은 그대로 알린다
+            status = 'Too many hands (%d). Using top 2' % n_found
             status_color = RED
         else:
             status = 'Ready - 2 hands detected'
@@ -496,7 +510,7 @@ try:
                        labels=['P1 ' + CLASS_NAME[p1[4]], 'P2 ' + CLASS_NAME[p2[4]]])
             draw_center(view, result_text(who), result_color(who), scale=1.2, thick=3)
             # cv2.putText 는 한글을 못 그린다(??? 로 찍힌다). 화면에는 영어 이름을 쓴다.
-            draw_hint(view, 'P1 %s  vs  P2 %s' % (CLASS[p1[4]], CLASS[p2[4]]))
+            draw_hint(view, 'P1 %s  vs  P2 %s' % (CLASS_NAME[p1[4]], CLASS_NAME[p2[4]]))
         else:
             view = frame
             if len(boxes) == 2:

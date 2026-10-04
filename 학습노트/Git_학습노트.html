@@ -93,6 +93,8 @@ pre .r{color:#ff8a80}
 <li><a href="#s9"><span class="toc-n gray">9</span>교육장 PC 주의</a></li>
 <li><a href="#s10"><span class="toc-n gray">10</span>용어 사전</a></li>
 <li><a href="#s11"><span class="toc-n gray">11</span>다음에 배울 것</a></li>
+<li><a href="#s12"><span class="toc-n gray">12</span>실제 출력 읽기</a></li>
+<li><a href="#s13"><span class="toc-n gray">13</span>개인 vs 교육원 저장소</a></li>
 </ul>
 </nav>
 
@@ -284,6 +286,164 @@ git remote -v        <span class="c">← 주소가 두 줄 나오면 연결 성�
 <tr><td>충돌 해결 (conflict)</td><td>두 사람이 같은 파일을 고쳤을 때</td></tr>
 </table></div>
 <div class="ok">1개월차엔 <b>status, add, commit, push</b> 네 개만 몸에 익히면 충분하다. 나머지는 필요할 때 이 노트에 이어서 추가한다.</div>
+
+<h2 id="s12">12. 실제 출력 한 줄씩 읽기 (2026-09-22, 프로젝트-2 저장소)</h2>
+<p class="small">교육원 저장소 <code>kcci-AI-campus/36_JBY</code>를 클론해 README를 고치고 push한 실습. 내가 친 명령과 실제로 나온 출력을 그대로 놓고 뜻을 붙였다.</p>
+
+<h3>전체 흐름</h3>
+<pre><code>편집          git add        git commit        git push
+ │              │               │                 │
+작업 폴더 ──▶ 스테이지 ──▶ 내 PC 저장소 ──▶ GitHub
+(고친 상태)   (담은 상태)   (확정, 오프라인)   (공유됨)</code></pre>
+<div class="ok"><code>commit</code>까지는 <b>인터넷이 없어도 된다.</b> 네트워크를 쓰는 건 <code>push</code> 하나뿐이다.</div>
+
+<h3>① git add</h3>
+<pre><code>PS C:\Users\kccistc\Projects\36_JBY&gt; git add .\README.md
+PS C:\Users\kccistc\Projects\36_JBY&gt;</code></pre>
+<b>출력이 없는 것이 성공이다.</b> git은 문제가 있을 때만 말한다.
+<div class="memo">장바구니에 담기. 아직 계산(commit) 전이라 무엇도 확정되지 않았다.</div>
+<p><b>왜 <code>add</code>가 따로 있나?</b> 파일 10개를 고쳤어도 그중 3개만 골라 커밋할 수 있게 하려고다.
+"한 커밋 = 한 가지 일"로 묶어 두면 나중에 기록을 읽기 쉽다.</p>
+<p><code>.\README.md</code>의 <code>.\</code>는 "현재 폴더의"라는 뜻이다. PowerShell이 Tab 자동완성으로 붙여 준 것이고 <code>README.md</code>와 같다.</p>
+
+<h3>② git commit</h3>
+<pre><code>PS ...&gt; git commit -m "소개 페이지 작성"
+[main fd4c2ae] 소개 페이지 작성
+ 1 file changed, 8 insertions(+)</code></pre>
+<div class="tbl"><table>
+<tr><th>조각</th><th>뜻</th></tr>
+<tr><td><code>[main</code></td><td><b>main 브랜치</b>에 기록했다 (브랜치 = 작업 갈래. 지금은 하나뿐)</td></tr>
+<tr><td><code>fd4c2ae]</code></td><td><b>커밋 ID</b>. 그 시점 내용 전체를 계산해 만든 지문. 실제로는 40자리인데 앞 7자만 보여준다</td></tr>
+<tr><td><code>소개 페이지 작성</code></td><td><code>-m</code>으로 준 <b>메시지</b>. "이 커밋이 뭐였지" 할 때 읽는 설명</td></tr>
+<tr><td><code>1 file changed, 8 insertions(+)</code></td><td>파일 1개, <b>8줄 추가</b>. 지운 줄이 있으면 <code>deletions(-)</code>도 함께 나온다</td></tr>
+</table></div>
+<div class="warn">여기까지는 <b>전부 내 PC 안의 일</b>이다. GitHub는 아직 아무것도 모른다.</div>
+
+<h3>③ git push</h3>
+<pre><code>PS ...&gt; git push
+<span class="c">Enumerating objects: 5, done.          ← 보낼 것 5개 추림
+Counting objects: 100% (5/5), done.    ← 세어 봄
+Delta compression using up to 16 threads   ← CPU 16개로 압축
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 452 bytes | 226.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)</span>
+<span class="g">To https://github.com/kcci-AI-campus/36_JBY.git
+   ca75aa8..fd4c2ae  main -&gt; main</span></code></pre>
+<p>회색 6줄은 <b>전송 진행 상황</b>이다. 실제로 보낸 양은 <b>452바이트</b>. 글자 몇 줄이라 이 정도다.
+<b>중요한 건 초록색 두 줄</b>이다.</p>
+<div class="tbl"><table>
+<tr><th>조각</th><th>뜻</th></tr>
+<tr><td><code>To https://github.com/...</code></td><td>어디로 보냈나</td></tr>
+<tr><td><code>ca75aa8..fd4c2ae</code></td><td>GitHub의 main이 <b><code>ca75aa8</code>(교수님 Initial commit)에서 <code>fd4c2ae</code>(내 커밋)로 전진</b>했다. <code>..</code>은 "여기서 여기까지"라는 범위 표시</td></tr>
+<tr><td><code>main -&gt; main</code></td><td>내 PC의 main을 → GitHub의 main으로</td></tr>
+</table></div>
+<div class="ok"><b>이 마지막 줄이 나오면 성공이다.</b> push 결과를 볼 때 이 한 줄만 확인하면 된다.</div>
+
+<h3>④ git log --oneline --decorate — 지금 누가 어디 있나</h3>
+<pre><code>fd4c2ae (HEAD -&gt; main, origin/main, origin/HEAD) 소개 페이지 작성
+ca75aa8 Initial commit</code></pre>
+<div class="tbl"><table>
+<tr><th>이름표</th><th>뜻</th></tr>
+<tr><td><code>HEAD</code></td><td><b>지금 내가 보고 있는 위치</b></td></tr>
+<tr><td><code>main</code></td><td>내 PC의 main 브랜치</td></tr>
+<tr><td><code>origin/main</code></td><td><b>GitHub의 main이 어디까지 와 있는지</b> 내 PC가 기억하는 값. <code>origin</code>은 "내가 클론해 온 원격 저장소"의 기본 별명</td></tr>
+</table></div>
+<p><b>셋이 한 줄에 모여 있으면</b> 내 PC와 GitHub가 완전히 같다는 뜻이다. push를 안 했다면 이렇게 갈라진다.</p>
+<pre><code>fd4c2ae (HEAD -&gt; main) 소개 페이지 작성        <span class="c">← 내 PC는 여기</span>
+ca75aa8 (origin/main) Initial commit          <span class="c">← GitHub는 아직 여기</span></code></pre>
+<div class="memo">VS Code의 Source Control 그래프에서 <code>main</code> 배지와 <code>origin/main</code> 배지가 위아래로 떨어져 보이는 것이 정확히 이 상태다.
+<code>Sync Changes 1↑</code>의 <b>1↑</b>이 "아직 안 보낸 커밋 1개"라는 뜻이고, 누르면 두 배지가 같은 줄로 모인다.</div>
+
+<h3>⑤ 곁가지 — PowerShell <code>ls</code> 출력</h3>
+<pre><code>Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-09-22  오전 11:50            243 README.md</code></pre>
+<p><code>Mode</code>의 <code>-a----</code>에서 첫 칸이 <code>d</code>가 아니면 <b>폴더가 아니라 파일</b>이고, <code>a</code>는 윈도우의 "보관" 속성이다. <code>Length</code>는 바이트 크기.</p>
+<div class="warn"><b><code>.git</code> 폴더가 안 보인다고 없는 게 아니다.</b> 숨김 속성이라 그냥 <code>ls</code>에는 안 나온다.
+<code>ls -Force</code>로 보인다. 저장소의 모든 기록이 그 안에 들어 있고, 폴더를 옮겨도 이게 같이 가면 저장소는 멀쩡하다.</div>
+
+<h3>이번 실습에서 처음 겪은 것</h3>
+<div class="tbl"><table>
+<tr><th>상황</th><th>알게 된 것</th></tr>
+<tr><td><code>git clone</code>을 홈 폴더에서 실행</td><td>클론은 <b>기존 폴더를 바꾸지 않고 새 폴더를 만든다.</b> 실행한 자리에 저장소 이름으로 폴더가 생긴다</td></tr>
+<tr><td>저장소를 다른 저장소 안에 두려 함</td><td><b>git 저장소 안에 git 저장소를 두면 안 된다</b>(중첩). <code>Developer</code>와 <b>나란한</b> <code>Projects\</code>에 두는 것이 맞다</td></tr>
+<tr><td>새 저장소에서 커밋이 막힘</td><td>이름·이메일이 <b><code>Developer</code>에만 지역 설정</b>돼 있었다. <code>git config --global</code>로 한 번 등록하면 이 PC의 모든 저장소에 적용된다</td></tr>
+</table></div>
+<div class="todo">다음 단계: <code>침입감지_프로젝트</code>의 코드를 이 저장소에 올리기.
+데이터셋 약 380MB와 <b>팀원 사진</b>이 섞여 있으므로 <b><code>.gitignore</code>를 먼저 만든 뒤</b> add 해야 한다.
+한 번 올라가면 지워도 커밋 기록에 남는다.</div>
+
+<h3>오늘 실제로 친 명령 전체 (PowerShell 기록에서 복원)</h3>
+<div class="tbl"><table>
+<tr><th>단계</th><th>명령</th><th>결과 / 배운 것</th></tr>
+<tr><td>1. 확인</td><td><code>git</code> / <code>git --version</code></td><td>인자 없이 친 <code>git</code>이 <b>사용법을 출력하면 설치돼 있다는 뜻</b>. 없으면 "내부 또는 외부 명령이 아닙니다"가 뜬다</td></tr>
+<tr><td>2. 첫 클론 ⚠</td><td><code>git clone https://github.com/kcci-AI-campus/36_JBY.git</code></td><td>홈 폴더에서 실행해 <code>C:\Users\kccistc\36_JBY</code>에 생겼다. <b>클론은 실행한 자리에 폴더를 만든다</b></td></tr>
+<tr><td>3. 되돌리기</td><td><code>rmdir /s /q C:\Users\kccistc\36_JBY</code></td><td>원본이 GitHub에 있으므로 <b>지워도 잃는 것이 없다</b></td></tr>
+<tr><td>4. 재클론</td><td><code>cd C:\Users\kccistc\Projects</code> → <code>git clone …</code></td><td><b><code>Developer</code> 안에는 두지 않는다</b>(저장소 중첩)</td></tr>
+<tr><td>5. 신원</td><td><code>git config --global user.name "정보윤"</code><br><code>git config --global user.email "boyun1806@gmail.com"</code><br><code>git config --global --list</code></td><td>없으면 커밋이 거부된다. <code>--global</code>은 <b>이 PC의 모든 저장소에 한 번만</b></td></tr>
+<tr><td>6. ★ 핵심</td><td><code>git add .\README.md</code><br><code>git commit -m "소개 페이지 작성"</code><br><code>git push</code></td><td>앞으로 매일 반복할 세 줄. <code>.\</code>는 "현재 폴더의"라는 뜻이라 없어도 같다</td></tr>
+<tr><td>7. 이사</td><td><code>mkdir work</code> → <code>cd work</code> → <code>move …</code> ⚠ 실패</td><td><b>VS Code가 열어 둔 폴더는 옮길 수 없다.</b> 그래서 <code>C:\work</code>에 <b>새로 클론</b>하는 쪽이 빨랐다</td></tr>
+<tr><td>8. 뒷정리</td><td><code>Remove-Item -Recurse -Force C:\Users\kccistc\Projects</code> ⚠ 실패</td><td>같은 이유. <code>cd C:\</code>로 터미널을 빼도 <b>VS Code 본체가 상위 폴더를 감시 중이면</b> 계속 잠긴다</td></tr>
+</table></div>
+
+<h3>다시 한다면 — 이 순서면 끝난다</h3>
+<pre><code><span class="c"># ── 이 PC에서 한 번만 ──</span>
+mkdir C:\work
+cd C:\work
+git clone https://github.com/kcci-AI-campus/36_JBY.git
+cd 36_JBY
+git config --global user.name "정보윤"
+git config --global user.email "boyun1806@gmail.com"
+
+<span class="c"># ── 여기서 파일 편집 후 Ctrl+S ──</span>
+
+<span class="c"># ── 앞으로 매번 반복하는 세 줄 ──</span>
+git add .
+git commit -m "무엇을 했는지"
+git push</code></pre>
+<div class="ok">준비는 한 번뿐이고, 매일 쓰는 건 <b><code>add</code> → <code>commit</code> → <code>push</code></b> 세 줄이다.</div>
+<div class="warn"><code>git add .</code>의 <code>.</code>은 <b>"현재 폴더의 바뀐 것 전부"</b>다. 편하지만 위험하다.
+데이터셋·팀원 사진처럼 올리면 안 되는 것이 폴더에 있으면 통째로 딸려 간다.
+<b>그런 폴더에서는 <code>.gitignore</code>를 먼저 만든 뒤에</b> <code>add .</code>를 쓴다. 한 번 올라가면 지워도 커밋 기록에 남는다.</div>
+
+<h3>PowerShell 쓰다 걸린 것</h3>
+<div class="tbl"><table>
+<tr><th>함정</th><th>무슨 일이 벌어지나</th><th>대처</th></tr>
+<tr><td><code>cd</code>를 혼자 침</td><td><b>PowerShell은 홈으로 이동한다</b>(cmd는 현재 위치를 출력만 한다). 그래서 다음 <code>cd 36_JBY</code>가 엉뚱한 곳에서 실패</td><td>목적지를 항상 같이 적는다. 현재 위치는 <code>pwd</code> 또는 프롬프트로 확인</td></tr>
+<tr><td><code>mkdir</code>을 혼자 침</td><td>오류가 아니라 <code>Path[0]:</code>로 <b>되묻는 중</b>이다</td><td>이름을 치고 Enter, 또는 <code>Ctrl+C</code>로 취소</td></tr>
+<tr><td>폴더가 "사용 중"</td><td>셸이 서 있는 폴더, VS Code가 연 폴더는 <b>옮기거나 지울 수 없다</b></td><td><code>cd C:\</code>로 빠져나오고, VS Code에서 다른 폴더를 열거나 종료한다</td></tr>
+<tr><td><code>Set-Location: … 없으므로</code></td><td><code>cd</code>의 본명이 <code>Set-Location</code>이다. <b>작은따옴표 안이 실제로 찾아본 경로</b></td><td>그 경로를 읽으면 "내가 어디에 서 있었는지"가 바로 보인다</td></tr>
+</table></div>
+
+
+<h2 id="s13">13. 개인 저장소와 교육원 저장소 — 무엇을 어디에 올리나 (2026-09-29)</h2>
+<p class="small">발표가 끝나고 "지금까지 한 것을 총정리해 올리자"고 할 때 정한 원칙. 저장소는 둘 다 쓰되 역할이 다르다. 올리는 일은 내가 직접 치고, 클로드코드는 올린 뒤 검토·다듬기만 한다.</p>
+
+<div class="tbl"><table>
+<tr><th></th><th><code>JBY1806/ai-soc-course</code> (개인)</th><th><code>kcci-AI-campus/36_JBY</code> (교육원 조직)</th></tr>
+<tr><td>누구 것</td><td>내 계정. 과정이 끝나도 남는다</td><td>교수님 조직 소유. 과정 뒤 접근·공개 여부를 내가 정하지 못한다</td></tr>
+<tr><td>누가 보나</td><td>채용 담당자·면접관 (Public)</td><td>교수님·교육원</td></tr>
+<tr><td>역할</td><td><b>원본</b> — 포트폴리오. 항상 최신</td><td><b>제출본</b> — 개인 저장소에서 검토가 끝난 것을 복사. 주 1회·과제 마감 때 갱신</td></tr>
+<tr><td>이 노트북의 로컬 복사본</td><td>없음. 교육장 PC에서는 <code>Developer</code> 폴더 자체가 저장소였는데 9/26 이식 때 <code>.git</code> 폴더가 안 넘어왔다</td><td>없음. 교육장 PC <code>C:\work\36_JBY</code> 에만 있다 (9/22, README 한 번 push)</td></tr>
+</table></div>
+<div class="memo">둘에 같은 것을 두 번 올리면 언젠가 내용이 어긋난다. 그래서 <b>원본은 하나(개인)</b>, 교육원 것은 그 복사본이라고 정해 둔다.</div>
+
+<h3>올리면 안 되는 것 (한 번 올라가면 지워도 기록에 남는다)</h3>
+<div class="tbl"><table>
+<tr><th>종류</th><th>이 폴더에서 해당하는 것</th><th>처리</th></tr>
+<tr><td>비밀값</td><td><code>notify.json</code> 3개(알림 주소) · 웹 접속 암호 <code>?k=…</code> 가 적혀 있던 <code>학습노트/웹관제_아키텍처_해설_15번.html</code></td><td><code>.gitignore</code> / 노트에서 암호를 가림(9/29)</td></tr>
+<tr><td>개인 자료</td><td><code>Resume/</code> 4.8 GB (경력증명서·채용 공고·대화 기록)</td><td><code>.gitignore</code></td></tr>
+<tr><td>남의 자료</td><td>1기 피드백 PDF(1기 학생 화면) · <code>참고/</code> · <code>팀원이 공유한 자료/</code> · <code>가천대_산학_RnD_최종제출자료 (1)/</code> · 사람이 찍힌 사진(<code>교육장_준비_0928/결과_0928/*.jpg</code>)</td><td><code>.gitignore</code></td></tr>
+<tr><td>팀 것</td><td>팀 저장소 클론 <code>Team10/</code> 2개(저장소 안에 저장소가 되어 꼬인다) · 팀 발표자료 <code>.pptx</code>(팀원 이름·사진, 팀 동의 전)</td><td><code>.gitignore</code>. 팀 저장소는 README 에 링크로</td></tr>
+<tr><td>크기</td><td>100 MB 가 넘으면 GitHub 가 push 자체를 거부한다: <code>전체백업_0923.zip</code>(151 MB) · <code>baby_0923.tgz</code>(123 MB) · <code>AI 시스템반도체 설계 교육/</code> 36 GB(라즈베리파이 이미지·데이터셋 zip) · 모델(<code>.tflite .pt</code>) · 영상</td><td><code>.gitignore</code> (확장자로)</td></tr>
+</table></div>
+<div class="warn"><code>.gitignore</code> 에 한글 폴더 이름을 쓸 때는 파일이 <b>UTF-8(BOM 없음)</b> 로 저장돼야 한다. PowerShell 의 <code>Set-Content</code>·<code>&gt;</code> 로 만들면 다른 인코딩이 되어 한글 줄이 무시된다. 그래서 초안은 클로드코드가 UTF-8 로 만들어 두었다: <code>C:\Users\LG\Developer\.gitignore</code>.</div>
+
+<h3>순서</h3>
+<div class="step"><div class="n">1</div><div><b>개인 저장소를 이 노트북의 <code>Developer</code> 폴더에 다시 연결</b>하고 push 한다. 새 명령 세 개: <code>git fetch</code>(GitHub 쪽 기록만 내려받기, 파일은 안 건드림) · <code>git reset origin/main</code>(내 저장소의 기준점을 GitHub 최신 커밋으로 맞춤, 작업 파일은 그대로 — <b><code>--hard</code> 는 붙이지 않는다</b>) · <code>git branch -u origin/main</code>(앞으로 <code>git push</code>·<code>git pull</code> 만 쳐도 되게 짝 지음).</div></div>
+<div class="step"><div class="n">2</div><div>올라간 것을 클로드코드가 검토한다: 빠진 것·잘못 올라간 것·README·폴더 구조. 고칠 것은 내가 다시 commit·push.</div></div>
+<div class="step"><div class="n">3</div><div>검토가 끝난 것을 <code>C:\work\36_JBY</code> 에 복사해 commit·push 한다(교육장 PC 에서 하던 방식 그대로).</div></div>
+<div class="ok">GitHub 에 지금 뭐가 올라가 있는지는 9/29 에 확인하지 못했다(온라인 조회를 하지 않음). 1번의 <code>git status</code> 가 "교육장에서 마지막으로 push 한 뒤 달라진 것"을 보여 주므로 그때 확인한다.</div>
 
 </main>
 </div>
