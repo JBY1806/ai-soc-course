@@ -1,15 +1,30 @@
 `timescale 1ns / 1ps
 
 module fnd_controller (
-    input  [1:0] ds_sel,
-    input  [8:0] fnd_data,  // 9bit {c, s}
+    input clk,
+    input reset,
+    input [8:0] fnd_data,  // 9bit {c, s}
     output [3:0] fnd_com,
     output [7:0] fnd_font
 );
     wire [3:0] w_ds1, w_ds10, w_ds100, w_ds1000, w_mux_out;
+    wire [1:0] w_ds_sel;
+    wire w_clk_800hz;
+
+    clk_div_800hz U_CLK_DIV_800HZ (
+    .clk(clk),
+    .reset(reset),
+    .o_clk_800hz(w_clk_800hz)
+);
+
+    counter_4 U_COUNTER_4 (
+        .clk(w_clk_800hz),
+        .reset(reset),
+        .ds_sel(w_ds_sel)
+    );
 
     decoder_2x4 U_DECODER_2x4 (
-        .ds_sel (ds_sel),
+        .ds_sel (w_ds_sel),
         .fnd_com(fnd_com)
     );
 
@@ -22,7 +37,7 @@ module fnd_controller (
     );
 
     mux_4x1 U_MUX_4x1 (
-        .sel(ds_sel),
+        .sel(w_ds_sel),
         .in0(w_ds1),
         .in1(w_ds10),
         .in2(w_ds100),
@@ -37,6 +52,53 @@ module fnd_controller (
     );
 endmodule
 
+
+
+module clk_div_800hz (
+    input clk,
+    input reset,
+    output reg o_clk_800hz
+);
+
+    reg [$clog2(62_500)-1:0] counter_reg;
+
+    always @(posedge clk, posedge reset) begin
+        if (reset) begin
+            counter_reg <= 16'd0;
+            o_clk_800hz <= 1'b0;
+        end else begin
+            counter_reg <= counter_reg + 1;
+            if (counter_reg == (62_500 - 1)) begin
+                counter_reg <= 16'd0;
+                o_clk_800hz <= ~o_clk_800hz;
+            end
+        end
+    end
+endmodule
+
+
+
+module counter_4 (
+    input clk,
+    input reset,
+    output [1:0] ds_sel
+);
+    reg [1:0] counter_reg;
+
+    assign ds_sel = counter_reg;
+
+    always @(posedge clk, posedge reset) begin
+        if (reset) begin
+            // reset: 1'b1
+            counter_reg <= 2'b0; // 1의 자리부터 보여줌. 10의 자리부터 보여주고싶으면 2'b1로 리셋.
+        end else begin
+            //operation
+            counter_reg <= counter_reg + 1;
+        end
+    end
+
+
+endmodule
 
 module decoder_2x4 (
     input [1:0] ds_sel,

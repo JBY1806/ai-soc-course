@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_btn_debounce_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_btn_debounce" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="2,298.058 ns"></ZoomStartTime>
+      <ZoomEndTime time="2,637.983 ns"></ZoomEndTime>
+      <Cursor1Time time="2,550.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="228"></NameColumnWidth>
+      <ValueColumnWidth column_width="114"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="9" />
+   <wave_markers>
+      <marker time="145000" label="" />
+      <marker time="525000" label="" />
+      <marker time="705000" label="" />
+      <marker time="1805000" label="" />
+      <marker time="2015000" label="" />
+      <marker time="2415000" label="" />
+      <marker time="2635000" label="" />
+      <marker time="70000" label="" />
+      <marker time="350000" label="" />
+   </wave_markers>
+   <wvobject fp_name="/tb_btn_debounce/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_btn_debounce/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_btn_debounce/i_btn" type="logic">
+      <obj_property name="ElementShortName">i_btn</obj_property>
+      <obj_property name="ObjectShortName">i_btn</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider152">
+      <obj_property name="label">Debounce</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_btn_debounce/dut/q_reg" type="array">
+      <obj_property name="ElementShortName">q_reg[7:0]</obj_property>
+      <obj_property name="ObjectShortName">q_reg[7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_btn_debounce/dut/debounce" type="logic">
+      <obj_property name="ElementShortName">debounce</obj_property>
+      <obj_property name="ObjectShortName">debounce</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider153">
+      <obj_property name="label">Edge</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_btn_debounce/dut/edge_reg" type="logic">
+      <obj_property name="ElementShortName">edge_reg</obj_property>
+      <obj_property name="ObjectShortName">edge_reg</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_btn_debounce/o_btn" type="logic">
+      <obj_property name="ElementShortName">o_btn</obj_property>
+      <obj_property name="ObjectShortName">o_btn</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+</wave_config>

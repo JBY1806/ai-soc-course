@@ -4,9 +4,10 @@
 
 
 module adder_fnd (
+    input           clk,
+    input           reset,
     input [7:0] a,
     input [7:0] b,
-    input [1:0] ds_sel,
     output [3:0] fnd_com,
     output [7:0] fnd_font
 );
@@ -22,7 +23,8 @@ module adder_fnd (
 );
 
 fnd_controller U_FND_CNTL (
-    .ds_sel(ds_sel),
+    .clk        (clk),
+    .reset      (reset),
     .fnd_data({w_c, w_s}),  // 9bit {c, s}
     .fnd_com(fnd_com),
     .fnd_font(fnd_font)
@@ -144,7 +146,9 @@ module half_adder (
     output c
 );
 
-    assign s = a ^ b;
-    assign c = a & b;
+    //    assign s = a ^ b;
+    //    assign c = a & b;
 
+    xor #1 U_X1 (s, a, b);  // gate premitive xor(output, input 0, input 1);
+    and (c, a, b);
 endmodule

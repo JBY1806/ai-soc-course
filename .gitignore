@@ -98,3 +98,100 @@ CLAUDE.md
 침입감지_프로젝트/교육장_준비_0928/읽어주세요.md
 침입감지_프로젝트/발표슬라이드_정보윤/읽어주세요.md
 침입감지_프로젝트/README_깃허브용.md
+# 6일차 클로드코드 실험 파일(바운스 재현·래치 변형) — 내 코드가 아니라 git 제외
+Lec_verilog/6일차/클로드_실험_바운스_래치/
+# HW4-1 PPT 생성기(클로드코드 작성) — git 제외
+Lec_verilog/HW4-1_led_fsm/_gen/
+# HW4-2 PPT 생성기(클로드코드 작성) · 4-2 TB 비교 파일(클로드코드 작성) — git 제외
+Lec_verilog/HW4-2_counter_fsm/_gen/
+Lec_verilog/6일차/4-2_TB_비교/
+Lec_verilog/HW5-1_0101_detector/_gen/
+Lec_verilog/HW5-2_btn_debounce/_gen/
+Lec_verilog/HW6_counter_10000/_gen/
+Lec_verilog/HW7_uart_loopback/_gen/
+# 미니프로젝트: 팀 분담 계획(작업 메모) · 수업 화면/안내 사진(교수님 자료) — git 제외
+Lec_verilog/Mini_Project_watch/팀_분담_계획.md
+Lec_verilog/Mini_Project_watch/팀_분담_계획.html
+Lec_verilog/Mini_Project_watch/*.jpg
+Lec_verilog/9일차(미니프로젝트)/*.jpg
+
+# 클로드코드가 짠 미니프로젝트 참고 구현 (보드 확인용, 사용자 설계 아님 — GitHub 에 올리지 않음)
+Lec_verilog/Mini_Project_watch/claude_reference/
+# 미니프로젝트 최종 발표: 슬라이드 생성기(클로드코드) · 팀원 캡처/촬영 안내(작업 메모) — git 제외
+Lec_verilog/Mini_Project_watch/final_present/_gen/
+Lec_verilog/Mini_Project_watch/final_present/*.md
+Lec_verilog/Mini_Project_watch/final_present/*.html
+대화기록_*.html
+
+# 교수님 피드백 자료 (다른 교육생 화면 포함, 공개 금지)
+AI캠퍼스_AI시스템반도체설계_*_피드백자료.pdf
+
+# 노션 강의 회의록 (녹취에 교육생 이름 · 대화 포함, 공개 금지)
+Lec_verilog/노션 강의 회의록/
+# 캡처 안내 메모 (작업 메모, 공개 안 함)
+Lec_verilog/Mini_Project_watch/submit_1019/capture_tcl/*.md
+
+# HW8 캡처 안내 (작업 메모)
+Lec_verilog/HW8_fifo/capture_tcl/*.md
+Lec_verilog/HW8_fifo/_gen/
+
+# UART+FIFO 발표 캡처 안내 · 생성기 (작업 메모)
+Lec_verilog/UART_FIFO_present/capture_tcl/*.md
+Lec_verilog/UART_FIFO_present/_gen/
+Lec_verilog/HW9_uart_fifo_ascii/capture_tcl/*.md
+Lec_verilog/HW9_uart_fifo_ascii/_gen/
+Lec_verilog/HW9_uart_fifo_ascii/capture_tcl/*.md
+Lec_verilog/강의노트/
+
+# 10/29 교수님 수업 자료 (판서 PDF · 데이터시트 · 교수님 코드) — GitHub 제외
+Lec_verilog/20261029/
+
+# 팀원 자료 (안성님 PDF 등) — 개인 GitHub 제외
+Lec_verilog/팀프로젝트2_자료/
+
+# ---- 10/29 개인 저장소 정리 (올리지 않는 것) ----
+# 클로드코드 설정 · 에이전트
+.claude/
+# 대화 기록 · 녹취 (교육생 이름 · 대화 포함)
+*대화기록_*.html
+Lec_verilog/4일차/4일차-2.txt
+# 교수님 코드 · TB
+Lec_verilog/tb_sr04.v
+Lec_verilog/7일차/control_unit.v
+work/26_AI_CAMP_2/20261029_dht11/
+# 클로드코드가 쓴 안내 · 검토 메모 · 캡처 스크립트 · 생성기
+Lec_verilog/4일차/HW3_따라하기_*.md
+Lec_verilog/5일차/응용_검토기록.md
+Lec_verilog/HW2_adder_fnd/클럭스캔_따라하기.md
+Lec_verilog/**/capture_tcl/
+Lec_verilog/**/_gen/
+# 클로드코드가 만든 실험 · 검증 · 발표 자료 (내 설계 아님)
+work/26_AI_CAMP_2/ppa_*/
+work/26_AI_CAMP_2/tm_sim_v2/
+work/26_AI_CAMP_2/tm2_after_tick4/
+work/26_AI_CAMP_2/source/
+work/26_AI_CAMP_2/2026102[12]_uart_loopback_verify/
+Lec_verilog/Mini_Project_watch/ai_eval/
+Lec_verilog/Mini_Project_watch/final_present/
+Lec_verilog/Mini_Project_watch/timer_tb_verilog/
+Lec_verilog/Mini_Project_watch/timer_slides/
+Lec_verilog/Mini_Project_watch/timer_present/
+Lec_verilog/Mini_Project_watch/tick_compare/
+Lec_verilog/Mini_Project_watch/PPA_캡처_1016/
+# 팀 제출본 사본 (팀원 코드 포함 — 팀 저장소에 있음)
+Lec_verilog/Mini_Project_watch/submit_1019/
+# Vivado IP 생성물 (ILA 등, 수십 MB)
+work/**/*.gen/
+Lec_verilog/Mini_Project_watch/tick공유_트레이드오프.html
+Lec_verilog/Mini_Project_watch/*.tcl
+Lec_verilog/Mini_Project_watch/timer_capture/*_상자.png
+work/26_AI_CAMP_2/uart_fifo/*.tcl
+**/검증_추가/
+Lec_verilog/image.png
+work/26_AI_CAMP_2/bsw_final/
+work/26_AI_CAMP_2/display_strobe/
+# 클로드코드 참고 구현을 불러온 프로젝트 (내 설계 아님)
+work/26_AI_CAMP_2/20261016_watch/
+# 숙제 프로젝트 안 팀 코드 사본 · 팀원 이름이 든 경로 (팀 저장소에 있음)
+work/26_AI_CAMP_2/20261027_uart_fifo_ascii_hw/*.xpr
+work/26_AI_CAMP_2/20261027_uart_fifo_ascii_hw/20261027_uart_fifo_ascii_hw.srcs/sources_1/imports/src/

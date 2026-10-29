@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_counter_10000_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_counter_10000" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="12,615.592 ns"></ZoomStartTime>
+      <ZoomEndTime time="13,047.393 ns"></ZoomEndTime>
+      <Cursor1Time time="12,655.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="228"></NameColumnWidth>
+      <ValueColumnWidth column_width="114"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="7" />
+   <wave_markers>
+      <marker time="13550000" label="" />
+      <marker time="30000" label="" />
+      <marker time="10035000" label="W2" />
+      <marker time="11030000" label="" />
+      <marker time="9935000" label="W1" />
+      <marker time="12030000" label="" />
+      <marker time="12655000" label="W3" />
+   </wave_markers>
+   <wvobject fp_name="/tb_counter_10000/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_counter_10000/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_counter_10000/run_stop" type="logic">
+      <obj_property name="ElementShortName">run_stop</obj_property>
+      <obj_property name="ObjectShortName">run_stop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_counter_10000/clear" type="logic">
+      <obj_property name="ElementShortName">clear</obj_property>
+      <obj_property name="ObjectShortName">clear</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_counter_10000/up_down" type="logic">
+      <obj_property name="ElementShortName">up_down</obj_property>
+      <obj_property name="ObjectShortName">up_down</obj_property>
+   </wvobject>
+   <wvobject fp_name="group10" type="group">
+      <obj_property name="label">U_COUNTER_DATAPATH</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_counter_10000/dut/U_COUNTER_DATAPATH/w_tick" type="logic">
+         <obj_property name="ElementShortName">w_tick</obj_property>
+         <obj_property name="ObjectShortName">w_tick</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_counter_10000/dut/U_COUNTER_DATAPATH/counter" type="array">
+         <obj_property name="ElementShortName">counter[13:0]</obj_property>
+         <obj_property name="ObjectShortName">counter[13:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group29" type="group">
+      <obj_property name="label">U_FND_CNTL</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_counter_10000/dut/U_FND_CNTL/w_ds1000" type="array">
+         <obj_property name="ElementShortName">w_ds1000[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_ds1000[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_counter_10000/dut/U_FND_CNTL/w_ds100" type="array">
+         <obj_property name="ElementShortName">w_ds100[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_ds100[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_counter_10000/dut/U_FND_CNTL/w_ds10" type="array">
+         <obj_property name="ElementShortName">w_ds10[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_ds10[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_counter_10000/dut/U_FND_CNTL/w_ds1" type="array">
+         <obj_property name="ElementShortName">w_ds1[3:0]</obj_property>
+         <obj_property name="ObjectShortName">w_ds1[3:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

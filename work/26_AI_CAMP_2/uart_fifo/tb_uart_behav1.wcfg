@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_uart_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_uart" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="2,349.172839 us"></ZoomEndTime>
+      <Cursor1Time time="254.016250 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="202"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="11" />
+   <wvobject fp_name="/tb_uart/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/rx" type="logic">
+      <obj_property name="ElementShortName">rx</obj_property>
+      <obj_property name="ObjectShortName">rx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/result_data" type="array">
+      <obj_property name="ElementShortName">result_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">result_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/expected_data" type="array">
+      <obj_property name="ElementShortName">expected_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/tx" type="logic">
+      <obj_property name="ElementShortName">tx</obj_property>
+      <obj_property name="ObjectShortName">tx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/dut/w_b_tick" type="logic">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">w_b_tick</obj_property>
+      <obj_property name="ObjectShortName">w_b_tick</obj_property>
+      <obj_property name="label">w_b_tick</obj_property>
+   </wvobject>
+   <wvobject fp_name="group1112" type="group">
+      <obj_property name="label">dut</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_uart/dut/w_rx_done" type="logic">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_rx_done</obj_property>
+         <obj_property name="ObjectShortName">w_rx_done</obj_property>
+         <obj_property name="label">w_rx_done</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_uart/dut/w_rx_data" type="array">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_rx_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">w_rx_data[7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="label">w_rx_data</obj_property>
+      </wvobject>
+      <wvobject fp_name="group1115" type="group">
+         <obj_property name="label">UART_RX</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/tb_uart/dut/U_UART_RX/rx" type="logic">
+            <obj_property name="ElementShortName">rx</obj_property>
+            <obj_property name="ObjectShortName">rx</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_RX/b_tick" type="logic">
+            <obj_property name="ElementShortName">b_tick</obj_property>
+            <obj_property name="ObjectShortName">b_tick</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_RX/c_state" type="array">
+            <obj_property name="ElementShortName">c_state[1:0]</obj_property>
+            <obj_property name="ObjectShortName">c_state[1:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_RX/b_tick_cnt" type="array">
+            <obj_property name="ElementShortName">b_tick_cnt[3:0]</obj_property>
+            <obj_property name="ObjectShortName">b_tick_cnt[3:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_RX/bit_cnt" type="array">
+            <obj_property name="ElementShortName">bit_cnt[2:0]</obj_property>
+            <obj_property name="ObjectShortName">bit_cnt[2:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_RX/data_reg" type="array">
+            <obj_property name="ElementShortName">data_reg[7:0]</obj_property>
+            <obj_property name="ObjectShortName">data_reg[7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_RX/rx_done" type="logic">
+            <obj_property name="ElementShortName">rx_done</obj_property>
+            <obj_property name="ObjectShortName">rx_done</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="group1123" type="group">
+         <obj_property name="label">FIFO_RX</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/push" type="logic">
+            <obj_property name="ElementShortName">push</obj_property>
+            <obj_property name="ObjectShortName">push</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/pop" type="logic">
+            <obj_property name="ElementShortName">pop</obj_property>
+            <obj_property name="ObjectShortName">pop</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/U_REG_FILE/we" type="logic">
+            <obj_property name="ElementShortName">we</obj_property>
+            <obj_property name="ObjectShortName">we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/push_data" type="array">
+            <obj_property name="ElementShortName">push_data[7:0]</obj_property>
+            <obj_property name="ObjectShortName">push_data[7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/pop_data" type="array">
+            <obj_property name="ElementShortName">pop_data[7:0]</obj_property>
+            <obj_property name="ObjectShortName">pop_data[7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/full" type="logic">
+            <obj_property name="ElementShortName">full</obj_property>
+            <obj_property name="ObjectShortName">full</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/empty" type="logic">
+            <obj_property name="ElementShortName">empty</obj_property>
+            <obj_property name="ObjectShortName">empty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/w_wptr" type="array">
+            <obj_property name="ElementShortName">w_wptr[1:0]</obj_property>
+            <obj_property name="ObjectShortName">w_wptr[1:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/w_rptr" type="array">
+            <obj_property name="ElementShortName">w_rptr[1:0]</obj_property>
+            <obj_property name="ObjectShortName">w_rptr[1:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_RX/U_REG_FILE/register_file" type="array">
+            <obj_property name="ElementShortName">register_file[0:3][7:0]</obj_property>
+            <obj_property name="ObjectShortName">register_file[0:3][7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="group1134" type="group">
+         <obj_property name="label">FIFO_TX</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/push" type="logic">
+            <obj_property name="ElementShortName">push</obj_property>
+            <obj_property name="ObjectShortName">push</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/pop" type="logic">
+            <obj_property name="ElementShortName">pop</obj_property>
+            <obj_property name="ObjectShortName">pop</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/U_REG_FILE/we" type="logic">
+            <obj_property name="ElementShortName">we</obj_property>
+            <obj_property name="ObjectShortName">we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/push_data" type="array">
+            <obj_property name="ElementShortName">push_data[7:0]</obj_property>
+            <obj_property name="ObjectShortName">push_data[7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/pop_data" type="array">
+            <obj_property name="ElementShortName">pop_data[7:0]</obj_property>
+            <obj_property name="ObjectShortName">pop_data[7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/full" type="logic">
+            <obj_property name="ElementShortName">full</obj_property>
+            <obj_property name="ObjectShortName">full</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/empty" type="logic">
+            <obj_property name="ElementShortName">empty</obj_property>
+            <obj_property name="ObjectShortName">empty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/w_wptr" type="array">
+            <obj_property name="ElementShortName">w_wptr[1:0]</obj_property>
+            <obj_property name="ObjectShortName">w_wptr[1:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/w_rptr" type="array">
+            <obj_property name="ElementShortName">w_rptr[1:0]</obj_property>
+            <obj_property name="ObjectShortName">w_rptr[1:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_FIFO_TX/U_REG_FILE/register_file" type="array">
+            <obj_property name="ElementShortName">register_file[0:3][7:0]</obj_property>
+            <obj_property name="ObjectShortName">register_file[0:3][7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="group1145" type="group">
+         <obj_property name="label">UART_TX</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/tx_start" type="logic">
+            <obj_property name="ElementShortName">tx_start</obj_property>
+            <obj_property name="ObjectShortName">tx_start</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/tx_data" type="array">
+            <obj_property name="ElementShortName">tx_data[7:0]</obj_property>
+            <obj_property name="ObjectShortName">tx_data[7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/b_tick" type="logic">
+            <obj_property name="ElementShortName">b_tick</obj_property>
+            <obj_property name="ObjectShortName">b_tick</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/tx" type="logic">
+            <obj_property name="ElementShortName">tx</obj_property>
+            <obj_property name="ObjectShortName">tx</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/tx_busy" type="logic">
+            <obj_property name="ElementShortName">tx_busy</obj_property>
+            <obj_property name="ObjectShortName">tx_busy</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/c_state" type="array">
+            <obj_property name="ElementShortName">c_state[1:0]</obj_property>
+            <obj_property name="ObjectShortName">c_state[1:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/bit_count_reg" type="array">
+            <obj_property name="ElementShortName">bit_count_reg[2:0]</obj_property>
+            <obj_property name="ObjectShortName">bit_count_reg[2:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/b_tick_cnt_reg" type="array">
+            <obj_property name="ElementShortName">b_tick_cnt_reg[3:0]</obj_property>
+            <obj_property name="ObjectShortName">b_tick_cnt_reg[3:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_uart/dut/U_UART_TX/data_reg" type="array">
+            <obj_property name="ElementShortName">data_reg[7:0]</obj_property>
+            <obj_property name="ObjectShortName">data_reg[7:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/tb_uart/dut/w_fifo_rx_pop_data" type="array">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_fifo_rx_pop_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">w_fifo_rx_pop_data[7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="label">w_fifo_rx_pop_data</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_uart/dut/w_fifo_tx_pop_data" type="array">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_fifo_tx_pop_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">w_fifo_tx_pop_data[7:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="label">w_fifo_tx_pop_data</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_uart/dut/w_fifo_tx_full" type="logic">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_fifo_tx_full</obj_property>
+         <obj_property name="ObjectShortName">w_fifo_tx_full</obj_property>
+         <obj_property name="label">w_fifo_tx_full</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_uart/dut/w_fifo_rx_empty" type="logic">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_fifo_rx_empty</obj_property>
+         <obj_property name="ObjectShortName">w_fifo_rx_empty</obj_property>
+         <obj_property name="label">w_fifo_rx_empty</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_uart/dut/w_fifo_tx_empty" type="logic">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_fifo_tx_empty</obj_property>
+         <obj_property name="ObjectShortName">w_fifo_tx_empty</obj_property>
+         <obj_property name="label">w_fifo_tx_empty</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_uart/dut/w_tx_busy" type="logic">
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="ElementShortName">w_tx_busy</obj_property>
+         <obj_property name="ObjectShortName">w_tx_busy</obj_property>
+         <obj_property name="label">w_tx_busy</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/i" type="array">
+      <obj_property name="ElementShortName">i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/pass_count" type="array">
+      <obj_property name="ElementShortName">pass_count[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pass_count[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart/fail_count" type="array">
+      <obj_property name="ElementShortName">fail_count[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fail_count[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

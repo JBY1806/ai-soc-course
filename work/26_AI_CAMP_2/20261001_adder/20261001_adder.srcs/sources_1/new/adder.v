@@ -35,7 +35,7 @@ endmodule
 module full_adder_4 (
     input [3:0] a,
     input [3:0] b,
-    input  cin,
+    input cin,
     output [3:0] s,
     output c
 );
@@ -114,7 +114,11 @@ module half_adder (
     output c
 );
 
-    assign s = a ^ b;
-    assign c = a & b;
+    //    assign s = a ^ b;
+    //    assign c = a & b;
+
+    xor #1 (s, a, b);  // gate premitive xor(output, input 0, input 1);
+    and (c, a, b);
 
 endmodule
+
