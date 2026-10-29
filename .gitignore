@@ -195,3 +195,4 @@ work/26_AI_CAMP_2/20261016_watch/
 # 숙제 프로젝트 안 팀 코드 사본 · 팀원 이름이 든 경로 (팀 저장소에 있음)
 work/26_AI_CAMP_2/20261027_uart_fifo_ascii_hw/*.xpr
 work/26_AI_CAMP_2/20261027_uart_fifo_ascii_hw/20261027_uart_fifo_ascii_hw.srcs/sources_1/imports/src/
+work/26_AI_CAMP_2/**/imports/Lec_verilog/tb_sr04.v
