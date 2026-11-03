@@ -1,7 +1,7 @@
 # AI 시스템반도체 설계 (2기) 작업 저장소
 
 서울기술교육센터(대한상공회의소) **AI 시스템반도체 설계 2기** 과정(2026-09-01 ~ 2027-03-31, 7개월 980시간)의 학습·실습 기록입니다.
-직접 작성한 코드(.py · .ipynb · .v · .xdc)와 과제 결과물만 올립니다. 교수님 수업 자료, 데이터셋, 모델 파일, 팀원 자료는 올리지 않습니다.
+직접 작성한 코드(.py · .ipynb · .v · .xdc)와 과제 결과물을 올립니다. 교수님 수업 자료, 데이터셋, 모델 파일은 올리지 않습니다. 팀 프로젝트는 팀 저장소 사본을 함께 두고, 폴더마다 README 에 내 담당 부분을 적었습니다.
 
 > 이 문서는 저장소 **목차**입니다.
 
@@ -30,11 +30,14 @@
 | 경로 | 내용 |
 |---|---|
 | [`Lec_verilog/`](Lec_verilog/) | 과제 자료. HW1 8비트 덧셈기: 파형·보드 사진은 [`HW1_8bit_adder/`](Lec_verilog/HW1_8bit_adder/) |
+| [`Lec_verilog/Mini_Project_watch/`](Lec_verilog/Mini_Project_watch/) | **미니 프로젝트(3인) — 스톱워치 · 시계 · 타이머** (10/13 ~ 10/19): 제출본 · 발표 · 타이머 검증 · tick 구조 비교. 개요는 [`README.md`](Lec_verilog/Mini_Project_watch/README.md) |
+| [`Lec_verilog/BEST_Stop_watch_project/`](Lec_verilog/BEST_Stop_watch_project/) | **팀 프로젝트(4인) — WTS + SR04 + DHT11 + UART 통합** (10/20 ~ 11/02): 팀 저장소 사본 + 내 담당(UART sender · 트러블슈팅 v2 · v3 · 시연). 개요는 [`README.md`](Lec_verilog/BEST_Stop_watch_project/README.md), 원본 [kimsacademy1234-max/BEST_Stop_watch_project](https://github.com/kimsacademy1234-max/BEST_Stop_watch_project) |
+| [`Lec_verilog/UART_sender/`](Lec_verilog/UART_sender/) · [`팀프로젝트2_자료/`](Lec_verilog/팀프로젝트2_자료/) | UART sender 설계 설명 · 캡처 · 파형 해설, 팀 프로젝트 2 공유 문서 |
 | [`work/26_AI_CAMP_2/`](work/26_AI_CAMP_2/) | Vivado 프로젝트 소스(.v · .xdc · .xpr). 생성물(.runs · .sim 등)은 제외. 보드: Digilent Basys3 (Artix-7 XC7A35T) |
 
 ## 올리지 않는 것
 
-`.gitignore` 기준: 비밀값(`notify.json`), 개인 자료, 교수님 수업 자료(PDF), 팀원 자료·팀 발표자료, 팀 저장소 클론, 개인 학습노트·작업 메모(학습노트, 포트폴리오 작성규칙·트러블슈팅 기록·보고서 구성안, CLAUDE.md), 데이터셋·모델·영상·zip, Vivado 생성물. 공개 저장소라 팀원 이름은 역할명(팀원A·B·C)으로 적었습니다.
+`.gitignore` 기준: 비밀값(`notify.json`), 개인 자료, 교수님 수업 자료(PDF), 1기 포트폴리오 피드백 자료, 개인 학습노트·작업 메모(학습노트, 포트폴리오 작성규칙·트러블슈팅 기록·보고서 구성안, CLAUDE.md), 데이터셋·모델·zip, 영상 원본(보드 영상은 줄인 판만), Vivado 생성물. 1과목 침입감지 프로젝트는 팀원 이름을 역할명(팀원A·B·C)으로 적었고, 2과목 팀 프로젝트는 공개된 팀 저장소의 표기를 따랐습니다.
 
 ## 환경
 
