@@ -1,0 +1,97 @@
+
+****** xsim v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+RESULT E1 PASS
+E2 FAIL after release state 01 cursor 2 exp 11 0
+E2 INFO first-clock U after release: min = 0 (0 = ignored, c_state was NORMAL on that edge)
+E2 FAIL second U: 13:0 exp 12:1
+RESULT E2 FAIL
+E3 FAIL setup state 10 time 19:30 .5 exp 01 15:xx .5
+E3 INFO before reset: state 10 19:30:0.5
+E3 FAIL re-entry state 01 cursor 2 exp 11 0
+RESULT E3 FAIL
+E4 FAIL 00-1 -> 11:0 exp 12:59
+E4 FAIL 09+1 -> 22:0 exp 12:10
+E4 FAIL 10-1 -> 21:0 exp 12:09
+RESULT E4 FAIL
+E5 FAIL L -> state 11 cursor 0 exp 10 1
+E5 FAIL 00-10 -> 12:59 exp 12:50
+E5 FAIL setup min 59 cursor 0 exp 55 1
+E5 FAIL 55+10 -> 17:0 exp 12:05
+E5 FAIL 05-10 -> 17:59 exp 12:55
+RESULT E5 FAIL
+E6 FAIL L -> state 10 cursor 1 exp 01 2
+E6 FAIL 12+11 -> 17:49 exp 23:55
+E6 FAIL 23+1 -> 17:59 exp 0:55
+E6 FAIL 0-1 -> 17:49 exp 23:55
+RESULT E6 FAIL
+E7 FAIL setup state 00 21:49:0.0 exp 00 23:59:0.0
+E7 FAIL after 5999 ticks 21:49:59.99 exp 23:59:59.99
+E7 INFO ripple +1clk 21:49:59.0
+E7 INFO ripple +2clk 21:49:0.0
+E7 INFO ripple +3clk 21:50:0.0
+E7 INFO ripple +4clk 21:50:0.0
+E7 FAIL midnight 21:50:0.0 exp 0:0:0.0
+RESULT E7 FAIL
+E8 FAIL SET_MIN_1 U+D: up=0 down=0 min 50->50 (02 spec: up=1 down=0 min 51)
+E8 OBS SET_MIN_1 U+D = INVALID (up=0 down=0, no change)
+E8 FAIL SET_MIN_10 U+D: up=0 down=0 min 50->50 (02 spec: up=1 down=0 min 0)
+E8 OBS SET_MIN_10 U+D = INVALID (up=0 down=0, no change)
+E8 FAIL SET_HOUR U+D: up=0 down=0 hour 21->21 (02 spec: up=1 down=0 hour 22)
+E8 OBS SET_HOUR U+D = INVALID (up=0 down=0, no change)
+RESULT E8 FAIL
+E9 FAIL setup cursor 2 exp 0
+E9 FAIL step 0 cursor 0 state 11 exp 1 10
+E9 FAIL step 1 cursor 1 state 10 exp 2 01
+E9 FAIL step 2 cursor 2 state 01 exp 0 11
+E9 FAIL step 3 cursor 1 state 10 exp 2 01
+E9 FAIL step 4 cursor 0 state 11 exp 1 10
+E9 FAIL step 5 cursor 2 state 01 exp 0 11
+E9 FAIL step 6 cursor 0 state 11 exp 1 10
+E9 FAIL step 7 cursor 1 state 10 exp 2 01
+E9 FAIL step 8 cursor 2 state 01 exp 0 11
+RESULT E9 FAIL
+E10 FAIL case 0 re-entry state 01 cursor 2 exp 11 0
+E10 FAIL case 1 re-entry state 01 cursor 2 exp 11 0
+E10 FAIL case 2 re-entry state 01 cursor 2 exp 11 0
+E10 FAIL case 3 re-entry state 01 cursor 2 exp 11 0
+E10 FAIL case 4 re-entry state 01 cursor 2 exp 11 0
+E10 FAIL case 5 re-entry state 01 cursor 2 exp 11 0
+RESULT E10 FAIL
+E11 FAIL (a) min-counter tick+U: 22:51:0.0 exp 21:51:0.0 (tick only)
+E11 INFO (a) min 50 -> 51 after tick+U same clock (button dropped if +1 only)
+E11 FAIL (b) align: w_tick_min 1 down 1 cursor 0 exp 1 1 1
+E11 INFO (b) min 51 -> 52 after tick+D(-10) same clock
+E11 FAIL (c) setup min 52 cursor 1 exp 59 2
+E11 FAIL (c) align: w_tick_hour 0 up 1 exp 1 1
+E11 FAIL (c) hour-counter tick+U: 10:3:0 exp 11:0:0 (tick only)
+E11 INFO (c) hour 10 -> 10 after tick+U same clock
+RESULT E11 FAIL
+E12 FAIL 10ms tick + U: msec 0->1 min 3->3 exp msec+1 min+1
+E12 FAIL U/D in 3 cursors changed sec.msec 0.1 -> 0.1 (cursor 2)
+E12 FAIL 100 ticks in SET: sec.msec 1.1 exp 1.1
+RESULT E12 FAIL
+E13 FAIL (a) SET_MIN_1 L+U: cursor 0 12:3 (was 11:3) exp cursor 1 min 4
+E13 OBS (a) SET_MIN_1 L+U -> cursor 0, 11:3 -> 12:3
+E13 FAIL (b) SET_MIN_10 R+U: cursor 2 12:4 (was 12:3) exp cursor 0 min 13
+E13 OBS (b) SET_MIN_10 R+U -> cursor 2, 12:3 -> 12:4
+E13 FAIL (c) SET_HOUR R+D: cursor 0 12:54 (was 12:4) exp cursor 1 hour 11
+E13 OBS (c) SET_HOUR R+D -> cursor 0, 12:4 -> 12:54
+RESULT E13 FAIL
+INFO up&down both 1 count = 0, total up pulses 52, down pulses 80
+COV transitions (bit index = {c_state, n_state}) = 1111111111110011
+COV MISS NORMAL->SET_MIN_1
+COV FAIL illegal NORMAL->SET_HOUR/SET_MIN_10 seen
+COV missing transitions = 1 (of 14 listed)
+TOTAL MISMATCH = 50
+$finish called at time : 486400 ns : File "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_2/tb_e_unit.v" Line 488
+## quit
+INFO: [Common 17-206] Exiting xsim at Wed Oct 21 16:08:11 2026...

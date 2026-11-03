@@ -1,0 +1,42 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 00:17:58 2026
+# Process ID: 34352
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_bounce
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_bounce/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_bounce\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+press  1 : 1MHz o_btn 6  |  4kHz o_btn 1
+press  2 : 1MHz o_btn 6  |  4kHz o_btn 1
+press  3 : 1MHz o_btn 8  |  4kHz o_btn 1
+press  4 : 1MHz o_btn 6  |  4kHz o_btn 1
+press  5 : 1MHz o_btn 8  |  4kHz o_btn 1
+press  6 : 1MHz o_btn 9  |  4kHz o_btn 1
+press  7 : 1MHz o_btn 9  |  4kHz o_btn 1
+press  8 : 1MHz o_btn 10  |  4kHz o_btn 1
+press  9 : 1MHz o_btn 7  |  4kHz o_btn 1
+press 10 : 1MHz o_btn 10  |  4kHz o_btn 1
+press 11 : 1MHz o_btn 8  |  4kHz o_btn 1
+press 12 : 1MHz o_btn 10  |  4kHz o_btn 1
+press 13 : 1MHz o_btn 7  |  4kHz o_btn 1
+press 14 : 1MHz o_btn 10  |  4kHz o_btn 1
+press 15 : 1MHz o_btn 10  |  4kHz o_btn 1
+press 16 : 1MHz o_btn 6  |  4kHz o_btn 1
+press 17 : 1MHz o_btn 7  |  4kHz o_btn 1
+press 18 : 1MHz o_btn 9  |  4kHz o_btn 1
+press 19 : 1MHz o_btn 6  |  4kHz o_btn 1
+press 20 : 1MHz o_btn 7  |  4kHz o_btn 1
+TOTAL press 20 : 1MHz o_btn = 159 (wrong presses 20)  |  4kHz o_btn = 20 (wrong presses 0)
+$finish called at time : 6059291941 ns : File "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/final_present/_gen/tb_bounce.v" Line 39
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:16:10 . Memory (MB): peak = 239.027 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 10952 KB (Peak: 10952 KB), Simulation CPU Usage: 897562 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 00:34:10 2026...

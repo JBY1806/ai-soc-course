@@ -1,0 +1,95 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 03:16:31 2026
+# Process ID: 33776
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_2
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_2/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_2\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 1 s accuracy: interval between two sec increments == 1,000,000,000 ns (no preload)
+              plan   : reset, run 2 s with no preload
+              expect : o_wt_sec changes every exactly 1,000,000,000 ns, 12:00:02.00 after 2 s
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P1                 sw4..0=00000 WATCH SS.cc 12h watch 12:00,  cursor NORMAL(3)
+[2000.001 ms] [   INFO]    P1.WB7 first sec increment 1000.000015 ms after reset release, second at +1000.000000 ms
+[2000.001 ms] [     OK]    P1.WB7 1 s = 100,000,000 clk | exp=1000000000.000 ns got=1000000000.000 ns
+[2000.001 ms] [     OK]    P1.WB7 watch value after 2 s | exp=12:00:02.00 got=12:00:02.00
+[2000.001 ms] [   PASS]        P1 END  checks=2 fail=0 defect=0 (2000.001 ms)
+
+==========================================================================================
+[2000.001 ms] [  BEGIN]        P2 sec 59 -> 00, min +1 : 00:00:59.95 -> 00:01:00.00
+              plan   : PRELOAD 00:00:59.95
+              expect : 59.99 after 4 ticks -> 5th tick 00:01:00.00
+------------------------------------------------------------------------------------------
+[2000.001 ms] [  RESET]        P2                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[2010.002 ms] [PRELOAD]        P2 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 00:00:59.95   (wave: values jump here with no U/D tick)
+[2010.002 ms] [   WAIT]        P2                           4 tick(s) of 10 ms watch 00:00,  cursor NORMAL(3)
+[2050.002 ms] [     OK] P2.WB2.SEC sec carry : 4 ticks after preload | exp=00:00:59.99 got=00:00:59.99
+[2050.002 ms] [   WAIT]        P2                           1 tick(s) of 10 ms watch 00:00 -> 00:01,  cursor NORMAL(3)
+[2060.002 ms] [     OK] P2.WB2.SEC sec carry : carry on 5th tick | exp=00:01:00.00 got=00:01:00.00
+[2060.002 ms] [   PASS]        P2 END  checks=2 fail=0 defect=0 (60.001 ms)
+
+==========================================================================================
+[2060.002 ms] [  BEGIN]        P3 min 59 -> 00, hour +1 : 00:59:59.95 -> 01:00:00.00
+              plan   : PRELOAD 00:59:59.95
+              expect : 01:00:00.00
+------------------------------------------------------------------------------------------
+[2060.002 ms] [  RESET]        P3                               rst 1 us pulse watch 00:01 -> 12:00,  cursor NORMAL(3)
+[2070.003 ms] [PRELOAD]        P3 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 00:59:59.95   (wave: values jump here with no U/D tick)
+[2070.003 ms] [   WAIT]        P3                           4 tick(s) of 10 ms watch 00:59,  cursor NORMAL(3)
+[2110.003 ms] [     OK] P3.WB2.MIN min carry : 4 ticks after preload | exp=00:59:59.99 got=00:59:59.99
+[2110.003 ms] [   WAIT]        P3                           1 tick(s) of 10 ms watch 00:59 -> 01:00,  cursor NORMAL(3)
+[2120.003 ms] [     OK] P3.WB2.MIN min carry : carry on 5th tick | exp=01:00:00.00 got=01:00:00.00
+[2120.003 ms] [   PASS]        P3 END  checks=2 fail=0 defect=0 (60.001 ms)
+
+==========================================================================================
+[2120.003 ms] [  BEGIN]        P4 midnight 23:59:59.95 -> 00:00:00.00 (4-stage carry in one tick)
+              plan   : PRELOAD 23:59:59.95 (HH.MM, 12h)
+              expect : o_wt_pm 1, led15 1 -> 00:00:00.00: o_wt_pm 0, led15 0, o_wt_hour_disp 12, FND 12.00
+------------------------------------------------------------------------------------------
+[2120.003 ms] [  RESET]        P4                               rst 1 us pulse watch 01:00 -> 12:00,  cursor NORMAL(3)
+[2120.005 ms] [     SW]        P4                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[2130.004 ms] [PRELOAD]        P4 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 23:59:59.95   (wave: values jump here with no U/D tick)
+[2130.004 ms] [     OK]    P4.WB4 23:59 is PM (led15) | exp=1 got=1
+[2130.004 ms] [   WAIT]        P4                           4 tick(s) of 10 ms watch 23:59,  cursor NORMAL(3)
+[2170.004 ms] [     OK]    P4.WB1 4 ticks after preload | exp=23:59:59.99 got=23:59:59.99
+[2180.004 ms] [   INFO]    P4.WB1 carry ripple after tick: clk+1=23:59:59.99 clk+2=23:59:59.00 clk+3=23:59:00.00 clk+4=23:00:00.00 clk+5=00:00:00.00
+[2180.004 ms] [     OK]    P4.WB1 all 4 digits wrap to 0 within the tick (+5 clk) | exp=00:00:00.00 got=00:00:00.00
+[2180.004 ms] [     OK]    P4.WB4 00:00 is AM (led15 off) | exp=0 got=0
+[2185.004 ms] [     OK]    P4.WB4 midnight shown as 12.00 in 12h mode | exp="12.00" got="12.00"
+[2185.004 ms] [   PASS]        P4 END  checks=5 fail=0 defect=0 (65.001 ms)
+
+==========================================================================================
+[2185.004 ms] [  BEGIN]        P5 set mode: clock keeps running, 23:59:59.95 -> 00:00 while sw2=1 (INFO)
+              plan   : set mode (sw2=1), PRELOAD 23:59:59.95
+              expect : SET_MIN_1 but still rolls over to 00:00:00.00
+------------------------------------------------------------------------------------------
+[2185.004 ms] [  RESET]        P5                               rst 1 us pulse watch 00:00 -> 12:00,  cursor NORMAL(3)
+[2185.006 ms] [     SW]        P5             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor NORMAL(3) -> SET_MIN_1(0)
+[2195.005 ms] [PRELOAD]        P5 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 23:59:59.95   (wave: values jump here with no U/D tick)
+[2195.005 ms] [   WAIT]        P5                           5 tick(s) of 10 ms watch 23:59 -> 00:00,  cursor SET_MIN_1(0)
+[2245.005 ms] [     OK]    P5.WB5 carry continues in set mode | exp=00:00:00.00 got=00:00:00.00
+[2245.005 ms] [     OK]    P5.WB5 still in set mode | exp=1 got=1
+[2245.005 ms] [   INFO]    P5.WB5 current behaviour: time set to 23:59 becomes 00:00 while user is still in set mode (clock never pauses)
+[2245.005 ms] [   PASS]        P5 END  checks=2 fail=0 defect=0 (60.001 ms)
+[2245.005 ms] [SUMMARY] WT2 src=orig checks=13 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 2245005210 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/03_watch/tb_wt_2_rollover.sv" Line 251
+run: Time (s): cpu = 00:00:03 ; elapsed = 00:41:52 . Memory (MB): peak = 248.551 ; gain = 16.160
+exit
+INFO: xsimkernel Simulation Memory Usage: 12840 KB (Peak: 12840 KB), Simulation CPU Usage: 1440046 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 03:58:25 2026...

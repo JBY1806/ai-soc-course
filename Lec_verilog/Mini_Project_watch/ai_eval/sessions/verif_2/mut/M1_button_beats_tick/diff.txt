@@ -1,0 +1,4 @@
+127c127
+<             if (i_tick) begin
+---
+>             if (i_tick & ~i_up & ~i_down) begin

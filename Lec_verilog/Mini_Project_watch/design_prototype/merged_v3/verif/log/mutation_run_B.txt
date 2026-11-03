@@ -1,0 +1,13 @@
+M16 점멸 조건 스위치 틀림                 unit[fnd:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M18 숫자 5 세그먼트 틀림                 unit[fnd:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M17 점 항상 꺼짐(점멸 없음)               unit[fnd:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M20 24시간 표시에서도 PM LED            unit[-] directed[CAUGHT] sv[CAUGHT]
+M19 타이머 화면에서 스톱워치도 버튼 받음         unit[-] directed[CAUGHT] sv[CAUGHT]
+M24 타이머 화면 분.초 고정 안 됨            unit[-] directed[CAUGHT] sv[CAUGHT]
+M23 100 Hz tick 1클럭 빠름           unit[tickgens:CAUGHT] directed[CAUGHT] sv[missed]
+M22 4 kHz 분주 1클럭 느림              unit[debounce:missed tickgens:CAUGHT] directed[missed] sv[missed]
+M26 초 -> 분 올림 누락                 unit[timer:CAUGHT] directed[CAUGHT] sv[missed]
+M25 시계 시작 00시                    unit[watch_cnt:missed watch_dp:CAUGHT] directed[CAUGHT(timeout/compile)] sv[CAUGHT]
+M21 디바운서 출력이 펄스 아닌 레벨            unit[debounce:CAUGHT] directed[CAUGHT(timeout/compile)] sv[missed]
+- 잡힘: 단위 8/11, 지시형 10/11, SV 랜덤 7/11, 셋 중 하나라도 11/11
+- 소요 11 분

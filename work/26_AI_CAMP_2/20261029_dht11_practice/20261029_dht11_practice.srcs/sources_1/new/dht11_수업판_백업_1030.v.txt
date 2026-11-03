@@ -1,0 +1,115 @@
+`timescale 1ns / 1ps
+
+module top_dht11 (
+    input        clk,
+    input        rst,
+    input        btnR,
+    output [3:0] fnd_com,
+    output [7:0] fnd_font,
+    inout        dht11_io
+);
+
+    dht11_controlller U_DHT11_CNTL (
+        .clk        (clk),
+        .rst        (rst),
+        .dht11_start(btnR),     //start trigger
+        .us_tick    (),
+        .valid      (),         // check sum ok
+        .humidity   (),
+        .temperature(),
+        .dht11_io   (dht11_io)  //single wire, for half duplexing
+    );
+
+endmodule
+
+
+module dht11_controlller (
+    input         clk,
+    input         rst,
+    input         dht11_start,  //start trigger
+    input         us_tick,
+    output        valid,        // check sum ok
+    output [15:0] humidity,
+    output [15:0] temperature,
+    inout         dht11_io      //single wire, for half duplexing
+);
+    localparam IDLE = 0, START = 1, WAIT = 2, SYNC_L = 3, STOP = 10;
+    reg [2:0] c_state, n_state;
+    reg dht11_io_control_reg, dht11_io_control_next;
+    reg dht11_io_reg, dht11_io_next;
+    reg [$clog2(19_000)-1:0] tick_cnt_reg, tick_cnt_next;
+
+    // output control by 3 state buffer
+    assign dht11_io = (dht11_io_control_reg) ? dht11_io_reg : 1'bz;
+
+    always @(posedge clk, posedge rst) begin
+        if (rst) begin
+            c_state              <= IDLE;
+            dht11_io_control_reg <= 1'b1;
+            dht11_io_reg         <= 1'b1;
+            tick_cnt_reg         <= 0;
+        end else begin
+            c_state              <= n_state;
+            dht11_io_control_reg <= dht11_io_control_next;
+            dht11_io_reg         <= dht11_io_next;
+            tick_cnt_reg         <= tick_cnt_next;
+        end
+    end
+
+    // next, output
+    always @(*) begin
+        n_state               = c_state;
+        dht11_io_control_next = dht11_io_control_reg;
+        dht11_io_next         = dht11_io_reg;
+        tick_cnt_next         = tick_cnt_reg;
+        case (c_state)
+            IDLE: begin
+                dht11_io_next = 1'b1;
+                dht11_io_control_next = 1'b1;
+                if (dht11_start) begin
+                    tick_cnt_next = 0;
+                    n_state = START;
+                end
+            end
+            START: begin
+                dht11_io_next = 1'b0;
+                dht11_io_control_next = 1'b1;
+                if (us_tick) begin
+                    if (tick_cnt_reg == 19_000 - 1) begin
+                        tick_cnt_next = 0;
+                        n_state = WAIT;
+                    end else begin
+                        tick_cnt_next = tick_cnt_reg + 1;
+                    end
+                end
+            end
+            WAIT: begin
+                dht11_io_next = 1'b1;
+                dht11_io_control_next = 1'b1;
+                if (us_tick) begin
+                    if (tick_cnt_reg == 30 - 1) begin
+                        tick_cnt_next = 0;
+                        //cahnge output to high impedence
+                        dht11_io_control_next = 1'b0;
+                        n_state = STOP;  // example
+                    end else begin
+                        tick_cnt_next = tick_cnt_reg + 1;
+                    end
+                end
+            end
+            STOP: begin
+                if (us_tick) begin
+                    if (tick_cnt_reg == 60 - 1) begin
+                        tick_cnt_next = 0;
+                        //cahnge output to high impedence
+                        dht11_io_control_next = 1'b1;
+                        n_state = IDLE;  // example
+                    end else begin
+                        tick_cnt_next = tick_cnt_reg + 1;
+                    end
+                end
+            end
+        endcase
+    end
+
+endmodule

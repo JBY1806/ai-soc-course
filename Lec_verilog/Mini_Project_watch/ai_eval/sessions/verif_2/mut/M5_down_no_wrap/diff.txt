@@ -1,0 +1,4 @@
+148c148
+<                         counter_reg <= counter_reg + TIMES - w_step;
+---
+>                         counter_reg <= 0;

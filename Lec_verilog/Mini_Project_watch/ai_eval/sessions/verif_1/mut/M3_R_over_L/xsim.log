@@ -1,0 +1,57 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Fri Oct 16 15:51:12 2026
+# Process ID: 52208
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_1/mut/M3_R_over_L
+# Command line: xsim.exe -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_1/mut/M3_R_over_L/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_1/mut/M3_R_over_L\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+E1 start 22 ns
+E2 start 80 ns
+E2 INFO first-clock U after reset release: min 0 -> 0 (ignored, state was NORMAL)
+E3 start 120 ns
+E4 start 180 ns
+E5 start 420 ns
+E6 start 620 ns
+E7 start 910 ns
+E8 start 61270 ns
+E9 start 61330 ns
+E9 FAIL L+R at MIN_1 cursor 2 exp 1
+E9 FAIL L+R at MIN_10 cursor 0 exp 2
+E9 FAIL L+R at HOUR cursor 2 exp 0
+E10 start 61450 ns
+E11 start 61560 ns
+E12 start 241910 ns
+E13 start 243140 ns
+E14 start 243940 ns
+E14 INFO L+U at SET_MIN_1 (12:05): min -> 06 = applied to OLD digit (min_1 +1), cursor -> 1
+E14 INFO R+D at SET_HOUR (12:6): hour -> 11 = applied to OLD digit (hour -1), cursor -> 1
+COV transitions (bit index = {c_state, n_state}) = 1111111111111001
+COV missing transitions = 0 (of 14 listed)
+RESULT E1 PASS
+RESULT E2 PASS
+RESULT E3 PASS
+RESULT E4 PASS
+RESULT E5 PASS
+RESULT E6 PASS
+RESULT E7 PASS
+RESULT E8 PASS
+RESULT E9 FAIL (3)
+RESULT E10 PASS
+RESULT E11 PASS
+RESULT E12 PASS
+RESULT E13 PASS
+RESULT E14 PASS
+TOTAL MISMATCH = 3
+$finish called at time : 244120 ns : File "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_1/tb_e_unit.v" Line 345
+## quit
+INFO: [Common 17-206] Exiting xsim at Fri Oct 16 15:51:14 2026...

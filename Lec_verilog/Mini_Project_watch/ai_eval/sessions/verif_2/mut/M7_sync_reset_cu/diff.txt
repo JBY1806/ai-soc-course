@@ -1,0 +1,4 @@
+30c30
+<     always @(posedge i_clk, posedge i_rst) begin
+---
+>     always @(posedge i_clk) begin

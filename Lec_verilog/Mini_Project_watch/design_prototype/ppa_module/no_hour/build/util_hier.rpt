@@ -1,0 +1,68 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+| Date         : Mon Oct 19 16:28:17 2026
+| Host         : DESKTOP-5C3QTIF running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file util_hier.rpt
+| Design       : stopwatch_watch
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Routed
+------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++----------------------------+-------------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+|          Instance          |                   Module                  | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++----------------------------+-------------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+| stopwatch_watch            |                                     (top) |        395 |        395 |       0 |    0 | 223 |      0 |      0 |          0 |
+|   (stopwatch_watch)        |                                     (top) |         42 |         42 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   U_BD_D                   |                              btn_debounce |          3 |          3 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_BD_L                   |                           btn_debounce__2 |          3 |          3 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_BD_R                   |                           btn_debounce__1 |          3 |          3 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_BD_U                   |                           btn_debounce__3 |          3 |          3 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_CLK_GEN_4KHZ           |                      clock_tick_generator |         12 |         12 |       0 |    0 |  16 |      0 |      0 |          0 |
+|   U_FND_CONTROLLER         |                        SW2_FND_CONTROLLER |         51 |         51 |       0 |    0 |   3 |      0 |      0 |          0 |
+|     (U_FND_CONTROLLER)     |                        SW2_FND_CONTROLLER |          2 |          2 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_ANODE_CHOICE_TO_MUX2 |                          SW2_ANODE_CHOICE |         13 |         13 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_COUNTER8             |                                  counter8 |          2 |          2 |       0 |    0 |   3 |      0 |      0 |          0 |
+|     U_DECODER              |                               decoder_2x4 |          2 |          2 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_DOT                  |                                       dot |          1 |          1 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_FND_DEC              |                               fnd_decoder |          4 |          4 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_HOUR                 |            digit_splitter__parameterized0 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MIN                  |         digit_splitter__parameterized0__2 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MIN_MUXER            |                                   mux_8x1 |          6 |          6 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MSEC                 |                            digit_splitter |          6 |          6 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_SEC                  |         digit_splitter__parameterized0__1 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_SEC_MUXER            |                                mux_8x1__1 |          6 |          6 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   U_HOUR_12_24             |                                hour_12_24 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   U_STOPWATCH_CONTROL_UNIT |                    stopwatch_control_unit |          2 |          2 |       0 |    0 |   2 |      0 |      0 |          0 |
+|   U_STOPWATCH_DATAPATH     |                        stopwatch_datapath |         76 |         76 |       0 |    0 |  52 |      0 |      0 |          0 |
+|     U_HOUR_COUNTER         |                    stopwatch_tick_counter |          6 |          6 |       0 |    0 |   5 |      0 |      0 |          0 |
+|     U_LAP_CONTROLLER       |                            lap_controller |         26 |         26 |       0 |    0 |  25 |      0 |      0 |          0 |
+|     U_MIN_COUNTER          | stopwatch_tick_counter__parameterized0__1 |         13 |         13 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_MSEC_COUNTER         |    stopwatch_tick_counter__parameterized1 |         20 |         20 |       0 |    0 |   8 |      0 |      0 |          0 |
+|     U_SEC_COUNTER          |    stopwatch_tick_counter__parameterized0 |         13 |         13 |       0 |    0 |   7 |      0 |      0 |          0 |
+|   U_TICK_GEN_100HZ         |                            tick_gen_100hz |         25 |         25 |       0 |    0 |  21 |      0 |      0 |          0 |
+|   U_TICK_GEN_SW            |                     tick_gen_100hz_run__1 |         31 |         31 |       0 |    0 |  21 |      0 |      0 |          0 |
+|   U_TICK_GEN_TM            |                        tick_gen_100hz_run |         31 |         31 |       0 |    0 |  21 |      0 |      0 |          0 |
+|   U_TIMER_CONTROL_UNIT     |                        timer_control_unit |          6 |          6 |       0 |    0 |   3 |      0 |      0 |          0 |
+|   U_TIMER_DATAPATH         |                            timer_datapath |         44 |         44 |       0 |    0 |  19 |      0 |      0 |          0 |
+|   U_WATCH_CONTROL_UNIT     |                        watch_control_unit |          3 |          3 |       0 |    0 |   2 |      0 |      0 |          0 |
+|   U_WATCH_DATAPATH         |                            watch_datapath |         59 |         59 |       0 |    0 |  27 |      0 |      0 |          0 |
+|     (U_WATCH_DATAPATH)     |                            watch_datapath |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_HOUR_COUNTER         |        watch_tick_counter__parameterized1 |          7 |          7 |       0 |    0 |   5 |      0 |      0 |          0 |
+|     U_MIN_COUNTER          |        watch_tick_counter__parameterized0 |         21 |         21 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_MSEC_COUNTER         |                        watch_tick_counter |         18 |         18 |       0 |    0 |   8 |      0 |      0 |          0 |
+|     U_SEC_COUNTER          |     watch_tick_counter__parameterized0__1 |         10 |         10 |       0 |    0 |   7 |      0 |      0 |          0 |
++----------------------------+-------------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

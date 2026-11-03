@@ -1,0 +1,12 @@
+57c57
+<                 end else if (i_wt_btn_L == 1'b1) begin
+---
+>                 end else if (i_wt_btn_L == 1'b1 && i_wt_btn_R == 1'b0) begin
+68c68
+<                 end else if (i_wt_btn_L == 1'b1) begin
+---
+>                 end else if (i_wt_btn_L == 1'b1 && i_wt_btn_R == 1'b0) begin
+79c79
+<                 end else if (i_wt_btn_L == 1'b1) begin
+---
+>                 end else if (i_wt_btn_L == 1'b1 && i_wt_btn_R == 1'b0) begin

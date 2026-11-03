@@ -1,0 +1,9 @@
+== M1_button_beats_tick : E8 E11  | TOTAL MISMATCH = 4
+== M2_spec_U_priority :  | TOTAL MISMATCH = 0
+== M3_R_over_L : E8 E9  | TOTAL MISMATCH = 5
+== M4_no_sw2_gate : E8 E10  | TOTAL MISMATCH = 6
+== M5_down_no_wrap : E4 E5 E6 E7 E8 E11  | TOTAL MISMATCH = 22
+== M6_enter_hour : E2 E3 E4 E5 E6 E7 E8 E9 E10 E11 E12 E13  | TOTAL MISMATCH = 50
+== M7_sync_reset_cu : E3 E8  | TOTAL MISMATCH = 4
+== M8_up_wrap_gt : E4 E5 E6 E8  | TOTAL MISMATCH = 6
+== M9_hour_init_0 : E1 E2 E3 E4 E5 E6 E7 E8  | TOTAL MISMATCH = 23

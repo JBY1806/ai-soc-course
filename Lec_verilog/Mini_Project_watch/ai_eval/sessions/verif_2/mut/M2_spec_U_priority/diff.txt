@@ -1,0 +1,4 @@
+90c90
+<             o_wt_up   = i_wt_btn_U & ~i_wt_btn_D;
+---
+>             o_wt_up   = i_wt_btn_U;

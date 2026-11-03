@@ -1,0 +1,98 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Oct 19 22:57:25 2026
+# Process ID: 29292
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_f1_src
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_f1_src/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_f1_src\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P0 fault_sw15 = 0: functional smoke (injector bypass == original)
+              plan   : fault_sw15=0, functional smoke
+              expect : same as original (injector bypassed), all checks pass
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P0                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P0                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[   0.003 ms] [     OK] P0.SMOKE.RST reset value 12:00:00 | exp=12:00:00.xx got=12:00:00.00
+[   0.003 ms] [     OK] P0.SMOKE.LED LED after reset (watch, HH.MM) | exp=8005 got=8005
+[   0.003 ms] [    BTN]        P0                   btn_U (o_btn @   2.001 ms) watch 12:00,  cursor NORMAL(3)
+[  10.003 ms] [     OK] P0.SMOKE.NORMAL U ignored in NORMAL | exp=min=0 got=min=0
+[  10.003 ms] [     SW]        P0             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor NORMAL(3) -> SET_MIN_1(0)
+[  10.004 ms] [     OK] P0.SMOKE.CUR set mode enters cursor 0 | exp=0 got=0
+[  10.004 ms] [    BTN]        P0                   btn_U (o_btn @  12.001 ms) watch 12:00 -> 12:01,  cursor SET_MIN_1(0)
+[  20.004 ms] [     OK] P0.SMOKE.UP U +1 min | exp=1 got=1
+[  20.004 ms] [    BTN]        P0                   btn_D (o_btn @  22.001 ms) watch 12:01 -> 12:00,  cursor SET_MIN_1(0)
+[  30.004 ms] [    BTN]        P0                   btn_D (o_btn @  32.001 ms) watch 12:00 -> 12:59,  cursor SET_MIN_1(0)
+[  40.004 ms] [     OK] P0.SMOKE.DN D -1 min twice (wrap) | exp=59 got=59
+[  40.004 ms] [    BTN]        P0                   btn_L (o_btn @  42.001 ms) watch 12:59,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[  50.004 ms] [     OK] P0.SMOKE.L L moves cursor 0->1 | exp=1 got=1
+[  50.004 ms] [    BTN]        P0                   btn_R (o_btn @  52.001 ms) watch 12:59,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[  60.004 ms] [     OK] P0.SMOKE.R R moves cursor 1->0 | exp=0 got=0
+[  60.004 ms] [     SW]        P0                 sw4..0=00010 WATCH HH.MM 12h watch 12:59,  cursor SET_MIN_1(0) -> NORMAL(3)
+[  65.005 ms] [     OK] P0.SMOKE.FND FND HH.MM after setting | exp="12.59" got="12.59"
+[  65.005 ms] [   PASS]        P0 END  checks=9 fail=0 defect=0 (65.005 ms)
+
+==========================================================================================
+[  65.005 ms] [  BEGIN]        P1 TB-model sweep: com delay N = 0 / 500 / 3000 / 12500 clk, screen 12.34, 20 ms
+              plan   : TB model: com delay N = 0 / 500 / 3000 / 12500 clk, screen 12.34, 20 ms
+              expect : N=0 PASS, N>0 DEFECT (wrong digit on-time table per digit)
+------------------------------------------------------------------------------------------
+[  65.005 ms] [  RESET]        P1                               rst 1 us pulse watch 12:59 -> 12:00,  cursor NORMAL(3)
+[  65.007 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[  75.006 ms] [PRELOAD]        P1 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 12:34:00.00   (wave: values jump here with no U/D tick)
+[  96.006 ms] [   INFO]  P1.F1.N0 N=0 (0.000 us skew): ghost per frame  AN0 0.000 us '_' | AN1 0.000 us '_' | AN2 0.000 us '_' | AN3 0.000 us '_'
+[  96.006 ms] [     OK]  P1.F1.N0 no skew -> no ghost digit | exp=0 us got=0.000 us
+[  96.006 ms] [   INFO] P1.F1.N500 N=500 (5.000 us skew): ghost per frame  AN0 5.000 us '4' | AN1 10.000 us '3' | AN2 5.000 us '2' | AN3 5.000 us '4'
+[  96.006 ms] [ DEFECT] P1.F1.N500 first ghost at   76.006 ms, N=500: AN0 shows '4'(AN1 digit) for 5.000 us per slot (2.0 % duty), AN3 shows '4'(AN0 digit) 5.000 us | exp=0 us ghost got=25.000 us/frame total | disp="12.34"
+    wave window:   75.006 ms ~   77.006 ms
+[  96.006 ms] [   INFO] P1.F1.N3000 N=3000 (30.000 us skew): ghost per frame  AN0 30.000 us '4' | AN1 60.000 us '3' | AN2 30.000 us '2' | AN3 30.000 us '4'
+[  96.006 ms] [ DEFECT] P1.F1.N3000 first ghost at   76.006 ms, N=3000: AN0 shows '4'(AN1 digit) for 30.000 us per slot (12.0 % duty), AN3 shows '4'(AN0 digit) 30.000 us | exp=0 us ghost got=150.000 us/frame total | disp="12.34"
+    wave window:   75.006 ms ~   77.006 ms
+[  96.006 ms] [   INFO] P1.F1.N12500 N=12500 (125.000 us skew): ghost per frame  AN0 125.000 us '4' | AN1 250.000 us '3' | AN2 125.000 us '2' | AN3 125.000 us '4'
+[  96.006 ms] [ DEFECT] P1.F1.N12500 first ghost at   76.006 ms, N=12500: AN0 shows '4'(AN1 digit) for 125.000 us per slot (50.0 % duty), AN3 shows '4'(AN0 digit) 125.000 us | exp=0 us ghost got=625.000 us/frame total | disp="12.34"
+    wave window:   75.006 ms ~   77.006 ms
+[  96.006 ms] [     OK] P1.F1.DISP pin FND (no injection) still reads 12.34 | exp="12.34" got="12.34"
+[  96.006 ms] [   PASS]        P1 END  checks=2 fail=0 defect=3 (31.001 ms)
+
+==========================================================================================
+[  96.006 ms] [  BEGIN]        P2 RTL injector fault_com_skew (N=12500) via fault_sw15: off -> on -> off, 20 ms each
+              plan   : RTL injector: fault_sw15 0 -> 1 -> 0, 20 ms each
+              expect : 0: matches reference / 1: DEFECT (ghost time) / back to 0: recovers
+------------------------------------------------------------------------------------------
+[  96.006 ms] [  RESET]        P2                               rst 1 us pulse watch 12:34 -> 12:00,  cursor NORMAL(3)
+[  96.008 ms] [     SW]        P2                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[ 106.007 ms] [PRELOAD]        P2 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 12:34:00.00   (wave: values jump here with no U/D tick)
+[ 126.007 ms] [     OK] P2.F1.OFF fault_sw15=0: pin FND == reference | exp=0 mismatch got=0
+[ 127.007 ms] [   INFO]  P2.F1.ON fault_sw15 -> 1 : com skew 125 us injected at the pins
+[ 127.132 ms] [ DEFECT]    P2.FND FND output != reference for 124.995 us from  127.007 ms (slot=4 com=0111 exp_com=1110 font=ff(_) exp_font=ff(_)) | exp=ref got=mismatch | disp="12.34"
+    wave window:  126.007 ms ~  128.007 ms
+[ 127.382 ms] [ DEFECT]    P2.FND FND output != reference for 125.000 us from  127.257 ms (slot=5 com=1110 exp_com=1101 font=ff(_) exp_font=ff(_)) | exp=ref got=mismatch | disp="12.34"
+    wave window:  126.257 ms ~  128.257 ms
+[ 127.632 ms] [ DEFECT]    P2.FND FND output != reference for 125.000 us from  127.507 ms (slot=6 com=1101 exp_com=1011 font=ff(_) exp_font=7f(.)) | exp=ref got=mismatch | disp="12.34"
+    wave window:  126.507 ms ~  128.507 ms
+[ 127.882 ms] [ DEFECT]    P2.FND FND output != reference for 125.000 us from  127.757 ms (slot=7 com=1011 exp_com=0111 font=7f(.) exp_font=ff(_)) | exp=ref got=mismatch | disp="12.34"
+    wave window:  126.757 ms ~  128.757 ms
+[ 128.132 ms] [ DEFECT]    P2.FND FND output != reference for 125.000 us from  128.007 ms (slot=0 com=0111 exp_com=1110 font=ff(_) exp_font=99(4)) | exp=ref got=mismatch | disp="12.34"
+    wave window:  127.007 ms ~  129.007 ms
+[ 147.007 ms] [   INFO]  P2.F1.ON N=12500 (125.000 us skew): ghost per frame  AN0 125.000 us '4' | AN1 250.000 us '3' | AN2 125.000 us '2' | AN3 125.000 us '4'
+[ 147.007 ms] [ DEFECT]  P2.F1.ON first ghost at  127.507 ms, N=12500: AN0 shows '4'(AN1 digit) for 125.000 us per slot (50.0 % duty), AN3 shows '4'(AN0 digit) 125.000 us | exp=0 us ghost got=625.000 us/frame total | disp="12.34"
+    wave window:  126.507 ms ~  128.507 ms
+[ 167.307 ms] [     OK] P2.F1.OFF2 fault_sw15 back to 0: pin FND == reference again | exp=0 mismatch got=0
+[ 167.307 ms] [   PASS]        P2 END  checks=2 fail=0 defect=82 (71.301 ms)
+[ 167.307 ms] [SUMMARY] F1 src=orig checks=13 fail=0 defect=85 limit=0 first_bad=76.006005 ms => DETECTED
+$finish called at time : 167307010 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/defect_1_fnd_com_skew/tb_f1_com_skew.sv" Line 263
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:02:25 . Memory (MB): peak = 239.473 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 13392 KB (Peak: 13392 KB), Simulation CPU Usage: 123499 ms
+INFO: [Common 17-206] Exiting xsim at Mon Oct 19 22:59:52 2026...

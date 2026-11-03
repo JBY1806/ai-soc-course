@@ -1,0 +1,42 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 03:02:37 2026
+# Process ID: 13876
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_3
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_3/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_3\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+[0.002 ms] ===== A stopwatch : STOP, R+L same instant
+  OK   A0 STOP, value 21 (x10 ms)
+[222.001005 ms] [same-clock] debounced pulses {D,U,L,R} = 0011 in the same clock  (Go To Time here)
+  OK   A1 R, L pulses in the same clock
+  OK   A2 R+L ignored : STOP, value 21 kept
+  OK   A3 L alone still clears (0)
+[240.002 ms] ===== B watch set : L+R, U+D same instant
+  OK   B0 set mode, cursor 0 (min ones), 12:00
+[243.001005 ms] [same-clock] debounced pulses {D,U,L,R} = 0011 in the same clock  (Go To Time here)
+  OK   B1 L+R ignored : cursor 0 kept
+[253.001005 ms] [same-clock] debounced pulses {D,U,L,R} = 1100 in the same clock  (Go To Time here)
+  OK   B2 U+D ignored : 12:00 kept
+  OK   B3 L alone still moves cursor (1)
+[271.002 ms] ===== C timer SET : U+R, L+D same instant
+[274.001005 ms] [same-clock] debounced pulses {D,U,L,R} = 0101 in the same clock  (Go To Time here)
+  OK   C1 U+R ignored : 00:00 kept
+  OK   C2 U alone still adds 10 s (00:10)
+[294.001005 ms] [same-clock] debounced pulses {D,U,L,R} = 1010 in the same clock  (Go To Time here)
+  OK   C3 L+D ignored : not started, 00:10 kept
+[302.002 ms] same-clock pulse pairs seen = 5 (expected 5)
+TOTAL 11 checks, TOTAL MISMATCH = 0
+$finish called at time : 302002 us : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/top/tb_top_3_btn_simultaneous.sv" Line 118
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:01:12 . Memory (MB): peak = 239.367 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 10272 KB (Peak: 10272 KB), Simulation CPU Usage: 68702 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 03:03:52 2026...

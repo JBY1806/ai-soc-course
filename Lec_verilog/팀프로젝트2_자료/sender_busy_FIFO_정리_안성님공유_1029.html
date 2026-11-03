@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>sender busy · FIFO 정리</title>
+<style>
+:root{--ink:#111;--sub:#555;--line:#d0d4da;--bg:#fbfcfe}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7;font-size:15.5px}
+#side{position:fixed;top:0;left:0;width:230px;height:100vh;overflow-y:auto;background:#f1f4f9;border-right:1px solid var(--line);padding:14px 8px;font-size:13.5px}
+#side a{display:block;color:var(--ink);text-decoration:none;border-radius:6px;padding:4px 8px}
+#side a:hover{background:#dfe7f3}
+main{margin-left:230px;max-width:1350px;padding:20px 30px 80px}
+h1{font-size:23px;margin:0 0 6px}
+h2{font-size:19px;margin:34px 0 8px;padding-top:10px;border-top:2px solid var(--line)}
+.lead{color:var(--sub);font-size:14px}
+.key{background:#fff7e0;border-left:5px solid #e8b64a;padding:8px 16px;margin:10px 0}
+table{border-collapse:collapse;margin:8px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:#e9eef6}
+code{font-family:Consolas,monospace;background:#eef1f6;border-radius:4px;padding:1px 4px}
+figure{margin:10px 0;border:1px solid #ccc;border-radius:6px;padding:6px;background:#fff}
+@media (max-width:900px){#side{position:static;width:auto;height:auto}main{margin-left:0;padding:14px}}
+</style></head><body>
+<aside id="side"><b>목차</b>
+<a href="#s0">0. 결론</a><a href="#s1">1. 블록도 · 신호</a><a href="#s2">2. send_busy 는 얼마나 긴가</a>
+<a href="#s3">3. busy 가 길어지는 경우</a><a href="#s4">4. busy 와 RX FIFO</a><a href="#s5">5. 대처 비교</a>
+<a href="#s6">6. 자원 (합성)</a><a href="#s7">7. /auto 제안</a><a href="#s8">8. 확인하고 싶은 것</a></aside>
+<main>
+<h1>sender busy · TX / RX FIFO 정리 (10/29)</h1>
+<p class="lead">안성님 01_UART_DECODER.pdf (05:31) 트러블슈팅을 보고 정리. 숫자는 9600 bps · 100 MHz 기준 계산값이고, 6 장 자원만 합성 실측. 정리 : 정보윤 (계산 · 합성 · 그림은 작성).</p>
+
+<h2 id="s0">0. 결론</h2>
+<div class="key"><ul>
+<li><b>send_busy 는 "sender 가 글자를 TX FIFO 에 다 넣을 때까지"</b> 만 1 (1 클럭에 1 글자). 선으로 PC 에 나가는 13 ms 는 TX FIFO · UART_TX 가 따로 처리 → 13 글자 응답이면 busy ≈ 130 ns.</li>
+<li>PDF 의 busy 11 ms 는 "선으로 다 나갈 때까지 busy" 로 본 최악 가정. 실제로 busy 가 길어지는 건 <b>TX FIFO 가 응답보다 작을 때</b> 뿐.</li>
+<li>그래서 <b>제 쪽 TX FIFO 를 가장 긴 응답보다 크게</b> (64 칸) 잡으면, 지금 디코더 구조 (busy 중 pop 멈춤) + RX FIFO 16 그대로 둬도 RX 가 넘칠 일이 없음.</li>
+</ul></div>
+
+<h2 id="s1">1. 블록도 · 신호 (지금까지 합의 + PDF 신호 이름)</h2>
+<figure><svg style="width:100%;height:auto;max-width:1300px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 720" font-family="Malgun Gothic, sans-serif" font-size="13">
+<defs>
+<marker id="a팀프로젝" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#222"/></marker>
+<marker id="r팀프로젝" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker>
+</defs>
+<rect width="1300" height="720" fill="#fff"/>
+<text x="12" y="24" font-size="17" font-weight="bold">팀 프로젝트 2 — 블록도와 신호 (10/29 기준 · 신호 이름은 안성님 PDF 파형)</text>
+<g font-size="12">
+<rect x="820" y="12" width="16" height="12" fill="#e3f0ff" stroke="#3b6fb6"/><text x="840" y="23">안성님 담당</text>
+<rect x="925" y="12" width="16" height="12" fill="#fff1dc" stroke="#d98c1f"/><text x="945" y="23">보윤 담당</text>
+<rect x="1005" y="12" width="16" height="12" fill="#f2f2f2" stroke="#555"/><text x="1025" y="23">UART · FIFO</text>
+<line x1="1115" y1="18" x2="1145" y2="18" stroke="#c62828" stroke-width="2" stroke-dasharray="5,4"/><text x="1150" y="23" fill="#c62828">아직 미정</text>
+</g>
+
+<!-- PC -->
+<rect x="20" y="300" width="90" height="80" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="65" y="335" text-anchor="middle">PC</text><text x="65" y="355" text-anchor="middle">콘솔</text>
+
+<!-- RX path -->
+<rect x="140" y="70" width="110" height="70" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="195" y="110" text-anchor="middle">UART_RX</text>
+<path d="M65,300 L65,105 L138,105" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#a팀프로젝)"/>
+<text x="72" y="160" font-size="12">rx (1선)</text>
+<text x="72" y="178" font-size="12">예 : /get sw_hm</text>
+
+<rect x="320" y="60" width="130" height="95" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="385" y="95" text-anchor="middle">RX FIFO</text>
+<text x="385" y="115" text-anchor="middle" font-size="11.5" fill="#c62828">깊이 8 → 16 / 32 ?</text>
+<g stroke="#222" stroke-width="1.4">
+<line x1="250" y1="92" x2="318" y2="92" marker-end="url(#a팀프로젝)"/>
+<line x1="250" y1="122" x2="318" y2="122" marker-end="url(#a팀프로젝)"/>
+</g>
+<g font-size="10.5"><text x="254" y="88">w_rx_data</text><text x="254" y="118">w_rx_done</text></g>
+
+<!-- FIFO <-> decoder -->
+<g stroke="#222" stroke-width="1.4">
+<line x1="450" y1="82" x2="538" y2="82" marker-end="url(#a팀프로젝)"/>
+<line x1="450" y1="112" x2="538" y2="112" marker-end="url(#a팀프로젝)"/>
+<line x1="540" y1="142" x2="452" y2="142" marker-end="url(#a팀프로젝)"/>
+</g>
+<g font-size="10.5"><text x="456" y="78">w_pop_data[7:0]</text><text x="456" y="108">w_rx_empty</text><text x="456" y="138">w_pop</text></g>
+
+<!-- DECODER -->
+<rect x="540" y="40" width="190" height="250" rx="6" fill="#e3f0ff" stroke="#3b6fb6" stroke-width="1.6"/>
+<text x="635" y="66" text-anchor="middle" font-weight="bold">UART_DECODER</text>
+<text x="635" y="84" text-anchor="middle" font-size="12">(안성님)</text>
+<text x="635" y="120" text-anchor="middle" font-size="12">글자 하나씩 읽는 FSM</text>
+<text x="635" y="145" text-anchor="middle" font-size="12">IDLE → SLASH</text>
+<text x="635" y="165" text-anchor="middle" font-size="12">→ g e t / m o d /</text>
+<text x="635" y="185" text-anchor="middle" font-size="12">a u t o / b t n</text>
+<text x="635" y="205" text-anchor="middle" font-size="12">→ SPACE → 인자 세기</text>
+<text x="635" y="225" text-anchor="middle" font-size="12">→ IDLE</text>
+<text x="635" y="255" text-anchor="middle" font-size="12">틀리면 ERROR</text>
+
+<!-- band 1 : decoder -> control -->
+<rect x="735" y="40" width="142" height="250" rx="6" fill="#f3f8ff" stroke="#3b6fb6" stroke-dasharray="4,3"/>
+<text x="741" y="57" font-size="12" font-weight="bold" fill="#1f4e99">① 안성님 안쪽</text>
+<text x="741" y="74" font-size="10" fill="#1f4e99">어떤 명령 (받는 동안 1)</text>
+<g stroke="#222" stroke-width="1.3">
+<line x1="730" y1="92" x2="878" y2="92" marker-end="url(#a팀프로젝)"/>
+<line x1="730" y1="110" x2="878" y2="110" marker-end="url(#a팀프로젝)"/>
+<line x1="730" y1="128" x2="878" y2="128" marker-end="url(#a팀프로젝)"/>
+<line x1="730" y1="146" x2="878" y2="146" marker-end="url(#a팀프로젝)"/>
+<line x1="730" y1="182" x2="878" y2="182" stroke-width="2.2" marker-end="url(#a팀프로젝)"/>
+<line x1="730" y1="218" x2="878" y2="218" marker-end="url(#a팀프로젝)"/>
+<line x1="730" y1="252" x2="878" y2="252" stroke-width="4.5" marker-end="url(#a팀프로젝)"/>
+</g>
+<g font-size="10.5"><text x="741" y="89">w_get</text><text x="741" y="107">w_mode</text><text x="741" y="125">w_auto</text><text x="741" y="143">w_btn</text>
+<text x="741" y="178" font-weight="bold" font-size="11">w_handshake</text><text x="741" y="196" font-size="10">다 받음 (짧은 펄스)</text>
+<text x="741" y="214">w_error (틀린 명령)</text>
+<text x="741" y="247">w_ascii[39:0]</text><text x="741" y="268" font-size="10">인자 5 글자</text></g>
+<line x1="730" y1="282" x2="878" y2="282" stroke="#c62828" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#r팀프로젝)"/>
+<text x="800" y="278" font-size="10" fill="#c62828">byte enable?</text>
+
+<!-- U_CONTROL -->
+<rect x="880" y="40" width="220" height="530" rx="6" fill="#e3f0ff" stroke="#3b6fb6" stroke-width="1.6"/>
+<text x="990" y="64" text-anchor="middle" font-weight="bold">U_CONTROL (안성님)</text>
+<rect x="898" y="150" width="112" height="62" rx="4" fill="#fff" stroke="#3b6fb6"/>
+<text x="954" y="176" text-anchor="middle" font-size="12">캡처 레지스터</text>
+<text x="954" y="196" text-anchor="middle" font-size="12">24비트</text>
+<text x="898" y="232" font-size="10.5">w_handshake 순간에</text>
+<text x="898" y="247" font-size="10.5">명령 · 데이터를 잡아 둠</text>
+<path d="M1045,85 L1075,100 L1075,285 L1045,300 z" fill="#fff" stroke="#3b6fb6" stroke-width="1.5"/>
+<text x="1060" y="198" text-anchor="middle" font-size="12">MUX</text>
+<line x1="1045" y1="190" x2="1012" y2="190" stroke="#222" stroke-width="3" marker-end="url(#a팀프로젝)"/>
+<text x="1108" y="322" font-size="10.5">↖ MUX 고르는 o_get_sel</text>
+<text x="1108" y="337" font-size="10.5">3비트 (5 개 중 하나)</text>
+<text x="898" y="372" font-size="11">auto : 1 초마다 send_go</text>
+<text x="898" y="390" font-size="11">auto 중 /get 무시</text>
+<path d="M1010,205 L1028,205 L1028,510 L884,510" fill="none" stroke="#777" stroke-width="2"/>
+
+<!-- sources -->
+<text x="1150" y="72" font-size="11">각 24비트</text>
+<g font-size="12">
+<rect x="1150" y="80" width="140" height="32" rx="4" fill="#f2f2f2" stroke="#555"/><text x="1220" y="101" text-anchor="middle">스톱워치</text>
+<rect x="1150" y="125" width="140" height="32" rx="4" fill="#f2f2f2" stroke="#555"/><text x="1220" y="146" text-anchor="middle">시계</text>
+<rect x="1150" y="170" width="140" height="32" rx="4" fill="#f2f2f2" stroke="#555"/><text x="1220" y="191" text-anchor="middle">타이머 (일정 보고)</text>
+<rect x="1150" y="215" width="140" height="32" rx="4" fill="#f2f2f2" stroke="#555"/><text x="1220" y="236" text-anchor="middle">거리 SR04</text>
+<rect x="1150" y="260" width="140" height="32" rx="4" fill="#f2f2f2" stroke="#555"/><text x="1220" y="281" text-anchor="middle">온습도 DHT11</text>
+</g>
+<g stroke="#222" stroke-width="1.5">
+<line x1="1150" y1="96" x2="1077" y2="112" marker-end="url(#a팀프로젝)"/>
+<line x1="1150" y1="141" x2="1077" y2="150" marker-end="url(#a팀프로젝)"/>
+<line x1="1150" y1="186" x2="1077" y2="190" marker-end="url(#a팀프로젝)"/>
+<line x1="1150" y1="231" x2="1077" y2="230" marker-end="url(#a팀프로젝)"/>
+<line x1="1150" y1="276" x2="1077" y2="268" marker-end="url(#a팀프로젝)"/>
+</g>
+
+<!-- band 2 : control <-> sender -->
+<rect x="735" y="410" width="142" height="160" rx="6" fill="#fff8ee" stroke="#d98c1f" stroke-dasharray="4,3"/>
+<text x="741" y="427" font-size="12" font-weight="bold" fill="#a85d00">② 보윤 ↔ 안성님</text>
+<g stroke="#222" stroke-width="1.4">
+<line x1="880" y1="452" x2="732" y2="452" stroke-width="2.2" marker-end="url(#a팀프로젝)"/>
+<line x1="880" y1="482" x2="732" y2="482" stroke-width="2.5" marker-end="url(#a팀프로젝)"/>
+<line x1="880" y1="510" x2="732" y2="510" stroke-width="4.5" marker-end="url(#a팀프로젝)"/>
+<line x1="730" y1="548" x2="878" y2="548" stroke-width="2.2" marker-end="url(#a팀프로젝)"/>
+</g>
+<g font-size="10.5"><text x="741" y="447" font-weight="bold">send_go</text><text x="800" y="447" font-size="10">보내 줘 1클럭</text>
+<text x="741" y="477">send_sel[2:0]</text><text x="828" y="477" font-size="10">형식</text>
+<text x="741" y="505">send_data[23:0]</text>
+<text x="741" y="543" font-weight="bold">send_busy</text><text x="806" y="543" font-size="10">보내는 중</text></g>
+
+<!-- SENDER -->
+<rect x="540" y="410" width="190" height="160" rx="6" fill="#fff1dc" stroke="#d98c1f" stroke-width="2.2"/>
+<text x="635" y="438" text-anchor="middle" font-weight="bold">SENDER (보윤)</text>
+<text x="635" y="465" text-anchor="middle" font-size="12">숫자 24비트 → 글자</text>
+<text x="635" y="487" text-anchor="middle" font-size="12">send_sel 로 형식 고름</text>
+<text x="635" y="512" text-anchor="middle" font-size="12">12:34:56.78 · 123cm</text>
+<text x="635" y="532" text-anchor="middle" font-size="12">· ERROR …</text>
+
+<!-- pop stop (red) -->
+<path d="M640,410 L640,293" fill="none" stroke="#c62828" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#r팀프로젝)"/>
+<text x="648" y="335" font-size="11" fill="#c62828">send_busy 중 pop 멈춤</text>
+<text x="648" y="351" font-size="11" fill="#c62828">→ RX FIFO 넘침 (05:31)</text>
+<text x="648" y="367" font-size="11" fill="#c62828">→ 바꿀지 논의 중</text>
+
+<!-- TX path -->
+<rect x="320" y="450" width="130" height="70" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="385" y="490" text-anchor="middle">TX FIFO</text>
+<rect x="140" y="450" width="110" height="70" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="195" y="490" text-anchor="middle">UART_TX</text>
+<g stroke="#222" stroke-width="1.5">
+<line x1="540" y1="485" x2="452" y2="485" marker-end="url(#a팀프로젝)"/>
+<line x1="320" y1="485" x2="252" y2="485" marker-end="url(#a팀프로젝)"/>
+</g>
+<text x="456" y="478" font-size="10.5">글자 8비트</text>
+<text x="456" y="503" font-size="10" fill="#c62828">(이름 미정)</text>
+<path d="M140,485 L65,485 L65,382" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#a팀프로젝)"/>
+<text x="72" y="440" font-size="12">tx (1선)</text>
+<text x="72" y="458" font-size="12">응답 글자</text>
+
+<!-- notes -->
+<rect x="10" y="590" width="1280" height="122" rx="6" fill="#fffbe6" stroke="#e8b64a"/>
+<g font-size="13">
+<text x="22" y="614"><tspan font-weight="bold" fill="#1f4e99">① 안성님 안쪽 핸드셰이크</tspan> : w_get · w_mode · w_auto · w_btn 로 "어떤 명령" 인지 + <tspan font-weight="bold">w_handshake</tspan> 펄스로 "다 받았다" → 그 순간 컨트롤러가 w_ascii (인자) 를 잡음</text>
+<text x="22" y="640"><tspan font-weight="bold" fill="#a85d00">② 보윤 ↔ 안성님 핸드셰이크</tspan> : <tspan font-weight="bold">send_go</tspan> 1클럭 "보내 줘" (+ send_sel · send_data) → <tspan font-weight="bold">send_busy</tspan> = 1 "보내는 중" → 0 "끝, 다음 받을 수 있음"</text>
+<text x="22" y="666"><tspan font-weight="bold">RX FIFO ↔ 디코더</tspan> : w_rx_empty = 0 "글자 있음" → w_pop 1클럭 "하나 꺼냄" → w_pop_data 가 그 글자 (수업 FIFO 와 같은 방식)</text>
+<text x="22" y="692"><tspan font-weight="bold">send_sel</tspan> : 0 스톱워치 · 1 시계 · 2 타이머 · 3 거리 · 4 온습도 · 7 ERROR   |   빨간 점선 = 아직 정하지 않은 것 (byte enable · FIFO 깊이 · pop 멈춤 · sender→TX FIFO 신호 이름)</text>
+</g>
+</svg>
+</figure>
+
+<h2 id="s2">2. send_busy 는 얼마나 긴가</h2>
+<figure><svg style="width:100%;height:auto;max-width:1300px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="Malgun Gothic, sans-serif" font-size="13">
+<defs>
+<marker id="asend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#222"/></marker>
+</defs>
+<rect width="1000" height="560" fill="#fff"/>
+<text x="12" y="24" font-size="17" font-weight="bold">send_busy = "sender 가 지금 일하는 중이라 새 send_go 를 못 받는다" 표시</text>
+
+<!-- top: blocks -->
+<rect x="20" y="50" width="150" height="60" rx="6" fill="#e3f0ff" stroke="#3b6fb6"/>
+<text x="95" y="76" text-anchor="middle" font-weight="bold">U_CONTROL</text><text x="95" y="96" text-anchor="middle" font-size="11">(안성님)</text>
+<rect x="250" y="50" width="150" height="60" rx="6" fill="#fff1dc" stroke="#d98c1f" stroke-width="2"/>
+<text x="325" y="76" text-anchor="middle" font-weight="bold">SENDER (보윤)</text><text x="325" y="96" text-anchor="middle" font-size="11">숫자 → 글자</text>
+<rect x="500" y="50" width="130" height="60" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="565" y="85" text-anchor="middle">TX FIFO</text>
+<rect x="700" y="50" width="130" height="60" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="765" y="85" text-anchor="middle">UART_TX</text>
+<rect x="900" y="50" width="80" height="60" rx="6" fill="#f2f2f2" stroke="#555"/>
+<text x="940" y="85" text-anchor="middle">PC</text>
+<g stroke="#222" stroke-width="1.5">
+<line x1="170" y1="70" x2="248" y2="70" marker-end="url(#asend)"/>
+<line x1="250" y1="95" x2="172" y2="95" marker-end="url(#asend)"/>
+<line x1="400" y1="80" x2="498" y2="80" marker-end="url(#asend)"/>
+<line x1="630" y1="80" x2="698" y2="80" marker-end="url(#asend)"/>
+<line x1="830" y1="80" x2="898" y2="80" marker-end="url(#asend)"/>
+</g>
+<g font-size="11"><text x="176" y="64">send_go</text><text x="176" y="110">send_busy</text>
+<text x="408" y="73">글자 넣기 (push)</text><text x="636" y="73">한 글자씩</text><text x="840" y="73">tx 선</text></g>
+<rect x="250" y="122" width="250" height="26" rx="4" fill="#fff1dc" stroke="#d98c1f"/>
+<text x="375" y="140" text-anchor="middle" font-size="12">sender 일 = 글자를 TX FIFO 에 넣기까지</text>
+<rect x="510" y="122" width="400" height="26" rx="4" fill="#f2f2f2" stroke="#555"/>
+<text x="710" y="140" text-anchor="middle" font-size="12">TX FIFO · UART_TX 일 = 선으로 한 글자씩 PC 에 내보내기</text>
+
+<!-- timing -->
+<text x="12" y="185" font-size="14" font-weight="bold">응답 13 글자 (예 : 12:34:56.78 = 11 글자 + 줄바꿈 CR · LF 2 글자) 를 보낼 때 — 숙제 sender 처럼 만들면 (계산)</text>
+<!-- axis regions -->
+<rect x="190" y="198" width="250" height="250" fill="#fff8ee"/>
+<text x="315" y="214" text-anchor="middle" font-size="11" fill="#a85d00">처음 130 ns 만 크게 확대</text>
+<text x="470" y="214" font-size="11" fill="#555">그 뒤 13.5 ms (축소)</text>
+<line x1="450" y1="198" x2="450" y2="448" stroke="#999" stroke-dasharray="3,3"/>
+<text x="444" y="460" font-size="12" fill="#999">//</text>
+
+<g font-size="12" font-weight="bold">
+<text x="12" y="243">send_go</text>
+<text x="12" y="288">send_busy</text>
+<text x="12" y="333">글자 넣기 (push)</text>
+<text x="12" y="378">TX FIFO 안 글자 수</text>
+<text x="12" y="423">tx 선 (PC 로)</text>
+</g>
+<g stroke="#1f4e99" stroke-width="2" fill="none">
+<!-- send_go -->
+<path d="M190,245 L200,245 L200,228 L215,228 L215,245 L980,245"/>
+<!-- send_busy -->
+<path d="M190,290 L215,290 L215,273 L410,273 L410,290 L980,290" stroke="#d98c1f" stroke-width="3"/>
+</g>
+<text x="250" y="268" font-size="11" fill="#a85d00">1 = 일하는 중 (13 클럭 ≈ 130 ns)</text>
+<text x="470" y="285" font-size="11" fill="#a85d00">0 = 다음 send_go 받을 수 있음 (선으로는 아직 나가는 중이어도)</text>
+<!-- push ticks -->
+<g stroke="#1f4e99" stroke-width="2">
+<path d="M190,335 L980,335" fill="none"/>
+<line x1="222" y1="335" x2="222" y2="320"/><line x1="236" y1="335" x2="236" y2="320"/><line x1="250" y1="335" x2="250" y2="320"/><line x1="264" y1="335" x2="264" y2="320"/><line x1="278" y1="335" x2="278" y2="320"/><line x1="292" y1="335" x2="292" y2="320"/><line x1="306" y1="335" x2="306" y2="320"/><line x1="320" y1="335" x2="320" y2="320"/><line x1="334" y1="335" x2="334" y2="320"/><line x1="348" y1="335" x2="348" y2="320"/><line x1="362" y1="335" x2="362" y2="320"/><line x1="376" y1="335" x2="376" y2="320"/><line x1="390" y1="335" x2="390" y2="320"/>
+</g>
+<text x="300" y="350" text-anchor="middle" font-size="10.5">1 클럭 (10 ns) 에 1 글자씩 13 번</text>
+<!-- fifo count -->
+<g font-size="10.5" text-anchor="middle">
+<rect x="190" y="363" width="30" height="22" fill="#fff" stroke="#555"/><text x="205" y="378">0</text>
+<rect x="220" y="363" width="190" height="22" fill="#fff" stroke="#555"/><text x="315" y="378">1 → 2 → … → 13 (쌓임)</text>
+<rect x="410" y="363" width="30" height="22" fill="#fff" stroke="#555"/><text x="425" y="378">13</text>
+<rect x="455" y="363" width="40" height="22" fill="#fff" stroke="#555"/><text x="475" y="378">13</text>
+<rect x="495" y="363" width="40" height="22" fill="#fff" stroke="#555"/><text x="515" y="378">12</text>
+<rect x="535" y="363" width="40" height="22" fill="#fff" stroke="#555"/><text x="555" y="378">11</text>
+<rect x="575" y="363" width="40" height="22" fill="#fff" stroke="#555"/><text x="595" y="378">10</text>
+<rect x="615" y="363" width="250" height="22" fill="#fff" stroke="#555"/><text x="740" y="378">9 → 8 → … → 1 (1.04 ms 마다 하나씩 빠짐)</text>
+<rect x="865" y="363" width="115" height="22" fill="#fff" stroke="#555"/><text x="922" y="378">0</text>
+</g>
+<!-- tx line -->
+<path d="M190,410 L455,410" stroke="#1f4e99" stroke-width="2" fill="none"/>
+<g fill="#dfe9f7" stroke="#1f4e99" stroke-width="1.2">
+<rect x="455" y="402" width="410" height="18"/>
+</g>
+<text x="660" y="415" text-anchor="middle" font-size="11">글자 1 · 글자 2 · … · 글자 13 이 선으로 나가는 중 (≈ 13.5 ms)</text>
+<path d="M865,410 L980,410" stroke="#1f4e99" stroke-width="2" fill="none"/>
+<text x="196" y="440" font-size="10.5" fill="#555">첫 글자가 막 나가기 시작 (1 글자 = 1.04 ms 라 여기선 안 보임)</text>
+
+<!-- professor-free note: 안성님 TB -->
+<rect x="12" y="470" width="976" height="80" rx="6" fill="#fdecea" stroke="#c62828"/>
+<text x="24" y="494" font-weight="bold" fill="#c62828">안성님 PDF 의 sender_busy 는?</text>
+<text x="24" y="516" font-size="12.5">sender 는 아직 없어서, 디코더만 시험하려고 TB 에서 "sender 가 약 11 ms 동안 바쁘다고 치자" 며 직접 1 로 만든 <tspan font-weight="bold">가정 신호</tspan>.</text>
+<text x="24" y="538" font-size="12.5">= 위 그림의 "tx 선으로 다 나갈 때까지 busy" 로 본 최악 경우. 숙제 sender 방식이면 실제 busy 는 위처럼 130 ns 정도 (TX FIFO 가 13 칸 이상일 때, 계산값).</text>
+</svg>
+</figure>
+
+<h2 id="s3">3. busy 가 길어지는 경우 = TX FIFO 가 꽉 찰 때</h2>
+<figure><svg style="width:100%;height:auto;max-width:1300px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="Malgun Gothic, sans-serif" font-size="13">
+<defs>
+<marker id="atx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#222"/></marker>
+<style>
+.c{fill:#fff1dc;stroke:#d98c1f;stroke-width:1.5}
+.f{fill:#dfe9f7;stroke:#1f4e99;stroke-width:1.5}
+.e{fill:#fff;stroke:#999;stroke-width:1.2;stroke-dasharray:3,2}
+.o{fill:#e6f4ea;stroke:#2e7d32;stroke-width:1.5}
+.p{fill:#eee;stroke:#888;stroke-width:1.2}
+.t{font-size:14px;font-weight:bold;text-anchor:middle}
+</style>
+</defs>
+<rect width="1000" height="600" fill="#fff"/>
+<text x="12" y="24" font-size="17" font-weight="bold">TX FIFO 가 꽉 차는 이유 : 넣는 속도 (1 클럭 10 ns 에 1 글자) ≫ 빼는 속도 (1.04 ms 에 1 글자)</text>
+<text x="12" y="46" font-size="13" fill="#444">쉬운 예 : TX FIFO 4 칸, 응답 6 글자 (A ~ F). 9600 bps 라 UART_TX 는 한 글자를 다 보내야 (1.04 ms) 다음 글자를 꺼냄</text>
+
+<!-- column headers -->
+<g font-size="12.5" font-weight="bold" fill="#333" text-anchor="middle">
+<text x="70" y="78">시각</text>
+<text x="235" y="78">sender 손에 남은 글자</text>
+<text x="480" y="78">TX FIFO (4 칸)</text>
+<text x="670" y="78">UART_TX (선으로 보내는 중)</text>
+<text x="900" y="78">send_busy</text>
+</g>
+
+<!-- row 1 -->
+<g transform="translate(0,90)">
+<text x="70" y="26" text-anchor="middle" font-size="12.5">① send_go</text><text x="70" y="42" text-anchor="middle" font-size="11">0 ns</text>
+<rect class="c" x="150" y="8" width="26" height="28"/><text class="t" x="163" y="28">A</text>
+<rect class="c" x="179" y="8" width="26" height="28"/><text class="t" x="192" y="28">B</text>
+<rect class="c" x="208" y="8" width="26" height="28"/><text class="t" x="221" y="28">C</text>
+<rect class="c" x="237" y="8" width="26" height="28"/><text class="t" x="250" y="28">D</text>
+<rect class="c" x="266" y="8" width="26" height="28"/><text class="t" x="279" y="28">E</text>
+<rect class="c" x="295" y="8" width="26" height="28"/><text class="t" x="308" y="28">F</text>
+<rect class="e" x="410" y="8" width="34" height="28"/><rect class="e" x="446" y="8" width="34" height="28"/><rect class="e" x="482" y="8" width="34" height="28"/><rect class="e" x="518" y="8" width="34" height="28"/>
+<rect class="p" x="620" y="8" width="100" height="28"/><text x="670" y="27" text-anchor="middle" font-size="11">쉬는 중</text>
+<text x="900" y="28" text-anchor="middle" font-weight="bold" fill="#d98c1f">1</text>
+</g>
+
+<!-- row 2 -->
+<g transform="translate(0,160)">
+<text x="70" y="26" text-anchor="middle" font-size="12.5">② 5 클럭 뒤</text><text x="70" y="42" text-anchor="middle" font-size="11">≈ 50 ns</text>
+<rect class="c" x="295" y="8" width="26" height="28"/><text class="t" x="308" y="28">F</text>
+<text x="150" y="27" font-size="11" fill="#c62828">빈칸 없음 → F 는 기다림</text>
+<rect class="f" x="410" y="8" width="34" height="28"/><text class="t" x="427" y="28">B</text>
+<rect class="f" x="446" y="8" width="34" height="28"/><text class="t" x="463" y="28">C</text>
+<rect class="f" x="482" y="8" width="34" height="28"/><text class="t" x="499" y="28">D</text>
+<rect class="f" x="518" y="8" width="34" height="28"/><text class="t" x="535" y="28">E</text>
+<text x="565" y="27" font-size="11.5" font-weight="bold" fill="#c62828">꽉 참</text>
+<rect class="o" x="620" y="8" width="100" height="28"/><text x="670" y="27" text-anchor="middle" font-size="11.5">A 보내는 중</text>
+<text x="900" y="28" text-anchor="middle" font-weight="bold" fill="#d98c1f">1 (기다림)</text>
+<text x="620" y="54" font-size="10.5" fill="#555">A 는 처음에 바로 꺼내 가서 FIFO 엔 B ~ E</text>
+</g>
+
+<!-- row 3 -->
+<g transform="translate(0,240)">
+<text x="70" y="26" text-anchor="middle" font-size="12.5">③ A 다 보냄</text><text x="70" y="42" text-anchor="middle" font-size="11">≈ 1.04 ms</text>
+<text x="150" y="27" font-size="11" fill="#2e7d32">빈칸 1 개 생김 → F 넣음</text>
+<rect class="f" x="410" y="8" width="34" height="28"/><text class="t" x="427" y="28">C</text>
+<rect class="f" x="446" y="8" width="34" height="28"/><text class="t" x="463" y="28">D</text>
+<rect class="f" x="482" y="8" width="34" height="28"/><text class="t" x="499" y="28">E</text>
+<rect class="f" x="518" y="8" width="34" height="28"/><text class="t" x="535" y="28">F</text>
+<rect class="o" x="620" y="8" width="100" height="28"/><text x="670" y="27" text-anchor="middle" font-size="11.5">B 보내는 중</text>
+<text x="900" y="28" text-anchor="middle" font-weight="bold" fill="#1f4e99">0 (sender 끝)</text>
+</g>
+
+<!-- row 4 -->
+<g transform="translate(0,310)">
+<text x="70" y="26" text-anchor="middle" font-size="12.5">④ 그 뒤</text><text x="70" y="42" text-anchor="middle" font-size="11">≈ 6.2 ms 까지</text>
+<text x="150" y="27" font-size="11" fill="#555">(sender 는 놀고 있음)</text>
+<rect class="e" x="410" y="8" width="34" height="28"/><rect class="e" x="446" y="8" width="34" height="28"/><rect class="e" x="482" y="8" width="34" height="28"/><rect class="e" x="518" y="8" width="34" height="28"/>
+<text x="480" y="54" text-anchor="middle" font-size="10.5" fill="#555">C D E F 가 1.04 ms 마다 하나씩 빠져 결국 빔</text>
+<rect class="o" x="620" y="8" width="100" height="28"/><text x="670" y="27" text-anchor="middle" font-size="11">B → C → … → F</text>
+<text x="900" y="28" text-anchor="middle" font-weight="bold" fill="#1f4e99">0</text>
+</g>
+
+<!-- result box -->
+<rect x="12" y="380" width="976" height="62" rx="6" fill="#fff8ee" stroke="#d98c1f"/>
+<text x="24" y="403" font-weight="bold">→ 응답 (6) 이 TX FIFO 빈칸 (4) + UART_TX 1 칸보다 많아서, 남은 1 글자 (F) 때문에 sender 가 ≈ 1.04 ms 동안 busy</text>
+<text x="24" y="428" font-size="12.5">busy ≈ (응답 글자 수 − TX FIFO 빈칸 − 1) × 1.04 ms · 빈칸이 넉넉하면 (예 : 16 칸에 6 글자) 6 클럭 ≈ 60 ns 만에 끝남</text>
+
+<!-- case 2 -->
+<text x="12" y="472" font-size="14" font-weight="bold">빈칸이 줄어드는 또 하나의 경우 : 앞 응답이 아직 TX FIFO 에 남아 있을 때</text>
+<g transform="translate(0,482)">
+<text x="70" y="22" text-anchor="middle" font-size="12">새 send_go</text>
+<rect class="c" x="150" y="4" width="26" height="28"/><text class="t" x="163" y="24">P</text>
+<rect class="c" x="179" y="4" width="26" height="28"/><text class="t" x="192" y="24">Q</text>
+<rect class="c" x="208" y="4" width="26" height="28"/><text class="t" x="221" y="24">R</text>
+<rect class="c" x="237" y="4" width="26" height="28"/><text class="t" x="250" y="24">S</text>
+<rect class="p" x="410" y="4" width="34" height="28"/><text class="t" x="427" y="24">D</text>
+<rect class="p" x="446" y="4" width="34" height="28"/><text class="t" x="463" y="24">E</text>
+<rect class="p" x="482" y="4" width="34" height="28"/><text class="t" x="499" y="24">F</text>
+<rect class="e" x="518" y="4" width="34" height="28"/>
+<rect class="o" x="620" y="4" width="100" height="28"/><text x="670" y="23" text-anchor="middle" font-size="11.5">C 보내는 중</text>
+<text x="900" y="24" text-anchor="middle" font-weight="bold" fill="#d98c1f">1 (기다림)</text>
+</g>
+<text x="24" y="540" font-size="12.5">회색 D E F = 바로 앞에 보낸 응답이 아직 선으로 다 안 나가고 남은 것 → 빈칸 1 개뿐 → P 만 들어가고 Q R S 는 1.04 ms 마다 하나씩 → busy ≈ 3 ms</text>
+<text x="24" y="562" font-size="12.5">언제 생기나 : 응답을 이어서 보낼 때 (/auto all 처럼 5 종을 연달아), 또는 TX FIFO 가 작을 때 /get 을 연달아 칠 때</text>
+<text x="24" y="586" font-size="12" fill="#555">숫자는 모두 계산값 (9600 bps · 100 MHz 기준, 측정 아님). 실제 칸 수 · 글자 수는 팀이 정할 사양</text>
+</svg>
+</figure>
+<p>busy ≈ (응답 글자 수 − TX FIFO 빈칸 − 1) × 1.04 ms. 0 이하면 글자 수 × 10 ns. (−1 = UART_TX 가 처음에 바로 꺼내 가는 한 글자)</p>
+<table><tr><th>TX FIFO</th><th>응답</th><th>busy (계산)</th></tr>
+<tr><td>4 칸 (수업 FIFO 기본값)</td><td>13 글자</td><td>≈ 8.3 ms</td></tr>
+<tr><td>4 칸</td><td>/auto all 54 글자</td><td>≈ 51 ms</td></tr>
+<tr><td>16 칸</td><td>13 글자</td><td>≈ 130 ns</td></tr>
+<tr><td>16 칸</td><td>54 글자</td><td>≈ 38 ms</td></tr>
+<tr><td>64 칸</td><td>54 글자</td><td>≈ 540 ns</td></tr></table>
+<p>/get 을 연달아 쳐도 : /get sw_hm 은 10 글자라 들어오는 데만 ≈ 10.4 ms → 두 번째 /get 이 완성될 때 앞 응답은 2 ~ 3 글자만 남아 있음 → TX 16 칸이면 busy ≈ 130 ns 그대로.</p>
+
+<h2 id="s4">4. busy 와 RX FIFO (지금 구조 = busy 중 pop 멈춤)</h2>
+<p>busy 동안 들어올 수 있는 글자 ≈ busy ÷ 1.04 ms (PC 가 쉬지 않고 보내는 최악). 이게 RX FIFO 빈칸보다 많으면 넘친 글자가 버려져 명령이 깨짐 (PDF 3 쪽 <code>sw_/g</code>).</p>
+<table><tr><th>busy</th><th>들어올 수 있는 글자</th><th>RX 8 칸</th><th>RX 16 칸</th></tr>
+<tr><td>130 ns ~ 540 ns (TX 를 크게 잡은 경우)</td><td>최대 1</td><td>OK</td><td>OK</td></tr>
+<tr><td>8.3 ms (TX 4 칸, 13 글자)</td><td>약 8</td><td>아슬</td><td>OK</td></tr>
+<tr><td>11 ms (PDF 가정)</td><td>약 11</td><td>넘침</td><td>OK</td></tr>
+<tr><td>38 ~ 51 ms (TX 작고 /auto all)</td><td>약 37 ~ 49</td><td>넘침</td><td>넘침 (32 도 넘침)</td></tr></table>
+
+<h2 id="s5">5. 대처 비교</h2>
+<table><tr><th>방법</th><th>누가</th><th>효과</th><th>단점</th></tr>
+<tr><td>RX FIFO 32 (안성님 안)</td><td>안성님</td><td>busy 30 ms 정도까지 버팀</td><td>/auto all + TX 작으면 여전히 넘칠 수 있음</td></tr>
+<tr><td>RX FIFO FULL 이면 sender 안 보냄 (안성님 안)</td><td>안성님 · 보윤</td><td>꽉 차면 디코더 우선</td><td>꽉 찬 순간에 들어오는 글자는 버려져서 "거의 참" 기준 필요, sender 에 신호 하나 추가</td></tr>
+<tr><td><b>TX FIFO 를 가장 긴 응답보다 크게 (추천)</b></td><td>보윤</td><td>busy 자체가 수백 ns → RX 가 쌓일 시간이 없음</td><td>응답 형식 · 종류가 바뀌면 칸 수 다시 확인</td></tr>
+<tr><td>pop 안 멈추고 U_CONTROL 이 대기 명령 1 개 보관 (보험)</td><td>안성님</td><td>busy 가 길어도 RX 안 쌓임</td><td>디코더 · 컨트롤러 수정 필요. TX 를 크게 잡으면 효과가 거의 없음</td></tr></table>
+<p>틀린 명령이 아주 빠르게 연속으로 들어오면 (붙여넣기 등) ERROR 응답 (7 글자) 이 입력보다 길어 TX 가 밀릴 수 있음 → 필요하면 "ERROR 보내는 중이면 새 ERROR 는 생략" 정도로 처리 가능.</p>
+
+<h2 id="s6">6. 자원 (합성 실측)</h2>
+<p class="lead">조건 : Vivado 2022.2 synth_design, xc7a35tcpg236-1, out_of_context, 합성만 (구현 전). FIFO = 수업 FIFO 구조 (8 비트), 대기 명령 = 비교용 예시 모듈 (팀 코드 아님).</p>
+<table><tr><th>대상</th><th>LUT (논리 + 메모리)</th><th>FF</th></tr>
+<tr><td>FIFO 4 칸</td><td>7 + 8 = 15</td><td>6</td></tr><tr><td>FIFO 8 칸</td><td>10 + 8 = 18</td><td>8</td></tr>
+<tr><td>FIFO 16 칸</td><td>12 + 8 = 20</td><td>10</td></tr><tr><td>FIFO 32 칸</td><td>14 + 8 = 22</td><td>12</td></tr>
+<tr><td>FIFO 64 칸</td><td>18 + 12 = 30</td><td>14</td></tr>
+<tr><td>대기 명령 1 개 (표시 · sel · send_go · 인자 1 비트)</td><td>1</td><td>6</td></tr></table>
+<p>FIFO 칸은 LUT 안 분산 RAM 으로 만들어져 4 → 64 칸이어도 LUT +15 · FF +8 (칩 LUT 20,800 · FF 41,600 의 0.2 % 미만).</p>
+
+<h2 id="s7">7. /auto 제안</h2>
+<p>/auto 뒤 인자로 보낼 것 고르기 : <code>/auto sw</code> (스톱워치만) · <code>/auto dist</code> (거리만) · <code>/auto all</code> (전부) · <code>/auto off</code>. all 이면 U_CONTROL 이 종류마다 send_sel 바꿔서 send_go 를 한 번씩 (send_busy 0 될 때마다). 5 종 54 글자 (예시 형식) 면 1 초 중 ≈ 56 ms.</p>
+<p><b>응답 형식 제안 (sender)</b> : 스톱워치 · 시계 · 타이머 <code>12:34:56.78</code> (11 글자) · 거리 <code>123cm</code> (5) · 온습도 <code>45%25C</code> (6, 정수만) · <code>ERROR</code> (5), 모두 끝에 줄바꿈 CR LF (2 글자). → 가장 긴 응답 13 글자, 5 종 전부 54 글자 → <b>TX FIFO 64 칸</b> (자원 차이가 작아 all 여부와 상관없이 64 로).</p>
+
+<h2 id="s8">8. 확인하고 싶은 것</h2>
+<ol>
+<li>명령 목록 표 (명령마다 인자 · 뜻 — <code>sw_hm</code>, <code>sw_ms</code>, <code>/btn L</code> 등), 특히 응답이 필요한 명령 중 가장 짧은 것</li>
+<li>byte enable = 인자 5 칸 중 진짜 글자인 칸 표시 (<code>R</code> 이면 첫 칸만 1) 맞는지</li>
+<li>인자가 5 글자보다 길게 들어오면 어떻게 처리하는지</li>
+<li>/mod · /btn 같은 명령에도 응답 (OK 등) 을 보낼지 — 보내면 send_go 가 필요한 명령이 늘어남</li>
+</ol>
+</main></body></html>

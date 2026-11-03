@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tick 공유 트레이드오프</title>
+<style>
+:root { --bg:#f6f7f3; --fg:#1f2620; --muted:#5d6a60; --line:#cfd6ca; --surf:#fff; --acc:#2f6b4f; --soft:#e3efe7; --warn:#9a5a08; --wsoft:#fbf0df; }
+@media (prefers-color-scheme: dark) { :root { --bg:#141815; --fg:#e4ebe5; --muted:#9aa89d; --line:#36413a; --surf:#1c221e; --acc:#7cc39f; --soft:#23362b; --warn:#e3a64f; --wsoft:#3a2e1c; } }
+body { background:var(--bg); color:var(--fg); font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; font-size:15px; line-height:1.65; margin:0; }
+.wrap { max-width:840px; margin:0 auto; padding:24px 16px 48px; }
+h1 { font-size:22px; margin:0 0 4px; } h2 { font-size:17px; margin:26px 0 8px; }
+.sub { color:var(--muted); font-size:13px; }
+.q { background:var(--soft); border-left:4px solid var(--acc); padding:12px 16px; border-radius:0 6px 6px 0; margin:14px 0; }
+.tw { overflow-x:auto; } table { border-collapse:collapse; width:100%; font-size:14px; font-variant-numeric:tabular-nums; margin:6px 0; }
+th, td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; } th { background:var(--soft); }
+tr.now td { background:var(--wsoft); }
+code { font-family:Consolas,monospace; font-size:13px; }
+ul { padding-left:20px; margin:6px 0; }
+</style></head><body><div class="wrap">
+<h1>100 Hz tick 공유 — 자원 vs 시작 정확도</h1>
+<p class="sub">대상: <code>verification_v2/source_file</code> (정안성 10/16 20:14 포트 통일판) · 2026-10-16 · 정보윤. 측정 · 정리는 함. 같은 비교를 그 전 판(merged_v4)에서 먼저 했고 그 숫자는 Vivado GUI 로 직접 확인함 — 아래 v2 숫자는 같은 스크립트로 다시 잰 값(FF 는 두 판이 같고 LUT 만 10~20 작음).</p>
+
+<div class="q"><b>결정 (10/17, 정안성 · 정보윤 디스코드)</b>: <b>④ 절충안</b>으로 간다 — 100 Hz tick 은 시계 · 스톱워치 · 타이머가 각자(스톱워치 · 타이머 것은 RUN 순간부터 셈), 4 kHz 는 그대로 공유. 팀 코드(verification_v2/source_file)에 반영: <code>tick_gen_100hz_run.v</code> + Top 의 <code>U_TICK_GEN_SW</code> · <code>U_TICK_GEN_TM</code>. 팀 코드로 다시 잰 값: LUT 355 · FF 228 · WNS +3.837 ns (아래 ④ 행과 같음, 구현 후 · 배치). 10초 타이머 = 10,000 ms + 20 ns.</div>
+<div class="q"><b>원래 정할 것이었던 문제</b>: 지금 판처럼 100 Hz tick 하나를 시계 · 스톱워치 · 타이머가 같이 쓸지, 스톱워치 · 타이머만 자기 tick 을 둘지. 어느 쪽이든 발표 고찰에 같은 숫자로 말하면 됨.</div>
+
+<h2>무슨 일이 생기나</h2>
+<ul>
+  <li>지금 판은 <code>U_TICK_GEN_100HZ</code> 하나가 항상 10 ms 박자로 돌고, 스톱워치 · 타이머는 "동작 중일 때만" 그 tick 을 받음.</li>
+  <li>그래서 시작 버튼을 박자 중간에 누르면 <b>첫 1/100초가 10 ms 가 아니라 0 ~ 10 ms 사이 아무 때나</b> 바뀜.</li>
+  <li>시뮬 실측(v2 소스, Top TB): 타이머 시작 → 첫 감소 <b>8 / 5 / 2 ms</b> (리셋 뒤 시작 시각만 3 ms 씩 바꿈). 10초 타이머 → <b>9,998 ms</b> 에 알람(<code>tb_tm_2</code>).</li>
+  <li>시계는 영향 없음(리셋부터 같은 박자). 스톱워치도 같은 이유로 최대 10 ms(<code>tb_sw_1</code> P2 가 1.000 초에 99~100 카운트를 허용하는 이유).</li>
+</ul>
+
+<h2>선택지 비교 (Vivado 2022.2, xc7a35t, 같은 xdc · 같은 흐름, 구현 후)</h2>
+<div class="tw"><table>
+<tr><th>판</th><th>구조</th><th>LUT</th><th>FF</th><th>시작 → 첫 tick</th><th>기능 TB 4개</th></tr>
+<tr><td>① 수업 방식</td><td>디바운서 안에 분주 카운터 · 데이터패스마다 tick_gen (3개)</td><td>403</td><td>292</td><td>매번 10.000 ms</td><td>PASS</td></tr>
+<tr class="now"><td><b>② 지금 판 (v2)</b></td><td>4 kHz 1개 공유 + 100 Hz tick 1개 공유</td><td><b>327</b></td><td><b>186</b></td><td>8 / 5 / 2 ms (최대 10 ms 이르게)</td><td>PASS</td></tr>
+<tr><td>④ 절충안</td><td>4 kHz 공유 유지, 스톱워치 · 타이머만 자기 tick_gen</td><td>355</td><td>228</td><td>매번 10.000 ms</td><td>PASS</td></tr>
+<tr><td>③ 참고</td><td>② + 4 kHz 를 클럭 대신 enable 로, 100 Hz 를 4 kHz 에서 만듦</td><td>317</td><td>172</td><td>8.25 / 5.25 / 2.25 ms</td><td>PASS</td></tr>
+</table></div>
+<p class="sub">기능 TB = v2 의 <code>tb_tm_1</code> · <code>tb_tm_3</code> · <code>tb_sw_1</code> · <code>tb_wt_1</code>. ①·③·④ 는 비교용으로 만든 판(팀 코드 미반영, 소스는 정보윤 PC <code>design_prototype\ppa_v2\</code>). 모듈별: 디바운서 하나 ① LUT 17 → ② 5, tick_gen 하나 LUT 16 · FF 21(③ 은 6 · 7). ② 와 ③ 은 Methodology Critical Warning(TIMING-17) 35 → 0 차이도 있음(4 kHz 펄스를 클럭으로 쓰는 FF 35개가 타이밍 검사에서 빠져 있음).</p>
+
+<h2>트레이드오프 한 줄씩</h2>
+<div class="tw"><table>
+<tr><th></th><th>② 지금 판 유지</th><th>④ 절충안</th></tr>
+<tr><td>얻는 것</td><td>자원 최소 (① 대비 FF −106, LUT −76), Top 단순 (tick 선 하나)</td><td>스톱워치 · 타이머 시작이 정확히 10 ms (수업 구조와 같음)</td></tr>
+<tr><td>잃는 것</td><td>시작 위상 오차 최대 10 ms</td><td>② 대비 LUT +28, FF +42 (tick_gen 2개)</td></tr>
+<tr><td>발표에서 말할 것</td><td>"오차가 표시 최소 단위(10 ms) 한 칸 안이라 화면으로는 구분 안 돼서 자원을 택함"</td><td>"디바운서 분주만 공유하고, 정확도가 필요한 스톱워치 · 타이머는 시작 순간부터 세도록 분리"</td></tr>
+<tr><td>바꿀 곳</td><td>없음</td><td>Top 에 tick_gen 2개(run · clear 입력 있는 판) 추가 + 두 데이터패스 tick 입력 연결. 블록도 · PORT_MAP 다시 생성, <code>tb_tm_2</code> 의 10초 판정 범위 수정</td></tr>
+</table></div>
+
+<h2>측정 방법 (다시 볼 수 있음)</h2>
+<ul>
+  <li>자원: 판마다 Vivado 프로젝트 → Run Implementation → Design Runs · Report Utilization(Hierarchy) · Report Methodology.</li>
+  <li>위상: Top TB(<code>tb_phase_check_v2.v</code>)로 리셋 뒤 12 / 15 / 18 ms 쯤 타이머 시작 → <code>U_TIMER_CONTROL_UNIT.o_tm_run</code> 상승부터 <code>U_TIMER_DATAPATH.o_tm_msec</code> 첫 변화까지. 파형 마커 2개로도 확인됨.</li>
+  <li>공유 구조는 정안성 님 통합판(10/16 10:41 커밋)부터 들어 있음. 이 문서는 그 구조의 대가를 숫자로 확인한 것.</li>
+</ul>
+</div></body></html>

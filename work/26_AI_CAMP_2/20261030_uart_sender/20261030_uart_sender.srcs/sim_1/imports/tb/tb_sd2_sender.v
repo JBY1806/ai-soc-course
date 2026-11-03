@@ -40,6 +40,47 @@ module tb_sd2_sender ();
 
     always #5 clk = ~clk;
 
+    // 파형 보기용 (판정에는 안 씀) : 24 비트 값을 사람이 읽는 글자로 풀어 둠 → 파형에서 radix ASCII 로 보면
+    //   645c4e → "12:34:56.78" · 000190 → "400cm" · 002d19 → "45%25C" · sel 5 ~ 7 → "ERROR"
+    reg [8*11-1:0] in_text;      // 바깥 입력 i_send_sel · i_send_data 의 뜻
+    reg [8*11-1:0] c_text;       // sender 가 잡아 둔 c_sel · c_data 의 뜻
+    // 10 을 8'd10 으로 쓴 이유 : 그냥 10 은 32 비트라 { } 안에서 글자 하나가 4 바이트가 됨
+    reg [7:0] in_d2, in_d1, in_d0, c_d2, c_d1, c_d0;   // 거리 백 · 십 · 일 자리 글자 (9 비트 계산을 8 비트로 담기)
+    always @(*) begin
+        in_d2 = "0" + i_send_data[8:0] / 100;
+        in_d1 = "0" + (i_send_data[8:0] / 10) % 10;
+        in_d0 = "0" + i_send_data[8:0] % 10;
+        if (i_send_sel <= 2)
+            in_text = {"0" + i_send_data[23:19] / 8'd10, "0" + i_send_data[23:19] % 8'd10, ":",
+                       "0" + i_send_data[18:13] / 8'd10, "0" + i_send_data[18:13] % 8'd10, ":",
+                       "0" + i_send_data[12:7] / 8'd10,  "0" + i_send_data[12:7] % 8'd10,  ".",
+                       "0" + i_send_data[6:0] / 8'd10,   "0" + i_send_data[6:0] % 8'd10};
+        else if (i_send_sel == 3)
+            in_text = {"      ", in_d2, in_d1, in_d0, "cm"};
+        else if (i_send_sel == 4)
+            in_text = {"     ", "0" + i_send_data[15:8] / 8'd10, "0" + i_send_data[15:8] % 8'd10, "%",
+                       "0" + i_send_data[7:0] / 8'd10, "0" + i_send_data[7:0] % 8'd10, "C"};
+        else
+            in_text = "      ERROR";
+    end
+    always @(*) begin
+        c_d2 = "0" + dut.c_data[8:0] / 100;
+        c_d1 = "0" + (dut.c_data[8:0] / 10) % 10;
+        c_d0 = "0" + dut.c_data[8:0] % 10;
+        if (dut.c_sel <= 2)
+            c_text = {"0" + dut.c_data[23:19] / 8'd10, "0" + dut.c_data[23:19] % 8'd10, ":",
+                      "0" + dut.c_data[18:13] / 8'd10, "0" + dut.c_data[18:13] % 8'd10, ":",
+                      "0" + dut.c_data[12:7] / 8'd10,  "0" + dut.c_data[12:7] % 8'd10,  ".",
+                      "0" + dut.c_data[6:0] / 8'd10,   "0" + dut.c_data[6:0] % 8'd10};
+        else if (dut.c_sel == 3)
+            c_text = {"      ", c_d2, c_d1, c_d0, "cm"};
+        else if (dut.c_sel == 4)
+            c_text = {"     ", "0" + dut.c_data[15:8] / 8'd10, "0" + dut.c_data[15:8] % 8'd10, "%",
+                      "0" + dut.c_data[7:0] / 8'd10, "0" + dut.c_data[7:0] % 8'd10, "C"};
+        else
+            c_text = "      ERROR";
+    end
+
     always @(posedge clk) begin
         if (o_tx_push) begin
             if (i_tx_full) begin

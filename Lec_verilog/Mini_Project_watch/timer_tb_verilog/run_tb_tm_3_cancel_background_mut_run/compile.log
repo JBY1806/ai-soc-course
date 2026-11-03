@@ -1,0 +1,83 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/btn_debounce.v" into library work
+INFO: [VRFC 10-311] analyzing module btn_debounce
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/clock_tick_generator.v" into library work
+INFO: [VRFC 10-311] analyzing module clock_tick_generator
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/counter8.v" into library work
+INFO: [VRFC 10-311] analyzing module counter8
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/decoder_2x4.v" into library work
+INFO: [VRFC 10-311] analyzing module decoder_2x4
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/digit_splitter.v" into library work
+INFO: [VRFC 10-311] analyzing module digit_splitter
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/dot.v" into library work
+INFO: [VRFC 10-311] analyzing module dot
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/fnd_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module fnd_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/hour_12_24.v" into library work
+INFO: [VRFC 10-311] analyzing module hour_12_24
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/lap_controller.v" into library work
+INFO: [VRFC 10-311] analyzing module lap_controller
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/mux_8x1.v" into library work
+INFO: [VRFC 10-311] analyzing module mux_8x1
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/stopwatch_datapath.v" into library work
+INFO: [VRFC 10-311] analyzing module stopwatch_datapath
+INFO: [VRFC 10-311] analyzing module stopwatch_tick_counter
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/stopwatch_watch.v" into library work
+INFO: [VRFC 10-311] analyzing module stopwatch_watch
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/SW2_ANODE_CHOICE.v" into library work
+INFO: [VRFC 10-311] analyzing module SW2_ANODE_CHOICE
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/SW2_FND_CONTROLLER.v" into library work
+INFO: [VRFC 10-311] analyzing module SW2_FND_CONTROLLER
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/tick_gen_100hz.v" into library work
+INFO: [VRFC 10-311] analyzing module tick_gen_100hz
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/timer_datapath.v" into library work
+INFO: [VRFC 10-311] analyzing module timer_datapath
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/watch_datapath.v" into library work
+INFO: [VRFC 10-311] analyzing module watch_datapath
+INFO: [VRFC 10-311] analyzing module watch_tick_counter
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/stopwatch_control_unit.sv" into library work
+INFO: [VRFC 10-311] analyzing module stopwatch_control_unit
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/timer_control_unit.sv" into library work
+INFO: [VRFC 10-311] analyzing module timer_control_unit
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LG/AppData/Local/Temp//C--Users-LG-Developer/3ee71011-c8a6-4cd5-bf99-fe1f665dffbe/scratchpad/mut_run/watch_control_unit.sv" into library work
+INFO: [VRFC 10-311] analyzing module watch_control_unit
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/timer_tb_verilog/tb_tm_3_cancel_background.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_tm_3_cancel_background
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2022.2/bin/unwrapped/win64.o/xelab.exe tb_tm_3_cancel_background -s tb_tm_3_cancel_background_snap -debug off 
+Multi-threading is on. Using 16 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.clock_tick_generator(CLK_FRQ=400...
+Compiling module work.tick_gen_100hz
+Compiling module work.btn_debounce
+Compiling module work.stopwatch_control_unit
+Compiling module work.stopwatch_tick_counter(TIMES=24,...
+Compiling module work.stopwatch_tick_counter(TIMES=60,...
+Compiling module work.stopwatch_tick_counter
+Compiling module work.lap_controller
+Compiling module work.stopwatch_datapath
+Compiling module work.watch_control_unit
+Compiling module work.watch_tick_counter
+Compiling module work.watch_tick_counter(TIMES=60,BIT_...
+Compiling module work.watch_tick_counter(TIMES=24,BIT_...
+Compiling module work.watch_datapath
+Compiling module work.hour_12_24
+Compiling module work.timer_control_unit
+Compiling module work.timer_datapath
+Compiling module work.digit_splitter
+Compiling module work.digit_splitter(WIDTH=6)
+Compiling module work.counter8
+Compiling module work.dot
+Compiling module work.SW2_ANODE_CHOICE
+Compiling module work.mux_8x1
+Compiling module work.decoder_2x4
+Compiling module work.fnd_decoder
+Compiling module work.SW2_FND_CONTROLLER(HOUR_BIT_WIDT...
+Compiling module work.stopwatch_watch
+Compiling module work.tb_tm_3_cancel_background
+Built simulation snapshot tb_tm_3_cancel_background_snap

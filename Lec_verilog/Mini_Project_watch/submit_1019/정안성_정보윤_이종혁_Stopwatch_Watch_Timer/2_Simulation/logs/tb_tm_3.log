@@ -1,0 +1,97 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 04:08:24 2026
+# Process ID: 29480
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_tm_3
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_tm_3/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_tm_3\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 RUN: U/R/D ignored (TC2)
+              plan   : start 01:00, then U, R, D
+              expect : stays RUN, no o_tm_add, value only drops ~30 ms
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P1                 sw4..0=10000 TIMER SS.cc 12h watch 12:00 -> timer 00:00.00,  cursor NORMAL(3) -> SET
+[   0.003 ms] [    BTN]        P1                   btn_R (o_btn @   2.001 ms) timer 00:00.00 -> 01:00.00,  SET
+[  10.003 ms] [    BTN]        P1                   btn_L (o_btn @  12.001 ms) timer 01:00.00,  SET -> RUN
+[  20.003 ms] [    BTN]        P1                   btn_U (o_btn @  22.001 ms) timer 01:00.00 -> 00:59.99,  RUN
+[  30.003 ms] [    BTN]        P1                   btn_R (o_btn @  32.001 ms) timer 00:59.99 -> 00:59.98,  RUN
+[  40.003 ms] [    BTN]        P1                   btn_D (o_btn @  42.001 ms) timer 00:59.98 -> 00:59.97,  RUN
+[  50.003 ms] [     OK]    P1.TC2 U/R/D during RUN add nothing (only ~30 ms elapsed) | exp=(5990,6000) got=5997 (00:59.97)
+[  50.003 ms] [     OK]    P1.TC2 still running | exp=1 got=1
+[  50.003 ms] [   PASS]        P1 END  checks=2 fail=0 defect=0 (50.003 ms)
+
+==========================================================================================
+[  50.003 ms] [  BEGIN]        P2 RUN: L -> cancel to 00:00, SET
+              plan   : RUN: L
+              expect : RUN -> SET, o_tm_clear pulse in the same 10 ns -> 00:00.00
+------------------------------------------------------------------------------------------
+[  50.003 ms] [  RESET]        P2                               rst 1 us pulse timer 00:59.97 -> 00:00.00,  RUN -> SET
+[  50.005 ms] [     SW]        P2                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[  50.006 ms] [    BTN]        P2                   btn_R (o_btn @  52.004 ms) timer 00:00.00 -> 01:00.00,  SET
+[  60.006 ms] [    BTN]        P2                   btn_L (o_btn @  62.004 ms) timer 01:00.00,  SET -> RUN
+[ 120.006 ms] [    BTN]        P2                   btn_L (o_btn @ 122.004 ms) timer 00:59.95 -> 00:00.00,  RUN -> SET
+[ 130.006 ms] [     OK]    P2.TC2 L during RUN cancels (0, SET, no alarm) | exp=00:00.00 SET got=00:00.00 run=0 alarm=0
+[ 130.006 ms] [   PASS]        P2 END  checks=1 fail=0 defect=0 (80.003 ms)
+
+==========================================================================================
+[ 130.006 ms] [  BEGIN]        P3 background: start, go to watch screen, preload 00:00.30 -> ALARM LED on watch screen (TC3)
+              plan   : start 01:00 -> watch screen -> PRELOAD 00:00.30
+              expect : RUN -> ALARM even on watch screen, led alarm pattern, FND shows watch 12.00
+------------------------------------------------------------------------------------------
+[ 130.006 ms] [  RESET]        P3                               rst 1 us pulse timer 00:00.00,  SET
+[ 130.008 ms] [     SW]        P3                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[ 130.009 ms] [    BTN]        P3                   btn_R (o_btn @ 132.007 ms) timer 00:00.00 -> 01:00.00,  SET
+[ 140.009 ms] [    BTN]        P3                   btn_L (o_btn @ 142.007 ms) timer 01:00.00,  SET -> RUN
+[ 150.009 ms] [     SW]        P3                 sw4..0=00010 WATCH HH.MM 12h timer 01:00.00 -> watch 12:00,  RUN -> cursor NORMAL(3)
+[ 150.010 ms] [     OK]    P3.TC3 timer runs in background | exp=1 got=1
+[ 160.007 ms] [PRELOAD]        P3 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:59.99 -> 00:00.30   (wave: values jump here with no tick/button)
+[ 452.007 ms] [   INFO]    P3.TC3 ALARM reached while watch screen is shown
+[ 472.007 ms] [     OK]    P3.TC3 alarm LED pattern on watch screen | exp=0000 got=0000
+[ 477.007 ms] [     OK]    P3.TC3 FND still shows the watch (12.00) | exp="12.00" got="12.00"
+[ 477.007 ms] [   PASS]        P3 END  checks=3 fail=0 defect=0 (347.001 ms)
+
+==========================================================================================
+[ 477.007 ms] [  BEGIN]        P4 watch-screen buttons do not stop the alarm (TC4)
+              plan   : alarm: watch screen U/D/L/R, stopwatch screen D
+              expect : w_tm_btn_* all 0 -> stays ALARM
+------------------------------------------------------------------------------------------
+[ 477.007 ms] [    BTN]        P4                   btn_U (o_btn @ 479.007 ms) watch 12:00,  cursor NORMAL(3)
+[ 487.007 ms] [    BTN]        P4                   btn_D (o_btn @ 489.007 ms) watch 12:00,  cursor NORMAL(3)
+[ 497.007 ms] [    BTN]        P4                   btn_L (o_btn @ 499.007 ms) watch 12:00,  cursor NORMAL(3)
+[ 507.007 ms] [    BTN]        P4                   btn_R (o_btn @ 509.007 ms) watch 12:00,  cursor NORMAL(3)
+[ 517.007 ms] [     OK]    P4.TC4 alarm still on after watch-screen U/D/L/R | exp=1 got=1
+[ 517.007 ms] [     SW]        P4             sw4..0=00001 STOPWATCH SS.cc 12h watch 12:00 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[ 517.008 ms] [    BTN]        P4                   btn_D (o_btn @ 519.007 ms) stopwatch 00:00:00.00,  STOP -> STOP LAP
+[ 527.008 ms] [     OK]    P4.TC4 alarm still on after stopwatch-screen D | exp=1 got=1
+[ 527.008 ms] [    BTN]        P4                   btn_D (o_btn @ 529.007 ms) stopwatch 00:00:00.00,  STOP LAP -> STOP
+[ 537.008 ms] [   PASS]        P4 END  checks=2 fail=0 defect=0 (60.001 ms)
+
+==========================================================================================
+[ 537.008 ms] [  BEGIN]        P5 sw4=1 & sw0=1 -> timer has priority; timer-screen button turns alarm off (TC5)
+              plan   : timer_sw4=1 & mode_sw0=1 -> R
+              expect : w_sel_tm 1, R: ALARM -> SET, no o_tm_add (no +1 min), led 0020
+------------------------------------------------------------------------------------------
+[ 537.008 ms] [     SW]        P5                 sw4..0=10001 TIMER SS.cc 12h stopwatch 00:00:00.00 -> timer 00:00.00,  STOP -> ALARM
+[ 537.009 ms] [     OK]    P5.TC5 timer selected over stopwatch | exp=sel_tm=1 sel_sw=0 got=sel_tm=1 sel_sw=0
+[ 537.009 ms] [    BTN]        P5                   btn_R (o_btn @ 539.007 ms) timer 00:00.00,  ALARM -> SET
+[ 547.009 ms] [     OK]    P5.TC5 R on timer screen turns alarm off, no +1 min | exp=alarm=0 00:00.00 got=alarm=0 00:00.00
+[ 547.009 ms] [     OK]    P5.TC6 LED timer screen with sw0=1: led5 only (led1 off, timer has priority) | exp=0020 got=0020
+[ 547.009 ms] [   PASS]        P5 END  checks=3 fail=0 defect=0 (10.001 ms)
+[ 547.009 ms] [SUMMARY] TM3 src=orig checks=11 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 547009040 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/02_timer/tb_tm_3_cancel_background.sv" Line 251
+run: Time (s): cpu = 00:00:02 ; elapsed = 00:10:36 . Memory (MB): peak = 253.160 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 12364 KB (Peak: 12364 KB), Simulation CPU Usage: 360953 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 04:19:02 2026...

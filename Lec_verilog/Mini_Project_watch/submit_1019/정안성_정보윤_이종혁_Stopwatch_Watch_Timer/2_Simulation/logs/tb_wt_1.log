@@ -1,0 +1,186 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Oct 24 19:40:07 2026
+# Process ID: 42164
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_1
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_1/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_1\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 reset: 12:00:00.00, cursor=3, set_mode=0, LED 8009 (WC1)
+              plan   : reset
+              expect : NORMAL, 12:00:00.00, cursor 3, led 8009
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     OK]    P1.WC1 reset time | exp=12:00:00.00 got=12:00:00.00
+[   0.002 ms] [     OK]    P1.WC1 cursor none after reset | exp=cursor=3 got=cursor=3
+[   0.002 ms] [     OK]    P1.WC1 set_mode 0 | exp=0 got=0
+[   0.002 ms] [     OK]    P1.WC1 LED | exp=8009 got=8009
+[   0.002 ms] [   PASS]        P1 END  checks=4 fail=0 defect=0 (0.002 ms)
+
+==========================================================================================
+[   0.002 ms] [  BEGIN]        P2 NORMAL (sw2=0): U/D/L/R ignored (WC2)
+              plan   : sw2=0 -> U, D, L, R
+              expect : stays NORMAL, no o_wt_up/down, 12:00 unchanged
+------------------------------------------------------------------------------------------
+[   0.002 ms] [  RESET]        P2                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.004 ms] [     SW]        P2                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[   0.005 ms] [    BTN]        P2                   btn_U (o_btn @   2.003 ms) watch 12:00,  cursor NORMAL(3)
+[  10.005 ms] [    BTN]        P2                   btn_D (o_btn @  12.003 ms) watch 12:00,  cursor NORMAL(3)
+[  20.005 ms] [    BTN]        P2                   btn_L (o_btn @  22.003 ms) watch 12:00,  cursor NORMAL(3)
+[  30.005 ms] [    BTN]        P2                   btn_R (o_btn @  32.003 ms) watch 12:00,  cursor NORMAL(3)
+[  40.005 ms] [     OK]    P2.WC2 time unchanged after U/D/L/R in NORMAL | exp=12:00 got=12:00
+[  40.005 ms] [     OK]    P2.WC2 cursor stays none | exp=cursor=3 got=cursor=3
+[  40.005 ms] [   PASS]        P2 END  checks=2 fail=0 defect=0 (40.003 ms)
+
+==========================================================================================
+[  40.005 ms] [  BEGIN]        P3 cursor: enter -> 0, L 0->1->2->0, R 0->2->1->0 (WC3, WC4)
+              plan   : sw2=1 -> L x3 -> R x3
+              expect : cursor 0 -> L 1 -> 2 -> 0 (wrap) -> R 2 (wrap) -> 1 -> 0
+------------------------------------------------------------------------------------------
+[  40.005 ms] [  RESET]        P3                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[  40.007 ms] [     SW]        P3             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor NORMAL(3) -> SET_MIN_1(0)
+[  40.008 ms] [     OK]    P3.WC3 sw2 on -> cursor 0 (min ones) | exp=cursor=0 got=cursor=0
+[  40.008 ms] [     OK]    P3.WC3 set_mode 1 | exp=1 got=1
+[  40.008 ms] [    BTN]        P3                   btn_L (o_btn @  42.006 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[  50.008 ms] [     OK]    P3.WC4 L 0->1 | exp=cursor=1 got=cursor=1
+[  50.008 ms] [    BTN]        P3                   btn_L (o_btn @  52.006 ms) watch 12:00,  cursor SET_MIN_10(1) -> SET_HOUR(2)
+[  60.008 ms] [     OK]    P3.WC4 L 1->2 | exp=cursor=2 got=cursor=2
+[  60.008 ms] [    BTN]        P3                   btn_L (o_btn @  62.006 ms) watch 12:00,  cursor SET_HOUR(2) -> SET_MIN_1(0)
+[  70.008 ms] [     OK]    P3.WC4 L 2->0 (wrap) | exp=cursor=0 got=cursor=0
+[  70.008 ms] [    BTN]        P3                   btn_R (o_btn @  72.006 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_HOUR(2)
+[  80.008 ms] [     OK]    P3.WC4 R 0->2 (wrap) | exp=cursor=2 got=cursor=2
+[  80.008 ms] [    BTN]        P3                   btn_R (o_btn @  82.006 ms) watch 12:00,  cursor SET_HOUR(2) -> SET_MIN_10(1)
+[  90.008 ms] [     OK]    P3.WC4 R 2->1 | exp=cursor=1 got=cursor=1
+[  90.008 ms] [    BTN]        P3                   btn_R (o_btn @  92.006 ms) watch 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 100.008 ms] [     OK]    P3.WC4 R 1->0 | exp=cursor=0 got=cursor=0
+[ 100.008 ms] [   PASS]        P3 END  checks=8 fail=0 defect=0 (60.003 ms)
+
+==========================================================================================
+[ 100.008 ms] [  BEGIN]        P4 min ones +-1 wrap, hour unchanged (WB3)
+              plan   : cursor 0 (min ones), PRELOAD 12:59 -> U -> D -> D
+              expect : 12:00 (hour stays 12, NOT 13) -> 12:59 -> 12:58
+------------------------------------------------------------------------------------------
+[ 100.008 ms] [  RESET]        P4                               rst 1 us pulse watch 12:00,  cursor SET_MIN_1(0)
+[ 100.010 ms] [     SW]        P4             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 110.009 ms] [PRELOAD]        P4 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 12:59:00.00   (wave: values jump here with no U/D tick)
+[ 110.009 ms] [    BTN]        P4                   btn_U (o_btn @ 112.009 ms) watch 12:59 -> 12:00,  cursor SET_MIN_1(0)
+[ 120.009 ms] [     OK]    P4.WB3 59 +1 -> 00, hour NOT +1 | exp=12:00 got=12:00
+[ 120.009 ms] [    BTN]        P4                   btn_D (o_btn @ 122.009 ms) watch 12:00 -> 12:59,  cursor SET_MIN_1(0)
+[ 130.009 ms] [     OK]    P4.WB3 00 -1 -> 59, hour NOT -1 | exp=12:59 got=12:59
+[ 130.009 ms] [    BTN]        P4                   btn_D (o_btn @ 132.009 ms) watch 12:59 -> 12:58,  cursor SET_MIN_1(0)
+[ 140.009 ms] [     OK]    P4.WB3 59 -1 -> 58 | exp=12:58 got=12:58
+[ 140.009 ms] [   PASS]        P4 END  checks=3 fail=0 defect=0 (40.001 ms)
+
+==========================================================================================
+[ 140.009 ms] [  BEGIN]        P5 min tens +-10 wrap: 55+10->05, 05-10->55 (WB3)
+              plan   : cursor 1 (min tens), PRELOAD 12:55 -> U -> D -> D
+              expect : 12:05 -> 12:55 -> 12:45 (min tens +-10 wrap, hour unchanged)
+------------------------------------------------------------------------------------------
+[ 140.009 ms] [  RESET]        P5                               rst 1 us pulse watch 12:58 -> 12:00,  cursor SET_MIN_1(0)
+[ 140.011 ms] [     SW]        P5             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 140.012 ms] [    BTN]        P5                   btn_L (o_btn @ 142.010 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 150.012 ms] [     OK]    P5.WB3 cursor min tens | exp=cursor=1 got=cursor=1
+[ 160.010 ms] [PRELOAD]        P5 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:55:00.00   (wave: values jump here with no U/D tick)
+[ 160.010 ms] [    BTN]        P5                   btn_U (o_btn @ 162.010 ms) watch 12:55 -> 12:05,  cursor SET_MIN_10(1)
+[ 170.010 ms] [     OK]    P5.WB3 55 +10 -> 05, hour unchanged | exp=12:05 got=12:05
+[ 170.010 ms] [    BTN]        P5                   btn_D (o_btn @ 172.010 ms) watch 12:05 -> 12:55,  cursor SET_MIN_10(1)
+[ 180.010 ms] [     OK]    P5.WB3 05 -10 -> 55 | exp=12:55 got=12:55
+[ 180.010 ms] [    BTN]        P5                   btn_D (o_btn @ 182.010 ms) watch 12:55 -> 12:45,  cursor SET_MIN_10(1)
+[ 190.010 ms] [     OK]    P5.WB3 55 -10 -> 45 | exp=12:45 got=12:45
+[ 190.010 ms] [   PASS]        P5 END  checks=4 fail=0 defect=0 (50.001 ms)
+
+==========================================================================================
+[ 190.010 ms] [  BEGIN]        P6 hour +-1 wrap: 12->13, 23->0, 0->23, min unchanged (WB3)
+              plan   : cursor 2 (hour), U -> PRELOAD 23:30 (skip U x10) -> wait 4 ms -> U -> D
+              expect : 13:00 -> 23:30 (FND 4 ms) -> 00:30 (min stays 30) -> 23:30
+------------------------------------------------------------------------------------------
+[ 190.010 ms] [  RESET]        P6                               rst 1 us pulse watch 12:45 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 190.012 ms] [     SW]        P6             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 190.013 ms] [    BTN]        P6                   btn_L (o_btn @ 192.011 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 200.013 ms] [    BTN]        P6                   btn_L (o_btn @ 202.011 ms) watch 12:00,  cursor SET_MIN_10(1) -> SET_HOUR(2)
+[ 210.013 ms] [     OK]    P6.WB3 cursor hour | exp=cursor=2 got=cursor=2
+[ 210.013 ms] [    BTN]        P6                   btn_U (o_btn @ 212.011 ms) watch 12:00 -> 13:00,  cursor SET_HOUR(2)
+[ 220.013 ms] [     OK]    P6.WB3 12 +1 -> 13 | exp=13:00 got=13:00
+[ 230.011 ms] [PRELOAD]        P6 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  13:00:00.04 -> 23:30:00.00   (wave: values jump here with no U/D tick)
+[ 234.011 ms] [    BTN]        P6                   btn_U (o_btn @ 236.011 ms) watch 23:30 -> 00:30,  cursor SET_HOUR(2)
+[ 244.011 ms] [     OK]    P6.WB3 23 +1 -> 0, min unchanged | exp=00:30 got=00:30
+[ 244.011 ms] [    BTN]        P6                   btn_D (o_btn @ 246.011 ms) watch 00:30 -> 23:30,  cursor SET_HOUR(2)
+[ 254.011 ms] [     OK]    P6.WB3 0 -1 -> 23 | exp=23:30 got=23:30
+[ 254.011 ms] [   PASS]        P6 END  checks=4 fail=0 defect=0 (64.001 ms)
+
+==========================================================================================
+[ 254.011 ms] [  BEGIN]        P7 U+D same instant -> ignored (WC5)
+              plan   : U and D at the same instant
+              expect : U_BD_U/U_BD_D o_btn in the same clock -> no o_wt_up / o_wt_down -> 12:00 unchanged
+------------------------------------------------------------------------------------------
+[ 254.011 ms] [  RESET]        P7                               rst 1 us pulse watch 23:30 -> 12:00,  cursor SET_HOUR(2) -> SET_MIN_1(0)
+[ 254.013 ms] [     SW]        P7             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 254.014 ms] [    BTN]        P7   btn_U+btn_D same time (o_btn @ 256.012 ms) watch 12:00,  cursor SET_MIN_1(0)
+[ 264.014 ms] [     OK]    P7.WC5 U and D pulses in the same clock | exp={D,U,L,R}=1100 got=1100
+[ 264.014 ms] [     OK]    P7.WC5 U+D -> ignored (no +1, no -1) | exp=12:00 got=12:00
+[ 264.014 ms] [   PASS]        P7 END  checks=2 fail=0 defect=0 (10.003 ms)
+
+==========================================================================================
+[ 264.014 ms] [  BEGIN]        P8 sw2 re-entry always starts at cursor 0 (WC3)
+              plan   : cursor -> hour, sw2 off -> sw2 on
+              expect : SET_HOUR -> NORMAL -> SET_MIN_1 (cursor 3 -> 0)
+------------------------------------------------------------------------------------------
+[ 264.014 ms] [  RESET]        P8                               rst 1 us pulse watch 12:00,  cursor SET_MIN_1(0)
+[ 264.016 ms] [     SW]        P8             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 264.017 ms] [    BTN]        P8                   btn_L (o_btn @ 266.015 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 274.017 ms] [    BTN]        P8                   btn_L (o_btn @ 276.015 ms) watch 12:00,  cursor SET_MIN_10(1) -> SET_HOUR(2)
+[ 284.017 ms] [     OK]    P8.WC3 cursor moved to hour | exp=cursor=2 got=cursor=2
+[ 284.017 ms] [     SW]        P8                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor SET_HOUR(2) -> NORMAL(3)
+[ 284.018 ms] [     OK]    P8.WC3 sw2 off -> cursor none | exp=cursor=3 got=cursor=3
+[ 284.018 ms] [     SW]        P8             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor NORMAL(3) -> SET_MIN_1(0)
+[ 284.019 ms] [     OK]    P8.WC3 sw2 on again -> cursor 0 | exp=cursor=0 got=cursor=0
+[ 284.019 ms] [   PASS]        P8 END  checks=3 fail=0 defect=0 (20.005 ms)
+
+==========================================================================================
+[ 284.019 ms] [  BEGIN]        P9 other screen (sw0=1 / sw4=1): watch buttons ignored, watch keeps running in background (WC7)
+              plan   : sw2=1, STOPWATCH screen: R (RUN) -> U, D, L -> wait 0.5 s -> R (STOP) -> TIMER screen: U, L, R
+              expect : stopwatch runs on screen, watch HH:MM and cursor unchanged, watch sec keeps counting in background
+------------------------------------------------------------------------------------------
+[ 284.019 ms] [  RESET]        P9                               rst 1 us pulse watch 12:00,  cursor SET_MIN_1(0)
+[ 284.021 ms] [     SW]        P9         sw4..0=00111 STOPWATCH SET HH.MM 12h watch 12:00 -> stopwatch 00:00:00.00,  cursor SET_MIN_1(0) -> STOP
+[ 294.020 ms] [   INFO]    P9.WC7 screen = STOPWATCH. watch is hidden but runs in background, now 12:00:00.01
+[ 294.020 ms] [    BTN]        P9                   btn_R (o_btn @ 296.020 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 304.020 ms] [     OK]    P9.WC7 R on stopwatch screen starts the stopwatch | exp=RUN got=RUN
+[ 304.020 ms] [    BTN]        P9                   btn_U (o_btn @ 306.020 ms) stopwatch 00:00:00.00 -> 00:00:00.01,  RUN
+[ 314.020 ms] [    BTN]        P9                   btn_D (o_btn @ 316.020 ms) stopwatch 00:00:00.01,  RUN -> RUN LAP
+[ 324.020 ms] [    BTN]        P9                   btn_L (o_btn @ 326.020 ms) stopwatch 00:00:00.01,  RUN LAP
+[ 334.020 ms] [   WAIT]        P9                          50 tick(s) of 10 ms stopwatch 00:00:00.01,  RUN LAP
+[ 834.020 ms] [   INFO]    P9.WC7 on screen  : stopwatch 00:00:00.01 (RUN)
+[ 834.020 ms] [   INFO]    P9.WC7 background : watch 12:00:00.01 -> 12:00:00.55 (540 ms)
+[ 834.020 ms] [     OK]    P9.WC7 watch counted every 10 ms tick behind the stopwatch screen | exp=+54 ticks got=+54 ticks
+[ 834.020 ms] [     OK]    P9.WC7 stopwatch screen: watch HH:MM unchanged by R/U/D/L | exp=12:00 got=12:00
+[ 834.020 ms] [     OK]    P9.WC7 stopwatch screen: cursor unchanged | exp=cursor=0 got=cursor=0
+[ 834.020 ms] [    BTN]        P9                   btn_R (o_btn @ 836.020 ms) stopwatch 00:00:00.01,  RUN LAP -> STOP LAP
+[ 844.020 ms] [     SW]        P9             sw4..0=10110 TIMER SET HH.MM 12h stopwatch 00:00:00.01 -> timer 00:00.00,  STOP LAP -> SET
+[ 844.021 ms] [    BTN]        P9                   btn_U (o_btn @ 846.020 ms) timer 00:00.00 -> 00:10.00,  SET
+[ 854.021 ms] [    BTN]        P9                   btn_L (o_btn @ 856.020 ms) timer 00:10.00,  SET -> RUN
+[ 864.021 ms] [    BTN]        P9                   btn_R (o_btn @ 866.020 ms) timer 00:10.00 -> 00:09.99,  RUN
+[ 874.021 ms] [     OK]    P9.WC7 timer screen: watch time unchanged | exp=12:00 got=12:00
+[ 874.021 ms] [     OK]    P9.WC7 timer screen: cursor unchanged | exp=cursor=0 got=cursor=0
+[ 874.021 ms] [     OK]    P9.WC7 watch kept running | exp=>00:00 got=12:00:00.59
+[ 874.021 ms] [     OK]    P9.WC6 sec/msec set inputs tied 0 | exp=0 got=0
+[ 874.021 ms] [   PASS]        P9 END  checks=8 fail=0 defect=0 (590.002 ms)
+[ 874.021 ms] [SUMMARY] WT1 src=orig checks=38 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 874021210 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/03_watch/tb_wt_1_set_ui.sv" Line 252
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:06:11 . Memory (MB): peak = 271.727 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 13288 KB (Peak: 13288 KB), Simulation CPU Usage: 351140 ms
+INFO: [Common 17-206] Exiting xsim at Sat Oct 24 19:46:20 2026...

@@ -1,0 +1,115 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 03:16:32 2026
+# Process ID: 3564
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_1
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_1/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_1\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P0 reset: no X on outputs 1 us after reset, LED=8009
+              plan   : reset, wait 1 us
+              expect : no X on fnd_com / fnd_font / led, led 8009, 12:00:00.00
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P0                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     OK]      P0.X no X/Z on fnd_com/fnd_font/led | exp=no X got=com=1110 font=11000000 led=1000000000001001
+[   0.002 ms] [     OK]    P0.WC1 LED after reset (all switches 0) | exp=8009 got=8009
+[   0.002 ms] [     OK]    P0.WC1 watch reset value | exp=12:00:00.00 got=12:00:00.00
+[   0.002 ms] [   PASS]        P0 END  checks=3 fail=0 defect=0 (0.002 ms)
+
+==========================================================================================
+[   0.002 ms] [  BEGIN]        P1 press length sweep 1.0/1.5/1.7 ms (ignore) 2.0/2.5/5/100 ms (1 pulse)
+              plan   : press U for 1.0 / 1.5 / 1.7 / 2.0 / 2.5 / 5 / 100 ms
+              expect : 1.0 1.5 1.7 ms: no o_btn / 2.0 2.5 5 100 ms: exactly 1 o_btn, o_wt_min +1
+------------------------------------------------------------------------------------------
+[   0.002 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.004 ms] [     SW]        P1             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor NORMAL(3) -> SET_MIN_1(0)
+[   0.005 ms] [    BTN]        P1                             btn_U (no o_btn) watch 12:00,  cursor SET_MIN_1(0)
+[   6.005 ms] [     OK] P1.P1.1.0ms press 1.0 ms : U_BD_U.o_btn pulses | exp=0 got=0
+[   6.005 ms] [     OK] P1.P1.1.0ms press 1.0 ms : watch min delta | exp=+0 got=+0
+[   6.005 ms] [   INFO] P1.P1.1.0ms press 1.0 ms -> pulses=0 min 0->0
+[   6.005 ms] [    BTN]        P1                             btn_U (no o_btn) watch 12:00,  cursor SET_MIN_1(0)
+[  12.505 ms] [     OK] P1.P1.1.5ms press 1.5 ms : U_BD_U.o_btn pulses | exp=0 got=0
+[  12.505 ms] [     OK] P1.P1.1.5ms press 1.5 ms : watch min delta | exp=+0 got=+0
+[  12.505 ms] [   INFO] P1.P1.1.5ms press 1.5 ms -> pulses=0 min 0->0
+[  12.505 ms] [    BTN]        P1                             btn_U (no o_btn) watch 12:00,  cursor SET_MIN_1(0)
+[  19.205 ms] [     OK] P1.P1.1.7ms press 1.7 ms : U_BD_U.o_btn pulses | exp=0 got=0
+[  19.205 ms] [     OK] P1.P1.1.7ms press 1.7 ms : watch min delta | exp=+0 got=+0
+[  19.205 ms] [   INFO] P1.P1.1.7ms press 1.7 ms -> pulses=0 min 0->0
+[  19.205 ms] [    BTN]        P1                   btn_U (o_btn @  21.003 ms) watch 12:00 -> 12:01,  cursor SET_MIN_1(0)
+[  26.205 ms] [     OK] P1.P1.2.0ms press 2.0 ms : U_BD_U.o_btn pulses | exp=1 got=1
+[  26.205 ms] [     OK] P1.P1.2.0ms press 2.0 ms : watch min delta | exp=+1 got=+1
+[  26.205 ms] [   INFO] P1.P1.2.0ms press 2.0 ms -> pulses=1 min 0->1
+[  26.205 ms] [    BTN]        P1                   btn_U (o_btn @  28.003 ms) watch 12:01 -> 12:02,  cursor SET_MIN_1(0)
+[  33.705 ms] [     OK] P1.P1.2.5ms press 2.5 ms : U_BD_U.o_btn pulses | exp=1 got=1
+[  33.705 ms] [     OK] P1.P1.2.5ms press 2.5 ms : watch min delta | exp=+1 got=+1
+[  33.705 ms] [   INFO] P1.P1.2.5ms press 2.5 ms -> pulses=1 min 1->2
+[  33.705 ms] [    BTN]        P1                   btn_U (o_btn @  35.503 ms) watch 12:02 -> 12:03,  cursor SET_MIN_1(0)
+[  43.705 ms] [     OK] P1.P1.5ms press 5 ms : U_BD_U.o_btn pulses | exp=1 got=1
+[  43.705 ms] [     OK] P1.P1.5ms press 5 ms : watch min delta | exp=+1 got=+1
+[  43.705 ms] [   INFO] P1.P1.5ms press 5 ms -> pulses=1 min 2->3
+[  43.705 ms] [    BTN]        P1                   btn_U (o_btn @  45.503 ms) watch 12:03 -> 12:04,  cursor SET_MIN_1(0)
+[ 148.705 ms] [     OK] P1.P1.100ms press 100 ms : U_BD_U.o_btn pulses | exp=1 got=1
+[ 148.705 ms] [     OK] P1.P1.100ms press 100 ms : watch min delta | exp=+1 got=+1
+[ 148.705 ms] [   INFO] P1.P1.100ms press 100 ms -> pulses=1 min 3->4
+[ 148.705 ms] [   PASS]        P1 END  checks=14 fail=0 defect=0 (148.703 ms)
+
+==========================================================================================
+[ 148.705 ms] [  BEGIN]        P2 bounce pattern -> exactly 1 pulse
+              plan   : bounce pattern (40..300 us bounces + 20 ms hold)
+              expect : exactly 1 o_btn, o_wt_min +1
+------------------------------------------------------------------------------------------
+[ 148.705 ms] [  RESET]        P2                               rst 1 us pulse watch 12:04 -> 12:00,  cursor SET_MIN_1(0)
+[ 148.707 ms] [     SW]        P2             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 148.708 ms] [    BTN]        P2       btn_U with bounce (o_btn @ 150.956 ms) watch 12:00 -> 12:01,  cursor SET_MIN_1(0)
+[ 174.958 ms] [     OK] P2.BOUNCE bounce pattern -> U_BD_U.o_btn pulses | exp=1 got=1
+[ 174.958 ms] [     OK] P2.BOUNCE bounce pattern -> min +1 | exp=1 got=1
+[ 174.958 ms] [   PASS]        P2 END  checks=2 fail=0 defect=0 (26.253 ms)
+
+==========================================================================================
+[ 174.958 ms] [  BEGIN]        P3 long press 2 s -> 1 pulse (no auto-repeat)
+              plan   : hold 2 s
+              expect : 1 o_btn (no auto-repeat)
+------------------------------------------------------------------------------------------
+[ 174.958 ms] [  RESET]        P3                               rst 1 us pulse watch 12:01 -> 12:00,  cursor SET_MIN_1(0)
+[ 174.960 ms] [     SW]        P3             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 174.961 ms] [    BTN]        P3                   btn_U (o_btn @ 176.959 ms) watch 12:00 -> 12:01,  cursor SET_MIN_1(0)
+[2179.961 ms] [     OK]   P3.LONG press 2 s : U_BD_U.o_btn pulses | exp=1 got=1
+[2179.961 ms] [     OK]   P3.LONG press 2 s : watch min delta | exp=+1 got=+1
+[2179.961 ms] [   INFO]   P3.LONG press 2 s -> pulses=1 min 0->1
+[2179.961 ms] [   PASS]        P3 END  checks=2 fail=0 defect=0 (2005.003 ms)
+
+==========================================================================================
+[2179.961 ms] [  BEGIN]        P4 0-glitch 300 us while held -> 2 pulses (design limit)
+              plan   : 300 us dropout in the middle of a press
+              expect : 2 o_btn, o_wt_min +2 -> [LIMIT] logged (dropout = new press)
+------------------------------------------------------------------------------------------
+[2179.961 ms] [  RESET]        P4                               rst 1 us pulse watch 12:01 -> 12:00,  cursor SET_MIN_1(0)
+[2179.963 ms] [     SW]        P4             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[2205.264 ms] [     OK] P4.GLITCH held + 300 us dropout -> U_BD_U.o_btn pulses | exp=2 got=2
+[2205.264 ms] [     OK] P4.GLITCH held + 300 us dropout -> min +2 | exp=2 got=2
+[2205.264 ms] [  LIMIT] P4.GLITCH debouncer filters only press-start bounce: a 300 us dropout while held = 2nd press (release needs 1 sample)
+[2205.264 ms] [   PASS]        P4 END  checks=2 fail=0 defect=0 (25.303 ms)
+
+==========================================================================================
+[2205.264 ms] [  BEGIN]        P5 pulse width of all w_btnX = 1 clk
+              plan   : all o_btn pulses so far
+              expect : pulse width exactly 10 ns (1 clk)
+------------------------------------------------------------------------------------------
+[2205.264 ms] [     OK]     P5.PW all debouncer pulses 1 clk wide (R=0 L=0 U=8 D=0 pulses seen) | exp=0 bad got=0 bad
+[2205.264 ms] [   PASS]        P5 END  checks=1 fail=0 defect=0 (0.000 ms)
+[2205.264 ms] [SUMMARY] TOP1 src=orig checks=24 fail=0 defect=0 limit=1 first_bad=- => PASS
+$finish called at time : 2205264010 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/top/tb_top_1_btn_debounce.sv" Line 252
+run: Time (s): cpu = 00:00:03 ; elapsed = 00:41:20 . Memory (MB): peak = 238.914 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 12888 KB (Peak: 12888 KB), Simulation CPU Usage: 1416187 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 03:57:55 2026...

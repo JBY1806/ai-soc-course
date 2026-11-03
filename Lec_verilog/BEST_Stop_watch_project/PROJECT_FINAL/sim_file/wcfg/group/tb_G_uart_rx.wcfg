@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_G_uart_rx_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_G_uart_rx" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="8080000001fs"></ZoomEndTime>
+      <Cursor1Time time="0fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="230"></NameColumnWidth>
+      <ValueColumnWidth column_width="115"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="7" />
+   <wvobject fp_name="group1" type="group">
+      <obj_property name="label">TB : scenario / last check / result (ASCII)</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_G_uart_rx/h/W_SC" type="array">
+         <obj_property name="ElementShortName">W_SC[63:0]</obj_property>
+         <obj_property name="ObjectShortName">W_SC[63:0]</obj_property>
+         <obj_property name="Radix">ASCIIRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_G_uart_rx/h/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_G_uart_rx/h/W_CMD" type="array">
+      <obj_property name="ElementShortName">W_CMD[127:0]</obj_property>
+      <obj_property name="ObjectShortName">W_CMD[127:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_G_uart_rx/h/rx" type="logic">
+      <obj_property name="ElementShortName">rx</obj_property>
+      <obj_property name="ObjectShortName">rx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_G_uart_rx/h/tx" type="logic">
+      <obj_property name="ElementShortName">tx</obj_property>
+      <obj_property name="ObjectShortName">tx</obj_property>
+   </wvobject>
+   <wvobject fp_name="group1270" type="group">
+      <obj_property name="label">Ascii_Decoder</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_DECODER/n_state" type="array">
+         <obj_property name="ElementShortName">n_state[3:0]</obj_property>
+         <obj_property name="ObjectShortName">n_state[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_DECODER/handshake" type="logic">
+         <obj_property name="ElementShortName">handshake</obj_property>
+         <obj_property name="ObjectShortName">handshake</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_DECODER/o_ascii" type="array">
+         <obj_property name="ElementShortName">o_ascii[39:0]</obj_property>
+         <obj_property name="ObjectShortName">o_ascii[39:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_DECODER/get_state" type="logic">
+         <obj_property name="ElementShortName">get_state</obj_property>
+         <obj_property name="ObjectShortName">get_state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_DECODER/btn_state" type="logic">
+         <obj_property name="ElementShortName">btn_state</obj_property>
+         <obj_property name="ObjectShortName">btn_state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_DECODER/mode_state" type="logic">
+         <obj_property name="ElementShortName">mode_state</obj_property>
+         <obj_property name="ObjectShortName">mode_state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_DECODER/auto_state" type="logic">
+         <obj_property name="ElementShortName">auto_state</obj_property>
+         <obj_property name="ObjectShortName">auto_state</obj_property>
+      </wvobject>
+      <wvobject fp_name="group1286" type="group">
+         <obj_property name="label">CONTROLLER</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_CONTROL/i_handshake" type="logic">
+            <obj_property name="ElementShortName">i_handshake</obj_property>
+            <obj_property name="ObjectShortName">i_handshake</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_CONTROL/i_error" type="logic">
+            <obj_property name="ElementShortName">i_error</obj_property>
+            <obj_property name="ObjectShortName">i_error</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_CONTROL/i_get" type="logic">
+            <obj_property name="ElementShortName">i_get</obj_property>
+            <obj_property name="ObjectShortName">i_get</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_CONTROL/i_btn" type="logic">
+            <obj_property name="ElementShortName">i_btn</obj_property>
+            <obj_property name="ObjectShortName">i_btn</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_CONTROL/i_mode" type="logic">
+            <obj_property name="ElementShortName">i_mode</obj_property>
+            <obj_property name="ObjectShortName">i_mode</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_CONTROL/i_auto" type="logic">
+            <obj_property name="ElementShortName">i_auto</obj_property>
+            <obj_property name="ObjectShortName">i_auto</obj_property>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group1281" type="group">
+      <obj_property name="label">Sender_TX</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_SENDER/c_state" type="logic">
+         <obj_property name="ElementShortName">c_state</obj_property>
+         <obj_property name="ObjectShortName">c_state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_SENDER/i_send_sel" type="array">
+         <obj_property name="ElementShortName">i_send_sel[2:0]</obj_property>
+         <obj_property name="ObjectShortName">i_send_sel[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_SENDER/i_send_data" type="array">
+         <obj_property name="ElementShortName">i_send_data[23:0]</obj_property>
+         <obj_property name="ObjectShortName">i_send_data[23:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_G_uart_rx/h/dut/U_UART/U_ASCII_SENDER/o_send_busy" type="logic">
+         <obj_property name="ElementShortName">o_send_busy</obj_property>
+         <obj_property name="ObjectShortName">o_send_busy</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

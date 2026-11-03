@@ -1,0 +1,110 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_1/tb_e15_top.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_e15_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/btn_debounce.v" into library work
+INFO: [VRFC 10-311] analyzing module btn_debounce
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/clock_tick_generator.v" into library work
+INFO: [VRFC 10-311] analyzing module clock_tick_generator
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/counter8.v" into library work
+INFO: [VRFC 10-311] analyzing module counter8
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/decoder_2x4.v" into library work
+INFO: [VRFC 10-311] analyzing module decoder_2x4
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/digit_splitter.v" into library work
+INFO: [VRFC 10-311] analyzing module digit_splitter
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/dot.v" into library work
+INFO: [VRFC 10-311] analyzing module dot
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/fnd_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module fnd_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/hour_12_24.v" into library work
+INFO: [VRFC 10-311] analyzing module hour_12_24
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/lap_controller.v" into library work
+INFO: [VRFC 10-311] analyzing module lap_controller
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/mux_2x1.v" into library work
+INFO: [VRFC 10-311] analyzing module mux_2x1
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/mux_8x1.v" into library work
+INFO: [VRFC 10-311] analyzing module mux_8x1
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/stopwatch_datapath.v" into library work
+INFO: [VRFC 10-311] analyzing module stopwatch_datapath
+INFO: [VRFC 10-311] analyzing module stopwatch_tick_counter
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/stopwatch_watch.v" into library work
+INFO: [VRFC 10-311] analyzing module stopwatch_watch
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/SW2_ANODE_CHOICE.v" into library work
+INFO: [VRFC 10-311] analyzing module SW2_ANODE_CHOICE
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/SW2_FND_CONTROLLER.v" into library work
+INFO: [VRFC 10-311] analyzing module SW2_FND_CONTROLLER
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/tick_gen_100hz.v" into library work
+INFO: [VRFC 10-311] analyzing module tick_gen_100hz
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/timer_datapath.v" into library work
+INFO: [VRFC 10-311] analyzing module timer_datapath
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/watch_datapath.v" into library work
+INFO: [VRFC 10-311] analyzing module watch_datapath
+INFO: [VRFC 10-311] analyzing module watch_tick_counter
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/watch_control_unit.sv" into library work
+INFO: [VRFC 10-311] analyzing module watch_control_unit
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/stopwatch_control_unit.sv" into library work
+INFO: [VRFC 10-311] analyzing module stopwatch_control_unit
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/design_prototype/merged_v4/src/timer_control_unit.sv" into library work
+INFO: [VRFC 10-311] analyzing module timer_control_unit
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2022.2/bin/unwrapped/win64.o/xelab.exe tb_e15_top -s snap -timescale 1ns/1ps 
+Multi-threading is on. Using 16 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.clock_tick_generator(CLK_FRQ=400...
+Compiling module work.btn_debounce
+Compiling module work.tick_gen_100hz
+Compiling module work.stopwatch_control_unit
+Compiling module work.stopwatch_tick_counter(TIMES=24,...
+Compiling module work.stopwatch_tick_counter(TIMES=60,...
+Compiling module work.stopwatch_tick_counter
+Compiling module work.lap_controller
+Compiling module work.stopwatch_datapath
+Compiling module work.watch_control_unit
+Compiling module work.watch_tick_counter
+Compiling module work.watch_tick_counter(TIMES=60,BIT_...
+Compiling module work.watch_tick_counter(TIMES=24,BIT_...
+Compiling module work.watch_datapath
+Compiling module work.hour_12_24
+Compiling module work.timer_control_unit
+Compiling module work.timer_datapath
+Compiling module work.digit_splitter
+Compiling module work.digit_splitter(WIDTH=6)
+Compiling module work.counter8
+Compiling module work.dot
+Compiling module work.SW2_ANODE_CHOICE
+Compiling module work.mux_8x1
+Compiling module work.decoder_2x4
+Compiling module work.fnd_decoder
+Compiling module work.SW2_FND_CONTROLLER(HOUR_BIT_WIDT...
+Compiling module work.stopwatch_watch
+Compiling module work.tb_e15_top
+Built simulation snapshot snap
+
+****** xsim v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+E15a start 1000 ns
+E15a INFO press -> o_up pulse delay = 2000005 ns
+E15b start 10001000 ns
+E15c start 20001000 ns
+E15d INFO tick1 10001005 ns, tick2 20001005 ns, period 10000000 ns, ticks 2, msec 2
+end 30001000 ns
+TOTAL MISMATCH = 0
+$finish called at time : 30001 us : File "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_1/tb_e15_top.v" Line 71
+## quit
+INFO: [Common 17-206] Exiting xsim at Fri Oct 16 15:52:36 2026...
+
+real	0m5.059s
+user	0m0.000s
+sys	0m0.016s

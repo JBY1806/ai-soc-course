@@ -1,0 +1,61 @@
+{
+  "type": "verification",
+  "session": 1,
+  "date": "2026-10-16",
+  "label": "1차 (시험)",
+  "targets": [
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_control_unit.sv",
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_datapath.v"
+  ],
+  "note": "평가 대상은 학생 초안이 아니라 시제품 설계(두 파일 3번째 줄 주석). 도구 시험 실행.",
+  "scenarios": [
+    {"id": "E1", "desc": "리셋값 + 리셋 해제 직후 U·D·L·R (sw2=0)", "expected": "12:00:00.00, NORMAL, cursor 3, 버튼 무시", "result": "PASS", "class": null},
+    {"id": "E2", "desc": "sw2=1 인 채 리셋 해제, 해제 직후 첫 클럭 U, 다음 U", "expected": "해제 뒤 SET_MIN_1·cursor 0, 두 번째 U 는 +1 (첫 클럭 U 는 사양에 규칙 없어 관찰)", "result": "PASS", "class": null, "observed": "첫 클럭 U 는 무시됨(그 클럭 c_state = NORMAL). 사양 불명확 항목이며 Top 에서는 디바운스 2 ms 때문에 생기지 않음(E15a)"},
+    {"id": "E3", "desc": "분 일 0-1, 59+1", "expected": "12:59, 12:00 (시 그대로)", "result": "PASS", "class": null},
+    {"id": "E4", "desc": "분 일 09+1, 10-1", "expected": "10, 09 (사양 예시 '분 59 +1 -> 0' = 분 카운터 0~59 전체가 돈다)", "result": "PASS", "class": null},
+    {"id": "E5", "desc": "분 십 0-10, 55+10, 05-10", "expected": "50, 05, 55 (시 그대로)", "result": "PASS", "class": null},
+    {"id": "E6", "desc": "시 23+1, 0-1", "expected": "00, 23 (분 그대로)", "result": "PASS", "class": null},
+    {"id": "E7", "desc": "자정 23:59:59.99 + tick", "expected": "00:00:00.00", "result": "PASS", "class": null},
+    {"id": "E8", "desc": "U+D 같은 클럭 (SET_MIN_1, SET_HOUR)", "expected": "U: o_up 1·o_down 0, 12:01, 13:01", "result": "PASS", "class": null},
+    {"id": "E9", "desc": "L 3번·R 3번 순환 + L+R 같은 클럭 (세 상태)", "expected": "cursor 1,2,0 / 2,1,0 / L 우선 1,2,0, 시각 그대로", "result": "PASS", "class": null},
+    {"id": "E10", "desc": "sw2 내림 + 버튼 같은 클럭 (세 상태) + 재진입", "expected": "NORMAL·cursor 3·시각 그대로, 다시 올리면 SET_MIN_1", "result": "PASS", "class": null},
+    {"id": "E11", "desc": "tick(자리 넘김) + 버튼 같은 클럭·같은 카운터: 분 일 D, 분 십 U, 시 U", "expected": "tick 만: 12:06, 12:07, 13:00", "result": "PASS", "class": null},
+    {"id": "E12", "desc": "1/100초 tick + U 같은 클럭(다른 카운터), 설정 버튼이 초·1/100초 안 건드림, 설정 중 흐름", "expected": "msec 11·min 1 둘 다 반영, sec·msec 그대로, 100 tick 뒤 sec 1", "result": "PASS", "class": null},
+    {"id": "E13", "desc": "설정 중(SET_HOUR, 15:07) 클럭 에지 사이 비동기 리셋, sw2=1 인 채 해제", "expected": "다음 posedge 전에 NORMAL·12:00:00.00, 해제 뒤 SET_MIN_1", "result": "PASS", "class": null},
+    {"id": "E14", "desc": "자리 이동(L/R) + U/D 같은 클럭", "expected": "자리는 L/R 대로, 한 칸에 한 번만 반영, 올림 없음 (어느 칸인지는 사양에 규칙 없어 관찰)", "result": "PASS", "class": null, "observed": "이동 전(현재) 자리에 반영 후 자리 이동: SET_MIN_1 12:05 L+U -> 12:06·cursor 1, SET_HOUR R+D -> 11시·cursor 1. 사양 불명확"},
+    {"id": "E15", "desc": "Top 실제 파라미터: 리셋 해제 직후 U, U+D 동시, L+R 동시, tick 주기", "expected": "디바운스 약 2 ms 뒤 펄스 1개 12:01, U 우선 12:02, L 우선 cursor 1, tick 10,000,000 ns", "result": "PASS", "class": null},
+    {"id": "M", "desc": "TB 자체 점검: 세션 폴더의 설계 사본에 bug 8개를 하나씩 넣고 같은 TB 실행 (점수 산정과 무관)", "expected": "8개 모두 FAIL 로 잡힘", "result": "PASS", "class": null, "observed": "M1 버튼 우선→E11, M2 D 우선→E8, M3 R 우선→E9, M4 sw2 게이팅 없음→E10, M5 일의 자리만 돌기→E3·E4, M6 내림 돌기 없음→E3·E5·E6·E7·E11, M7 진입 SET_HOUR→13개, M8 동기 리셋→E13"}
+  ],
+  "sim": {
+    "tool": "xsim 2022.2",
+    "tb": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\tb_e_unit.v",
+    "tb_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\tb_e15_top.v",
+    "total_mismatch": 0,
+    "total_mismatch_top": 0,
+    "log": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\unit_run.log",
+    "log_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\top_run.log",
+    "log_mutation": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\mutation.log",
+    "sim_time": "단위 244,120 ns ($finish), Top 30,001,000 ns (실행 약 5초)"
+  },
+  "criteria": [
+    {"id": "V1", "name": "시나리오 커버리지", "weight": 25, "score": 100, "deductions": [],
+     "evidence": "unit_run.log 'COV transitions = 1111111111111001', 'COV missing transitions = 0 (of 14 listed)': 상태 4개 모두, 비자기 전이 10개(NORMAL->SET_MIN_1, L 3개, R 3개, 각 상태->NORMAL 3개) + 유지 4개 지나감. 금지 전이 NORMAL->SET_HOUR/SET_MIN_10 은 0. 설정 중 비동기 리셋(SET_HOUR->NORMAL) 은 E13 에서 따로 확인"},
+    {"id": "V2", "name": "경계값", "weight": 20, "score": 100, "deductions": [],
+     "evidence": "D3 경계값 6개 모두 TB 비교: 분 0-1 · 59+1 (E3), 분 십 55+10 · 0-10 (E5), 시 23+1 · 0-1 (E6). 추가로 자정(E7), 05-10(E5), 09+1(E4)"},
+    {"id": "V3", "name": "엣지 케이스 · 동시 입력", "weight": 25, "score": 100, "deductions": [],
+     "evidence": "E1~E15 15개 모두 실행, FAIL 0, 실행 못 한 것 0"},
+    {"id": "V4", "name": "실제 시간 조건", "weight": 15, "score": 100, "deductions": [],
+     "evidence": "E15 가 Top 을 실제 파라미터(100 MHz, tick_gen F_COUNT 1,000,000, 4 kHz 디바운스)로 실행: tick 주기 10,000,000 ns, 누름->펄스 2,000,005 ns. 단위 TB 는 파라미터를 바꾸지 않고 tick 입력만 TB 가 넣음"},
+    {"id": "V5", "name": "자동 판정", "weight": 15, "score": 100, "deductions": [],
+     "evidence": "모든 시나리오가 if (x !== exp) 비교 + err 카운트, 두 TB 모두 'TOTAL MISMATCH = 0' 출력. E2 첫 클럭·E14 반영 자리는 사양 규칙이 없어 INFO 로 출력하되 같은 시나리오 안에 사양 근거 자동 비교가 있음"}
+  ],
+  "total": 100.0,
+  "needs_check": [
+    "1. E14 (사양 불명확): L/R 과 U/D 가 같은 클럭이면 이동 전 자리에 반영되고 자리가 옮겨간다(watch_control_unit.sv:91-94 의 o_up/o_down 이 c_state 기준 cursor(56, 67, 78줄)와 같은 클럭에 데이터패스로 감). 02_target_spec 에 규칙 추가 여부를 팀이 정할 것",
+    "2. E2 (사양 불명확): sw2=1 인 채 리셋을 풀면 첫 클럭은 NORMAL 이라 그 클럭의 버튼은 무시된다(watch_control_unit.sv:46-53, 91). Top 에서는 디바운스 2 ms 때문에 실제로 생기지 않음(E15a)",
+    "3. E11: tick 과 같은 클럭에 온 버튼은 다음 클럭으로 미뤄지지 않고 버려진다(watch_datapath.v:127-137). 사양 문장('tick 만 반영')대로. 분 카운터에 tick 이 오는 것은 1분에 1클럭(10 ns)뿐이라 체감 빈도는 낮다(계산, 측정 아님)",
+    "4. 자리 넘김이 리플 방식이라 59->00 때 1/100초·초·분·시가 1클럭씩 늦게 바뀐다(watch_datapath.v:129-131 o_tick 레지스터). 이번 TB 는 4클럭 기다린 뒤 비교해 이 30 ns 중간값을 판정하지 않았다 — 사양에 규칙 없음, 표시상 영향은 확인 안 함",
+    "5. 이번 점수는 시제품 설계 대상이다. 학생 초안으로 세션을 다시 돌려야 과제(설계는 학생, AI 는 평가자) 기준 점수가 된다"
+  ],
+  "summary": "엣지 케이스 15개(단위 14 + Top 실제 파라미터 1) xsim 실행 FAIL 0, 상태·전이 커버리지 100%, bug 사본 8개 모두 검출 — 총 100.0. 사양 불명확 2건(L/R+U/D 동시, 리셋 해제 첫 클럭 버튼)은 관찰 기록"
+}

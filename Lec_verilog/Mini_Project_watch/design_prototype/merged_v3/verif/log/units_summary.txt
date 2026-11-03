@@ -1,0 +1,11 @@
+== sw_cu: TOTAL MISMATCH = 0, DEVIATION = 4 0 FAIL lines, 5 DEVIATION
+== lap: TOTAL MISMATCH = 0 0 FAIL lines, 0 DEVIATION
+== timer: TOTAL MISMATCH = 4 4 FAIL lines, 0 DEVIATION
+== hour1224: TOTAL MISMATCH = 0  (48 cases + 8 out-of-range) 0 FAIL lines, 0 DEVIATION
+== fnd: TOTAL MISMATCH = 160  (160 combos x 8 slots + scan order) 160 FAIL lines, 0 DEVIATION
+== watch_cu: TOTAL MISMATCH = 3  (128 state x input combos + 3 resets) 3 FAIL lines, 0 DEVIATION
+== watch_cnt: TOTAL MISMATCH = 0  (PASS) 0 FAIL lines, 0 DEVIATION
+== watch_dp: TOTAL MISMATCH = 0 0 FAIL lines, 0 DEVIATION
+== sw_dp: TOTAL MISMATCH = 1 1 FAIL lines, 0 DEVIATION
+== tickgens: TOTAL MISMATCH = 0 0 FAIL lines, 0 DEVIATION
+== debounce: TOTAL MISMATCH = 0, DEVIATION = 1 0 FAIL lines, 2 DEVIATION

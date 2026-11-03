@@ -1,0 +1,151 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Oct 19 23:43:23 2026
+# Process ID: 35532
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_tm_1
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_tm_1/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_tm_1\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 timer screen: disp_mode=1, LED led5 only, FND 00.00 (TC1)
+              plan   : reset, timer_sw4=1
+              expect : w_disp_mode 1, led 0020 (led5), FND 00.00
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P1                 sw4..0=10000 TIMER SS.cc 12h watch 12:00 -> timer 00:00.00,  cursor NORMAL(3) -> SET
+[   0.003 ms] [     OK]    P1.TC1 timer forces MM.SS screen (sw1=0) | exp=1 got=1
+[   0.003 ms] [     OK]    P1.TC6 LED timer screen (led5) | exp=0020 got=0020
+[   5.003 ms] [     OK]    P1.TC1 FND timer 00.00 | exp="00.00" got="00.00"
+[   5.003 ms] [   PASS]        P1 END  checks=3 fail=0 defect=0 (5.003 ms)
+
+==========================================================================================
+[   5.003 ms] [  BEGIN]        P2 L at 00:00 does not start (TB3)
+              plan   : L at 00:00
+              expect : stays SET (i_tm_zero=1), o_tm_run 0, o_tm_alarm 0
+------------------------------------------------------------------------------------------
+[   5.003 ms] [  RESET]        P2                               rst 1 us pulse timer 00:00.00,  SET
+[   5.005 ms] [     SW]        P2                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[   5.006 ms] [    BTN]        P2                   btn_L (o_btn @   7.004 ms) timer 00:00.00,  SET
+[  15.006 ms] [     OK]    P2.TB3 L at zero -> stays SET (no run, no alarm) | exp=run=0 alarm=0 got=run=0 alarm=0
+[  15.006 ms] [   PASS]        P2 END  checks=1 fail=0 defect=0 (10.003 ms)
+
+==========================================================================================
+[  15.006 ms] [  BEGIN]        P3 U x6 -> 01:00 (sec carry into min) (TB2)
+              plan   : U x5 -> U
+              expect : each U: o_tm_add + amount 0 (+10 s): 00:50 -> 01:00 (sec carries into min), FND 01.00
+------------------------------------------------------------------------------------------
+[  15.006 ms] [  RESET]        P3                               rst 1 us pulse timer 00:00.00,  SET
+[  15.008 ms] [     SW]        P3                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[  15.009 ms] [    BTN]        P3                   btn_U (o_btn @  17.007 ms) timer 00:00.00 -> 00:10.00,  SET
+[  25.009 ms] [    BTN]        P3                   btn_U (o_btn @  27.007 ms) timer 00:10.00 -> 00:20.00,  SET
+[  35.009 ms] [    BTN]        P3                   btn_U (o_btn @  37.007 ms) timer 00:20.00 -> 00:30.00,  SET
+[  45.009 ms] [    BTN]        P3                   btn_U (o_btn @  47.007 ms) timer 00:30.00 -> 00:40.00,  SET
+[  55.009 ms] [    BTN]        P3                   btn_U (o_btn @  57.007 ms) timer 00:40.00 -> 00:50.00,  SET
+[  65.009 ms] [     OK]    P3.TB2 U x5 = +50 s | exp=00:50.00 got=00:50.00
+[  65.009 ms] [    BTN]        P3                   btn_U (o_btn @  67.007 ms) timer 00:50.00 -> 01:00.00,  SET
+[  75.009 ms] [     OK]    P3.TB2 00:50 + U -> 01:00 (carry) | exp=01:00.00 got=01:00.00
+[  80.009 ms] [     OK]    P3.TB2 FND 01.00 | exp="01.00" got="01.00"
+[  80.009 ms] [   PASS]        P3 END  checks=3 fail=0 defect=0 (65.003 ms)
+
+==========================================================================================
+[  80.009 ms] [  BEGIN]        P4 R +1 min, D +10 min
+              plan   : R -> D -> U
+              expect : amount 1 / 2 / 0: 01:00 -> 11:00 -> 11:10
+------------------------------------------------------------------------------------------
+[  80.009 ms] [  RESET]        P4                               rst 1 us pulse timer 01:00.00 -> 00:00.00,  SET
+[  80.011 ms] [     SW]        P4                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[  80.012 ms] [    BTN]        P4                   btn_R (o_btn @  82.010 ms) timer 00:00.00 -> 01:00.00,  SET
+[  90.012 ms] [     OK]    P4.TB2 R = +1 min | exp=01:00.00 got=01:00.00
+[  90.012 ms] [    BTN]        P4                   btn_D (o_btn @  92.010 ms) timer 01:00.00 -> 11:00.00,  SET
+[ 100.012 ms] [     OK]    P4.TB2 D = +10 min | exp=11:00.00 got=11:00.00
+[ 100.012 ms] [    BTN]        P4                   btn_U (o_btn @ 102.010 ms) timer 11:00.00 -> 11:10.00,  SET
+[ 110.012 ms] [     OK]    P4.TB2 U = +10 s | exp=11:10.00 got=11:10.00
+[ 110.012 ms] [   PASS]        P4 END  checks=3 fail=0 defect=0 (30.003 ms)
+
+==========================================================================================
+[ 110.012 ms] [  BEGIN]        P5 cap: D x5 -> 50:00, R x9 -> 59:00, U x5 -> 59:50, U -> 59:59 (TB1)
+              plan   : D x5 -> R x9 -> U x5 -> U
+              expect : 50:00 -> 59:00 -> 59:50 -> 59:59 (NOT 60:00), FND 59.59
+------------------------------------------------------------------------------------------
+[ 110.012 ms] [  RESET]        P5                               rst 1 us pulse timer 11:10.00 -> 00:00.00,  SET
+[ 110.014 ms] [     SW]        P5                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[ 110.015 ms] [    BTN]        P5                   btn_D (o_btn @ 112.013 ms) timer 00:00.00 -> 10:00.00,  SET
+[ 120.015 ms] [    BTN]        P5                   btn_D (o_btn @ 122.013 ms) timer 10:00.00 -> 20:00.00,  SET
+[ 130.015 ms] [    BTN]        P5                   btn_D (o_btn @ 132.013 ms) timer 20:00.00 -> 30:00.00,  SET
+[ 140.015 ms] [    BTN]        P5                   btn_D (o_btn @ 142.013 ms) timer 30:00.00 -> 40:00.00,  SET
+[ 150.015 ms] [    BTN]        P5                   btn_D (o_btn @ 152.013 ms) timer 40:00.00 -> 50:00.00,  SET
+[ 160.015 ms] [     OK]    P5.TB1 D x5 | exp=50:00.00 got=50:00.00
+[ 160.015 ms] [    BTN]        P5                   btn_R (o_btn @ 162.013 ms) timer 50:00.00 -> 51:00.00,  SET
+[ 170.015 ms] [    BTN]        P5                   btn_R (o_btn @ 172.013 ms) timer 51:00.00 -> 52:00.00,  SET
+[ 180.015 ms] [    BTN]        P5                   btn_R (o_btn @ 182.013 ms) timer 52:00.00 -> 53:00.00,  SET
+[ 190.015 ms] [    BTN]        P5                   btn_R (o_btn @ 192.013 ms) timer 53:00.00 -> 54:00.00,  SET
+[ 200.015 ms] [    BTN]        P5                   btn_R (o_btn @ 202.013 ms) timer 54:00.00 -> 55:00.00,  SET
+[ 210.015 ms] [    BTN]        P5                   btn_R (o_btn @ 212.013 ms) timer 55:00.00 -> 56:00.00,  SET
+[ 220.015 ms] [    BTN]        P5                   btn_R (o_btn @ 222.013 ms) timer 56:00.00 -> 57:00.00,  SET
+[ 230.015 ms] [    BTN]        P5                   btn_R (o_btn @ 232.013 ms) timer 57:00.00 -> 58:00.00,  SET
+[ 240.015 ms] [    BTN]        P5                   btn_R (o_btn @ 242.013 ms) timer 58:00.00 -> 59:00.00,  SET
+[ 250.015 ms] [     OK]    P5.TB1 R x9 | exp=59:00.00 got=59:00.00
+[ 250.015 ms] [    BTN]        P5                   btn_U (o_btn @ 252.013 ms) timer 59:00.00 -> 59:10.00,  SET
+[ 260.015 ms] [    BTN]        P5                   btn_U (o_btn @ 262.013 ms) timer 59:10.00 -> 59:20.00,  SET
+[ 270.015 ms] [    BTN]        P5                   btn_U (o_btn @ 272.013 ms) timer 59:20.00 -> 59:30.00,  SET
+[ 280.015 ms] [    BTN]        P5                   btn_U (o_btn @ 282.013 ms) timer 59:30.00 -> 59:40.00,  SET
+[ 290.015 ms] [    BTN]        P5                   btn_U (o_btn @ 292.013 ms) timer 59:40.00 -> 59:50.00,  SET
+[ 300.015 ms] [     OK]    P5.TB1 U x5 | exp=59:50.00 got=59:50.00
+[ 300.015 ms] [    BTN]        P5                   btn_U (o_btn @ 302.013 ms) timer 59:50.00 -> 59:59.00,  SET
+[ 310.015 ms] [     OK]    P5.TB1 59:50 + U -> sec carry makes 60:00 -> capped 59:59 | exp=59:59.00 got=59:59.00
+[ 315.015 ms] [     OK]    P5.TB1 FND never shows 60.00 | exp="59.59" got="59.59"
+[ 315.015 ms] [   PASS]        P5 END  checks=5 fail=0 defect=0 (205.003 ms)
+
+==========================================================================================
+[ 315.015 ms] [  BEGIN]        P6 at 59:59: U / R / D each -> 59:59 (TB1)
+              plan   : at 59:59: U, R, D
+              expect : o_tm_add pulses but o_tm_* stays 59:59
+------------------------------------------------------------------------------------------
+[ 315.015 ms] [  RESET]        P6                               rst 1 us pulse timer 59:59.00 -> 00:00.00,  SET
+[ 315.017 ms] [     SW]        P6                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[ 325.016 ms] [PRELOAD]        P6 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:00.00 -> 59:59.00   (wave: values jump here with no tick/button)
+[ 325.016 ms] [    BTN]        P6                   btn_U (o_btn @ 327.016 ms) timer 59:59.00,  SET
+[ 335.016 ms] [     OK]    P6.TB1 59:59 + U | exp=59:59.00 got=59:59.00
+[ 335.016 ms] [    BTN]        P6                   btn_R (o_btn @ 337.016 ms) timer 59:59.00,  SET
+[ 345.016 ms] [     OK]    P6.TB1 59:59 + R | exp=59:59.00 got=59:59.00
+[ 345.016 ms] [    BTN]        P6                   btn_D (o_btn @ 347.016 ms) timer 59:59.00,  SET
+[ 355.016 ms] [     OK]    P6.TB1 59:59 + D | exp=59:59.00 got=59:59.00
+[ 355.016 ms] [   PASS]        P6 END  checks=3 fail=0 defect=0 (40.001 ms)
+
+==========================================================================================
+[ 355.016 ms] [  BEGIN]        P7 52:10 + D (+10 min = 62:10) -> 59:59 (TB1)
+              plan   : PRELOAD 52:10 -> D -> R
+              expect : 52:10 + 10 min -> 59:59, R also 59:59
+------------------------------------------------------------------------------------------
+[ 355.016 ms] [  RESET]        P7                               rst 1 us pulse timer 59:59.00 -> 00:00.00,  SET
+[ 355.018 ms] [     SW]        P7                 sw4..0=10000 TIMER SS.cc 12h timer 00:00.00,  SET
+[ 355.019 ms] [    BTN]        P7                   btn_D (o_btn @ 357.017 ms) timer 00:00.00 -> 10:00.00,  SET
+[ 365.019 ms] [    BTN]        P7                   btn_D (o_btn @ 367.017 ms) timer 10:00.00 -> 20:00.00,  SET
+[ 375.019 ms] [    BTN]        P7                   btn_D (o_btn @ 377.017 ms) timer 20:00.00 -> 30:00.00,  SET
+[ 385.019 ms] [    BTN]        P7                   btn_D (o_btn @ 387.017 ms) timer 30:00.00 -> 40:00.00,  SET
+[ 395.019 ms] [    BTN]        P7                   btn_D (o_btn @ 397.017 ms) timer 40:00.00 -> 50:00.00,  SET
+[ 405.019 ms] [    BTN]        P7                   btn_R (o_btn @ 407.017 ms) timer 50:00.00 -> 51:00.00,  SET
+[ 415.019 ms] [    BTN]        P7                   btn_R (o_btn @ 417.017 ms) timer 51:00.00 -> 52:00.00,  SET
+[ 425.019 ms] [    BTN]        P7                   btn_U (o_btn @ 427.017 ms) timer 52:00.00 -> 52:10.00,  SET
+[ 435.019 ms] [     OK]    P7.TB1 built 52:10 with buttons | exp=52:10.00 got=52:10.00
+[ 435.019 ms] [    BTN]        P7                   btn_D (o_btn @ 437.017 ms) timer 52:10.00 -> 59:59.00,  SET
+[ 445.019 ms] [     OK]    P7.TB1 52:10 + D -> capped 59:59 | exp=59:59.00 got=59:59.00
+[ 445.019 ms] [    BTN]        P7                   btn_R (o_btn @ 447.017 ms) timer 59:59.00,  SET
+[ 455.019 ms] [     OK]    P7.TB1 59:59 + R stays | exp=59:59.00 got=59:59.00
+[ 455.019 ms] [   PASS]        P7 END  checks=3 fail=0 defect=0 (100.003 ms)
+[ 455.019 ms] [SUMMARY] TM1 src=orig checks=21 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 455019060 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/02_timer/tb_tm_1_add_cap.sv" Line 251
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:06:18 . Memory (MB): peak = 271.062 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 12368 KB (Peak: 12368 KB), Simulation CPU Usage: 279999 ms
+INFO: [Common 17-206] Exiting xsim at Mon Oct 19 23:49:43 2026...

@@ -1,0 +1,53 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+| Date         : Fri Oct 16 21:51:44 2026
+| Host         : DESKTOP-5C3QTIF running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file util_hier.rpt
+| Design       : stopwatch_watch
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Routed
+------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++----------------------------+------------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+|          Instance          |                  Module                  | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++----------------------------+------------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+| stopwatch_watch            |                                    (top) |        317 |        317 |       0 |    0 | 172 |      0 |      0 |          0 |
+|   (stopwatch_watch)        |                                    (top) |          1 |          1 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   U_BD_D                   |                             btn_debounce |          5 |          5 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_BD_L                   |                           btn_debounce_0 |          6 |          6 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_BD_R                   |                           btn_debounce_1 |          5 |          5 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_BD_U                   |                           btn_debounce_2 |          6 |          6 |       0 |    0 |   9 |      0 |      0 |          0 |
+|   U_CLK_GEN_4KHZ           |                     clock_tick_generator |         12 |         12 |       0 |    0 |  16 |      0 |      0 |          0 |
+|   U_FND_CONTROLLER         |                       SW2_FND_CONTROLLER |         19 |         19 |       0 |    0 |   3 |      0 |      0 |          0 |
+|     U_COUNTER8             |                                 counter8 |         19 |         19 |       0 |    0 |   3 |      0 |      0 |          0 |
+|   U_STOPWATCH_CONTROL_UNIT |                   stopwatch_control_unit |          8 |          8 |       0 |    0 |   2 |      0 |      0 |          0 |
+|   U_STOPWATCH_DATAPATH     |                       stopwatch_datapath |        131 |        131 |       0 |    0 |  52 |      0 |      0 |          0 |
+|     U_HOUR_COUNTER         |                   stopwatch_tick_counter |          8 |          8 |       0 |    0 |   5 |      0 |      0 |          0 |
+|     U_LAP_CONTROLLER       |                           lap_controller |         75 |         75 |       0 |    0 |  25 |      0 |      0 |          0 |
+|     U_MIN_COUNTER          |   stopwatch_tick_counter__parameterized0 |         15 |         15 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_MSEC_COUNTER         |   stopwatch_tick_counter__parameterized1 |         18 |         18 |       0 |    0 |   8 |      0 |      0 |          0 |
+|     U_SEC_COUNTER          | stopwatch_tick_counter__parameterized0_4 |         15 |         15 |       0 |    0 |   7 |      0 |      0 |          0 |
+|   U_TICK_GEN_100HZ         |                           tick_gen_100hz |          6 |          6 |       0 |    0 |   7 |      0 |      0 |          0 |
+|   U_TIMER_CONTROL_UNIT     |                       timer_control_unit |          5 |          5 |       0 |    0 |   3 |      0 |      0 |          0 |
+|   U_TIMER_DATAPATH         |                           timer_datapath |         46 |         46 |       0 |    0 |  24 |      0 |      0 |          0 |
+|   U_WATCH_CONTROL_UNIT     |                       watch_control_unit |         13 |         13 |       0 |    0 |   2 |      0 |      0 |          0 |
+|   U_WATCH_DATAPATH         |                           watch_datapath |         59 |         59 |       0 |    0 |  27 |      0 |      0 |          0 |
+|     U_HOUR_COUNTER         |       watch_tick_counter__parameterized1 |         19 |         19 |       0 |    0 |   5 |      0 |      0 |          0 |
+|     U_MIN_COUNTER          |       watch_tick_counter__parameterized0 |         18 |         18 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_MSEC_COUNTER         |                       watch_tick_counter |         14 |         14 |       0 |    0 |   8 |      0 |      0 |          0 |
+|     U_SEC_COUNTER          |     watch_tick_counter__parameterized0_3 |          8 |          8 |       0 |    0 |   7 |      0 |      0 |          0 |
++----------------------------+------------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

@@ -1,0 +1,99 @@
+{
+  "type": "design",
+  "session": 2,
+  "date": "2026-10-21",
+  "label": "2차",
+  "targets": [
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_control_unit.sv",
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_datapath.v"
+  ],
+  "reference_only": [
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\stopwatch_watch.v"
+  ],
+  "criteria": [
+    {
+      "id": "D1", "name": "사양 일치", "weight": 30, "score": 100,
+      "deductions": [],
+      "checked": [
+        "상태 4개 NORMAL·SET_HOUR·SET_MIN_10·SET_MIN_1 (watch_control_unit.sv:24)",
+        "진입 = SET_MIN_1 (cursor 0, 분 일) (watch_control_unit.sv:48-49, 76)",
+        "L 순환 SET_MIN_1→SET_MIN_10→SET_HOUR→SET_MIN_1 (watch_control_unit.sv:79-80, 68-69, 57-58)",
+        "R 순환 반대 방향 SET_HOUR→SET_MIN_10→SET_MIN_1→SET_HOUR (watch_control_unit.sv:59-60, 70-71, 81-82)",
+        "cursor 0 분±1 · 1 분±10 · 2 시±1 · 3 = NORMAL (watch_control_unit.sv:41, 47, 54, 65, 76 / watch_datapath.v:29-33)",
+        "설정은 그 칸만 돌고 o_tick 을 내지 않음 = 올림·내림 없음 (watch_datapath.v:136-152)",
+        "초·1/100초 설정 없음 (watch_datapath.v:46-48, 61-63)",
+        "리셋 12:00:00.00, 내부 0~23 (watch_datapath.v:41, 56, 71, 84-86)",
+        "100 Hz tick 항상 흐름 (watch_datapath.v:36, stopwatch_watch.v:226 w_tick_10ms = 시계 전용 tick)",
+        "U+D 동시 규칙은 사양 '동시 입력 규칙' 항목이라 D3 에서만 감점(이중 감점 안 함)"
+      ]
+    },
+    {
+      "id": "D2", "name": "래치 · 다중 구동 없음", "weight": 15, "score": 90,
+      "deductions": [
+        {"rule": "case default 없음", "points": -10, "where": "watch_control_unit.sv:44-85",
+         "why": "case (c_state) 에 default 가 없다. 첫 줄 기본값(40-43줄)이 출력 4개 모두에 있고 2비트 4가지 값을 다 다뤄 래치가 생길 여지는 없어 보이지만, 감점 규칙은 default 유무 자체를 본다"}
+      ],
+      "checked": [
+        "조합 always 첫 줄 기본값 n_state·o_wt_cursor·o_wt_up·o_wt_down 4개 모두 있음 (watch_control_unit.sv:40-43)",
+        "watch_datapath 는 조합 always 없이 assign 만 사용 (watch_datapath.v:29-36, 119-120)",
+        "같은 신호를 두 always 에서 구동하는 곳 없음 (counter_reg·o_tick 은 watch_datapath.v:122 always 하나에서만)"
+      ]
+    },
+    {
+      "id": "D3", "name": "동시 입력 · 경계값 규칙", "weight": 20, "score": 85,
+      "deductions": [
+        {"rule": "동시 입력 규칙 코드로 보장 안 됨 (U+D)", "points": -15, "where": "watch_control_unit.sv:88-91",
+         "why": "02_target_spec.md 는 'U 와 D 같은 클럭 → U'. 코드는 o_wt_up = U & ~D, o_wt_down = D & ~U 라 둘 다 0(무효). 머리 주석(9줄)에도 '무효'로 적혀 있어 의도된 변경으로 보이나, 평가 기준 문서(02)와 다르다 — 확인 필요 1번"}
+      ],
+      "checked": [
+        "sw2 내림 + 버튼 → NORMAL, 자리 이동·± 모두 무시: 각 SET 상태에서 i_set_sw2 == 0 을 먼저 검사(watch_control_unit.sv:55-56, 66-67, 77-78), ± 펄스는 i_set_sw2 == 1 일 때만(89)",
+        "L+R 같은 클럭 → L: if / else if 순서 (watch_control_unit.sv:57-60, 68-71, 79-82) — 모듈 단위에서는 보장. Top 은 둘 다 버림(확인 필요 2번)",
+        "tick + 설정 버튼 같은 클럭·같은 카운터 → tick 만 반영 (watch_datapath.v:127-137, 설정은 else 쪽 140-152)",
+        "분 59+1→0 (141-142), 분 0-1→59 (147-148)",
+        "분 십 55+10→5 (141-142), 0-10→50 (147-148)",
+        "시 23+1→0, 0-1→23 (같은 식, TIMES = 24, watch_datapath.v:84)",
+        "경계 계산: counter_reg + w_step 과 TIMES(32비트 parameter) 비교라 6비트 넘침 없음 — 코드 읽기로 계산, 이번 세션에서 시뮬 실행은 안 함"
+      ]
+    },
+    {
+      "id": "D4", "name": "클럭 · 리셋 규칙", "weight": 15, "score": 100,
+      "deductions": [],
+      "checked": [
+        "두 모듈 모두 i_clk 하나만 클럭으로 사용, 카운터는 if (i_tick) enable (watch_datapath.v:122, 127)",
+        "Top 에서 i_clk = clk(100 MHz), i_tick_10ms = 1클럭 펄스 w_tick_10ms (stopwatch_watch.v:43, 211, 224-226)",
+        "비동기 positive 리셋 (watch_control_unit.sv:30-32, watch_datapath.v:122-125)",
+        "리셋값 NORMAL (watch_control_unit.sv:32), 12:00:00.00 · o_tick 0 (watch_datapath.v:41, 56, 71, 86, 124-125)"
+      ]
+    },
+    {
+      "id": "D5", "name": "수업 규칙 · 가독성", "weight": 20, "score": 80,
+      "deductions": [
+        {"rule": "3블록 분리 안 함", "points": -10, "where": "watch_control_unit.sv:38-93",
+         "why": "Next State CL 과 Output CL 이 always @(*) 하나에 합쳐져 있다(주석도 'next state / output CL'). 수업 기본은 분리형"},
+        {"rule": "안 배운 문법 1종", "points": -10, "where": "watch_control_unit.sv:24, 27",
+         "why": "typedef enum logic (SystemVerilog 문법, 파일 확장자도 .sv). Lec_verilog/.md 일정상 SystemVerilog 는 Verilog 과목 뒤에 배운다 — 확인 필요 3번"}
+      ],
+      "checked": [
+        "두 파일 모두 1줄 `timescale 1ns / 1ps",
+        "핵심 줄 주석 있음: 진입(49), 순환(58, 82), U+D 무효(88), tick 우선(128), 경계 돌기(138-139)",
+        "포트 이름 i_/o_ + wt_ 접두어로 역할이 드러남, 상태 이름·CUR_* 상수가 FND 자리와 일치(25)",
+        "$clog2 는 4일차 수업에서 배움 — 감점 없음"
+      ]
+    }
+  ],
+  "total": 91.5,
+  "needs_check": [
+    "1. U+D 동시 규칙: 02_target_spec.md(10/16 기준)는 'U 우선', 코드와 Top 은 '무효'(watch_control_unit.sv:9, 88-91 / stopwatch_watch.v:162-166, 10/18 팀 결정 주석). 팀 결정이 맞으면 02 를 고친 뒤 다시 매기면 D3 +15 → 총점 94.5",
+    "2. L+R 동시 규칙(Top 경로, 이번 점수 밖): 모듈은 L 우선이지만 Top 의 w_btn_multi 가 두 버튼을 모두 버려 보드에서는 아무 일도 안 일어난다(stopwatch_watch.v:165-166, 173-174). 02 는 'L'. 1번과 같이 02 를 고칠지 정보윤이 정할 것",
+    "3. typedef enum 을 수업에서 다뤘는지 정보윤 확인 — 다뤘으면 D5 +10 → 총점 +2.0",
+    "4. 합성 로그로 watch_control_unit 래치 0개(Synth 8-327 · LDCE 없음) 확인 — 이번 세션은 코드 읽기만 했고 이 제출판을 합성하지 않음",
+    "5. (규칙 없음, 검증 에이전트로 확인 필요) 모듈 단위에서 L/R 과 U/D 가 같은 클럭이면 지금 자리에 ± 가 들어가고 자리도 옮겨진다(watch_control_unit.sv:57-60, 89-91). Top 의 w_btn_multi 로 보드에서는 막혀 있음",
+    "6. (검증 에이전트로 확인 필요) tick 과 버튼이 같은 클럭이면 버튼은 버려지고 다음 클럭으로 미뤄지지 않는다(watch_datapath.v:127-137). 사양대로이나 실제 시뮬로 확인 필요",
+    "7. (Top 경로, 감점 규칙 없음) set_sw2 가 2단 FF 동기화 없이 핀에서 바로 FSM 으로 들어간다(stopwatch_watch.v:217). 01_course_rules 4장 '스위치는 2단 FF 동기화가 정석'과 다름",
+    "8. (Top 경로) set_sw2 가 화면 선택과 상관없이 들어가 스톱워치·타이머 화면에서도 sw2 = 1 이면 시계 FSM 이 SET 상태에 머문다(stopwatch_watch.v:217). 버튼은 w_sel_wt 로 게이팅(173-176), FND 점멸은 i_sel_wt 로 막혀(295) 화면·시각 영향은 없어 보임",
+    "9. 출력 이름 o_wt_msec 는 1/100초 값(0~99). 판서 표기를 따른 것으로 보여 감점 안 함",
+    "10. 세션 1(94.5) 대상은 design_prototype\\merged_v4 판이라 같은 대상의 점수 변화가 아니다. 컨트롤 유닛 기준 바뀐 점은 포트 이름(i_/o_), set_mode 출력 삭제, U+D 규칙(U 우선 → 무효) — −3.0 은 U+D 규칙 변경에서 나옴",
+    "11. Lec_verilog/.md 기록상 이 두 모듈은 10/15 시제품 설계에서 이어진 판이고, 세션 1 대상의 머리 주석 '시제품 설계'이 제출판에서는 빠져 있다(watch_control_unit.sv:3). 과제(설계는 학생, AI 는 평가자) 점수로 쓸 때 이 출처를 어떻게 밝힐지 정보윤이 정할 것"
+  ],
+  "summary": "사양·경계값·클럭·리셋은 규칙대로. 감점은 U+D 동시 입력이 02 사양(U 우선)과 다른 무효 처리(-15), case default 없음(-10), 합친 always(-10), typedef enum(-10) — 총 91.5. U+D 는 10/18 팀 결정이라 02 갱신 여부 확인 필요"
+}

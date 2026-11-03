@@ -1,0 +1,29 @@
+최종 코드로 TB 전부 다시 실행한 결과 (Vivado 2022.2 xsim, 2026-10-19 ~ 20 · 일부 10-24)
+각 TB 의 전체 콘솔 출력은 logs/<TB>.log, TB 코드는 3_Code/tb
+
+tb_bounce            TOTAL press 20 : 1MHz o_btn = 159 (wrong presses 20)  |  4kHz o_btn = 20 (wrong presses 0)
+tb_f1_src            [ 167.307 ms] [SUMMARY] F1 src=orig checks=13 fail=0 defect=85 limit=0 first_bad=76.006005 ms => DETECTED
+tb_f2_src            [1296.039 ms] [SUMMARY] F2 src=orig checks=44 fail=0 defect=12 limit=5 first_bad=317.264010 ms => DETECTED
+tb_f3                (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_f4_src            [ 370.020 ms] [SUMMARY] F4 src=orig checks=26 fail=0 defect=5 limit=0 first_bad=115.007062 ms => DETECTED
+tb_sw_1              [2290.146 ms] [SUMMARY] SW1 src=orig checks=23 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_sw_2              [ 485.005 ms] [SUMMARY] SW2 src=orig checks=15 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_sw_3              [1230.015 ms] [SUMMARY] SW3 src=orig checks=15 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_sw_stop_edge      TOTAL 3, MISMATCH = 0
+tb_tick_restart      (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_timer_simple      (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_tm_1              [ 455.019 ms] [SUMMARY] TM1 src=orig checks=21 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_tm_1v             [645021010 ns] TM1 checks = 21, TOTAL MISMATCH = 0
+tb_tm_1v_mut_cap     [645021010 ns] TM1 checks = 21, TOTAL MISMATCH = 7
+tb_tm_2              (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_tm_2v             (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_tm_3              [ 547.009 ms] [SUMMARY] TM3 src=orig checks=11 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_tm_3v             (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_tm_3v_mut_run     (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_top_1             [2205.264 ms] [SUMMARY] TOP1 src=orig checks=24 fail=0 defect=0 limit=1 first_bad=- => PASS
+tb_top_2             [2180.257 ms] [SUMMARY] TOP2 src=orig checks=22 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_top_3             TOTAL 11 checks, TOTAL MISMATCH = 0
+tb_wt_1              [ 874.021 ms] [SUMMARY] WT1 src=orig checks=38 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_wt_2              [2245.005 ms] [SUMMARY] WT2 src=orig checks=13 fail=0 defect=0 limit=0 first_bad=- => PASS
+tb_wt_3              (이번 제출에 로그 없음 — 결과는 발표자료 부록 TB 결과 표)
+tb_wt_4              [ 480.017 ms] [SUMMARY] WT4 src=orig checks=95 fail=0 defect=0 limit=0 first_bad=- => PASS

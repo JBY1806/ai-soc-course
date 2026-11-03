@@ -1,0 +1,154 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Oct 24 19:51:29 2026
+# Process ID: 33604
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_f4_src
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_f4_src/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_f4_src\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P0 fault_sw15 = 0: functional smoke (injector bypass == original)
+              plan   : fault_sw15=0, functional smoke
+              expect : same as original, all checks pass
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P0                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P0                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[   0.003 ms] [     OK] P0.SMOKE.RST reset value 12:00:00 | exp=12:00:00.xx got=12:00:00.00
+[   0.003 ms] [     OK] P0.SMOKE.LED LED after reset (watch, HH.MM) | exp=8005 got=8005
+[   0.003 ms] [    BTN]        P0                   btn_U (o_btn @   2.001 ms) watch 12:00,  cursor NORMAL(3)
+[  10.003 ms] [     OK] P0.SMOKE.NORMAL U ignored in NORMAL | exp=min=0 got=min=0
+[  10.003 ms] [     SW]        P0             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor NORMAL(3) -> SET_MIN_1(0)
+[  10.004 ms] [     OK] P0.SMOKE.CUR set mode enters cursor 0 | exp=0 got=0
+[  10.004 ms] [    BTN]        P0                   btn_U (o_btn @  12.001 ms) watch 12:00 -> 12:01,  cursor SET_MIN_1(0)
+[  20.004 ms] [     OK] P0.SMOKE.UP U +1 min | exp=1 got=1
+[  20.004 ms] [    BTN]        P0                   btn_D (o_btn @  22.001 ms) watch 12:01 -> 12:00,  cursor SET_MIN_1(0)
+[  30.004 ms] [    BTN]        P0                   btn_D (o_btn @  32.001 ms) watch 12:00 -> 12:59,  cursor SET_MIN_1(0)
+[  40.004 ms] [     OK] P0.SMOKE.DN D -1 min twice (wrap) | exp=59 got=59
+[  40.004 ms] [    BTN]        P0                   btn_L (o_btn @  42.001 ms) watch 12:59,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[  50.004 ms] [     OK] P0.SMOKE.L L moves cursor 0->1 | exp=1 got=1
+[  50.004 ms] [    BTN]        P0                   btn_R (o_btn @  52.001 ms) watch 12:59,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[  60.004 ms] [     OK] P0.SMOKE.R R moves cursor 1->0 | exp=0 got=0
+[  60.004 ms] [     SW]        P0                 sw4..0=00010 WATCH HH.MM 12h watch 12:59,  cursor SET_MIN_1(0) -> NORMAL(3)
+[  65.005 ms] [     OK] P0.SMOKE.FND FND HH.MM after setting | exp="12.59" got="12.59"
+[  65.005 ms] [   PASS]        P0 END  checks=9 fail=0 defect=0 (65.005 ms)
+
+==========================================================================================
+[  65.005 ms] [  BEGIN]        P1 TB stim: rst pin glitch 0.5 / 1 / 5 / 10 ns, not aligned to clk
+              plan   : glitch rst pin 0.5 / 1 / 5 / 10 ns, not aligned to clk
+              expect : every glitch wipes state (watch 09:41, stopwatch RUN 0.30, timer RUN 00:50) = DEFECT
+------------------------------------------------------------------------------------------
+[  65.005 ms] [  RESET]        P1                               rst 1 us pulse watch 12:59 -> 12:00,  cursor NORMAL(3)
+[  65.007 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[  75.006 ms] [PRELOAD]        P1 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 09:41:00.00   (wave: values jump here with no U/D tick)
+[  75.006 ms] [     SW]        P1             sw4..0=00001 STOPWATCH SS.cc 12h watch 09:41 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[  85.006 ms] [PRELOAD]        P1 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.00 -> 00:00:00.30   (wave: values jump here with no tick/button)
+[  85.006 ms] [    BTN]        P1                   btn_R (o_btn @  87.006 ms) stopwatch 00:00:00.30 -> 00:00:00.31,  STOP -> RUN
+[  95.006 ms] [     SW]        P1                 sw4..0=10000 TIMER SS.cc 12h stopwatch 00:00:00.31 -> timer 00:00.00,  RUN -> SET
+[ 105.006 ms] [PRELOAD]        P1 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:00.00 -> 00:50.00   (wave: values jump here with no tick/button)
+[ 105.006 ms] [    BTN]        P1                   btn_L (o_btn @ 107.006 ms) timer 00:50.00 -> 00:49.99,  SET -> RUN
+[ 115.006 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h timer 00:49.99 -> watch 09:41,  RUN -> cursor NORMAL(3)
+[ 115.007 ms] [     OK]   P1.PREP state prepared: watch 09:41, stopwatch RUN, timer RUN | exp=09:41 RUN RUN got=09:41:00.04 sw.run=1 tm.run=1
+[ 115.007 ms] [     OK] P1.F4.MON glitch monitor saw rst outside do_reset() | exp=seen got=seen
+[ 115.008 ms] [ DEFECT]  P1.F4.W0 unexpected reset glitch width=0.5ns at  115.007 ms: watch 09:41:00.04->12:00:00.00, sw 00:00:00.33->00:00:00.00 (RUN->STOP), timer 00:49.99->00:00.00 (alarm lost) | exp=state kept got=all reset | disp="00.50"
+    wave window:  114.007 ms ~  116.007 ms
+[ 115.008 ms] [     OK]  P1.F4.W0 LED after glitch = normal watch screen (no fault indication, 12:00 PM) | exp=8005 got=8005
+[ 115.008 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[ 115.010 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[ 125.009 ms] [PRELOAD]        P1 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 09:41:00.00   (wave: values jump here with no U/D tick)
+[ 125.009 ms] [     SW]        P1             sw4..0=00001 STOPWATCH SS.cc 12h watch 09:41 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[ 135.009 ms] [PRELOAD]        P1 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.00 -> 00:00:00.30   (wave: values jump here with no tick/button)
+[ 135.009 ms] [    BTN]        P1                   btn_R (o_btn @ 137.009 ms) stopwatch 00:00:00.30 -> 00:00:00.31,  STOP -> RUN
+[ 145.009 ms] [     SW]        P1                 sw4..0=10000 TIMER SS.cc 12h stopwatch 00:00:00.31 -> timer 00:00.00,  RUN -> SET
+[ 155.009 ms] [PRELOAD]        P1 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:00.00 -> 00:50.00   (wave: values jump here with no tick/button)
+[ 155.009 ms] [    BTN]        P1                   btn_L (o_btn @ 157.009 ms) timer 00:50.00 -> 00:49.99,  SET -> RUN
+[ 165.009 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h timer 00:49.99 -> watch 09:41,  RUN -> cursor NORMAL(3)
+[ 165.010 ms] [     OK]   P1.PREP state prepared: watch 09:41, stopwatch RUN, timer RUN | exp=09:41 RUN RUN got=09:41:00.04 sw.run=1 tm.run=1
+[ 165.010 ms] [     OK] P1.F4.MON glitch monitor saw rst outside do_reset() | exp=seen got=seen
+[ 165.011 ms] [ DEFECT]  P1.F4.W1 unexpected reset glitch width=1.0ns at  165.010 ms: watch 09:41:00.04->12:00:00.00, sw 00:00:00.33->00:00:00.00 (RUN->STOP), timer 00:49.99->00:00.00 (alarm lost) | exp=state kept got=all reset | disp="00.50"
+    wave window:  164.010 ms ~  166.010 ms
+[ 165.011 ms] [     OK]  P1.F4.W1 LED after glitch = normal watch screen (no fault indication, 12:00 PM) | exp=8005 got=8005
+[ 165.011 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[ 165.013 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[ 175.012 ms] [PRELOAD]        P1 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 09:41:00.00   (wave: values jump here with no U/D tick)
+[ 175.012 ms] [     SW]        P1             sw4..0=00001 STOPWATCH SS.cc 12h watch 09:41 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[ 185.012 ms] [PRELOAD]        P1 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.00 -> 00:00:00.30   (wave: values jump here with no tick/button)
+[ 185.012 ms] [    BTN]        P1                   btn_R (o_btn @ 187.012 ms) stopwatch 00:00:00.30 -> 00:00:00.31,  STOP -> RUN
+[ 195.012 ms] [     SW]        P1                 sw4..0=10000 TIMER SS.cc 12h stopwatch 00:00:00.31 -> timer 00:00.00,  RUN -> SET
+[ 205.012 ms] [PRELOAD]        P1 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:00.00 -> 00:50.00   (wave: values jump here with no tick/button)
+[ 205.012 ms] [    BTN]        P1                   btn_L (o_btn @ 207.012 ms) timer 00:50.00 -> 00:49.99,  SET -> RUN
+[ 215.012 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h timer 00:49.99 -> watch 09:41,  RUN -> cursor NORMAL(3)
+[ 215.013 ms] [     OK]   P1.PREP state prepared: watch 09:41, stopwatch RUN, timer RUN | exp=09:41 RUN RUN got=09:41:00.04 sw.run=1 tm.run=1
+[ 215.013 ms] [     OK] P1.F4.MON glitch monitor saw rst outside do_reset() | exp=seen got=seen
+[ 215.014 ms] [ DEFECT]  P1.F4.W2 unexpected reset glitch width=5.0ns at  215.013 ms: watch 09:41:00.04->12:00:00.00, sw 00:00:00.33->00:00:00.00 (RUN->STOP), timer 00:49.99->00:00.00 (alarm lost) | exp=state kept got=all reset | disp="00.50"
+    wave window:  214.013 ms ~  216.013 ms
+[ 215.014 ms] [     OK]  P1.F4.W2 LED after glitch = normal watch screen (no fault indication, 12:00 PM) | exp=8005 got=8005
+[ 215.014 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[ 215.016 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[ 225.015 ms] [PRELOAD]        P1 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 09:41:00.00   (wave: values jump here with no U/D tick)
+[ 225.015 ms] [     SW]        P1             sw4..0=00001 STOPWATCH SS.cc 12h watch 09:41 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[ 235.015 ms] [PRELOAD]        P1 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.00 -> 00:00:00.30   (wave: values jump here with no tick/button)
+[ 235.015 ms] [    BTN]        P1                   btn_R (o_btn @ 237.015 ms) stopwatch 00:00:00.30 -> 00:00:00.31,  STOP -> RUN
+[ 245.015 ms] [     SW]        P1                 sw4..0=10000 TIMER SS.cc 12h stopwatch 00:00:00.31 -> timer 00:00.00,  RUN -> SET
+[ 255.015 ms] [PRELOAD]        P1 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:00.00 -> 00:50.00   (wave: values jump here with no tick/button)
+[ 255.015 ms] [    BTN]        P1                   btn_L (o_btn @ 257.015 ms) timer 00:50.00 -> 00:49.99,  SET -> RUN
+[ 265.015 ms] [     SW]        P1                 sw4..0=00010 WATCH HH.MM 12h timer 00:49.99 -> watch 09:41,  RUN -> cursor NORMAL(3)
+[ 265.016 ms] [     OK]   P1.PREP state prepared: watch 09:41, stopwatch RUN, timer RUN | exp=09:41 RUN RUN got=09:41:00.04 sw.run=1 tm.run=1
+[ 265.016 ms] [     OK] P1.F4.MON glitch monitor saw rst outside do_reset() | exp=seen got=seen
+[ 265.017 ms] [ DEFECT]  P1.F4.W3 unexpected reset glitch width=10.0ns at  265.016 ms: watch 09:41:00.04->12:00:00.00, sw 00:00:00.33->00:00:00.00 (RUN->STOP), timer 00:49.99->00:00.00 (alarm lost) | exp=state kept got=all reset | disp="00.50"
+    wave window:  264.016 ms ~  266.016 ms
+[ 265.017 ms] [     OK]  P1.F4.W3 LED after glitch = normal watch screen (no fault indication, 12:00 PM) | exp=8005 got=8005
+[ 265.017 ms] [   PASS]        P1 END  checks=12 fail=0 defect=4 (200.012 ms)
+
+==========================================================================================
+[ 265.017 ms] [  BEGIN]        P2 RTL injector fault_rst_glitch: fault_sw15 0->1 -> 1-clk internal reset
+              plan   : RTL injector: fault_sw15 0 -> 1 (1-clk internal reset)
+              expect : same state loss = DEFECT, no LED indication
+------------------------------------------------------------------------------------------
+[ 265.017 ms] [  RESET]        P2                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[ 265.019 ms] [     SW]        P2                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[ 275.018 ms] [PRELOAD]        P2 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 09:41:00.00   (wave: values jump here with no U/D tick)
+[ 275.018 ms] [     SW]        P2             sw4..0=00001 STOPWATCH SS.cc 12h watch 09:41 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[ 285.018 ms] [PRELOAD]        P2 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.00 -> 00:00:00.30   (wave: values jump here with no tick/button)
+[ 285.018 ms] [    BTN]        P2                   btn_R (o_btn @ 287.018 ms) stopwatch 00:00:00.30 -> 00:00:00.31,  STOP -> RUN
+[ 295.018 ms] [     SW]        P2                 sw4..0=10000 TIMER SS.cc 12h stopwatch 00:00:00.31 -> timer 00:00.00,  RUN -> SET
+[ 305.018 ms] [PRELOAD]        P2 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:00.00 -> 00:50.00   (wave: values jump here with no tick/button)
+[ 305.018 ms] [    BTN]        P2                   btn_L (o_btn @ 307.018 ms) timer 00:50.00 -> 00:49.99,  SET -> RUN
+[ 315.018 ms] [     SW]        P2                 sw4..0=00010 WATCH HH.MM 12h timer 00:49.99 -> watch 09:41,  RUN -> cursor NORMAL(3)
+[ 315.019 ms] [     OK]   P2.PREP state prepared: watch 09:41, stopwatch RUN, timer RUN | exp=09:41 RUN RUN got=09:41:00.04 sw.run=1 tm.run=1
+[ 320.019 ms] [     OK] P2.F4.INJ.OFF fault_sw15=0: nothing happens | exp=kept got=09:41:00.04 run=1 tm.run=1
+[ 320.019 ms] [     OK] P2.F4.INJ.PW injected internal reset pulse = 1 clk | exp=10.000 ns got=10.000 ns
+[ 320.020 ms] [ DEFECT] P2.F4.INJ unexpected reset glitch (fault_sw15 rising edge, 1 clk) at  320.019 ms: watch 09:41:00.04->12:00:00.00, sw 00:00:00.33->00:00:00.00 (RUN->STOP), timer 00:49.99->00:00.00 (alarm lost) | exp=state kept got=all reset | disp="09.41"
+    wave window:  319.019 ms ~  321.019 ms
+[ 320.020 ms] [     OK] P2.F4.INJ LED after glitch = normal watch screen (no fault indication, 12:00 PM) | exp=8005 got=8005
+[ 370.020 ms] [     OK] P2.F4.INJ.HOLD fault_sw15 held at 1: only one pulse, clock runs again | exp=running got=12:00:00.05
+[ 370.020 ms] [   PASS]        P2 END  checks=5 fail=0 defect=1 (105.003 ms)
+[ 370.020 ms] [SUMMARY] F4 src=orig checks=26 fail=0 defect=5 limit=0 first_bad=115.007062 ms => DETECTED
+$finish called at time : 370020350 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/defect_4_reset_glitch/tb_f4_reset_glitch.sv" Line 263
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:02:35 . Memory (MB): peak = 271.359 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 13032 KB (Peak: 13032 KB), Simulation CPU Usage: 150625 ms
+INFO: [Common 17-206] Exiting xsim at Sat Oct 24 19:54:07 2026...

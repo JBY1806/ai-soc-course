@@ -28,8 +28,7 @@ module tb_sd1_char ();
             i_data = data;
             for (k = 0; k < n + 2; k = k + 1) begin
                 i_idx = k;
-                #1;
-                if (k < n) begin
+                if (k < n) begin                 // 기대 글자를 i_idx 와 같은 시각에 바꿔 파형에서 한 칸씩 맞게 보이도록
                     tmp   = body >> (8 * (n - 1 - k));
                     exp_c = tmp[7:0];
                 end else if (k == n) begin
@@ -37,6 +36,7 @@ module tb_sd1_char ();
                 end else begin
                     exp_c = 8'h0A;
                 end
+                #1;
                 if (o_char !== exp_c) begin
                     err = err + 1;
                     $display("FAIL sel %0d idx %0d : got %h expect %h", sel, k, o_char, exp_c);

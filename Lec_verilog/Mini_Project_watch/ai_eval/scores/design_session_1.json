@@ -1,0 +1,86 @@
+{
+  "type": "design",
+  "session": 1,
+  "date": "2026-10-16",
+  "label": "1차 (시험)",
+  "targets": [
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_control_unit.sv",
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_datapath.v"
+  ],
+  "criteria": [
+    {
+      "id": "D1", "name": "사양 일치", "weight": 30, "score": 100,
+      "deductions": [],
+      "checked": [
+        "상태 4개 NORMAL·SET_HOUR·SET_MIN_10·SET_MIN_1 (watch_control_unit.sv:24)",
+        "진입 = SET_MIN_1, cursor 0 (watch_control_unit.sv:51, 78)",
+        "L 순환 SET_MIN_1→SET_MIN_10→SET_HOUR→SET_MIN_1 (watch_control_unit.sv:82, 71, 60)",
+        "R 순환 반대 방향 (watch_control_unit.sv:84, 62, 73)",
+        "cursor 0 분±1 · 1 분±10 · 2 시±1, 3 = NORMAL (watch_datapath.v:29-33, watch_control_unit.sv:42-49)",
+        "설정은 그 칸만 돌고 o_tick 안 냄 = 올림·내림 없음 (watch_datapath.v:136-152)",
+        "초·1/100초 설정 없음 (watch_datapath.v:46-48, 61-63)",
+        "리셋 12:00:00.00 (watch_datapath.v:41, 56, 71, 86)",
+        "100 Hz tick 항상 흐름 (watch_datapath.v:36)"
+      ]
+    },
+    {
+      "id": "D2", "name": "래치 · 다중 구동 없음", "weight": 15, "score": 90,
+      "deductions": [
+        {"rule": "case default 없음", "points": -10, "where": "watch_control_unit.sv:45-87",
+         "why": "case (c_state) 에 default 가 없다. 첫 줄 기본값(40-44줄)이 모든 출력에 있고 2비트 4가지 값을 모두 다뤄 래치가 생길 여지는 없어 보이지만, 감점 규칙이 default 유무 자체를 본다"}
+      ],
+      "checked": [
+        "조합 always 기본값 n_state·set_mode·cursor·o_up·o_down 5개 모두 있음 (watch_control_unit.sv:40-44)",
+        "watch_datapath 는 조합 always 없이 assign 만 사용",
+        "같은 신호를 두 always 에서 구동하는 곳 없음"
+      ]
+    },
+    {
+      "id": "D3", "name": "동시 입력 · 경계값 규칙", "weight": 20, "score": 100,
+      "deductions": [],
+      "checked": [
+        "U+D 같은 클럭 → U (watch_control_unit.sv:92-93, watch_datapath.v:140-146)",
+        "sw2 내림 + 버튼 → NORMAL, 버튼 무시 (watch_control_unit.sv:57-58, 68-69, 79-80, 91)",
+        "L+R 같은 클럭 → L (watch_control_unit.sv:59-62, 70-73, 81-84 if/else if 순서)",
+        "tick+버튼 같은 카운터 → tick 만 (watch_datapath.v:127-137)",
+        "분 59+1→0, 0-1→59 / 분 십 55+10→5, 0-10→50 / 시 23+1→0, 0-1→23 (watch_datapath.v:141-151, 비교·덧셈이 32비트 TIMES 와 섞여 넘침 없음 — 코드 읽기로 계산, 시뮬 실행은 안 함)"
+      ]
+    },
+    {
+      "id": "D4", "name": "클럭 · 리셋 규칙", "weight": 15, "score": 100,
+      "deductions": [],
+      "checked": [
+        "clk 하나만 사용, 카운터는 if (i_tick) enable (watch_datapath.v:127)",
+        "비동기 positive 리셋 (watch_control_unit.sv:30, watch_datapath.v:122)",
+        "리셋값 NORMAL · 12:00:00.00 · o_tick 0 (watch_control_unit.sv:32, watch_datapath.v:124-125)"
+      ]
+    },
+    {
+      "id": "D5", "name": "수업 규칙 · 가독성", "weight": 20, "score": 80,
+      "deductions": [
+        {"rule": "3블록 분리 안 함", "points": -10, "where": "watch_control_unit.sv:38-95",
+         "why": "Next State CL 과 Output CL 이 always @(*) 하나에 합쳐져 있다(주석도 'next state / output CL'). 수업 기본은 분리형"},
+        {"rule": "안 배운 문법 1종", "points": -10, "where": "watch_control_unit.sv:24, 27",
+         "why": "typedef enum logic (SystemVerilog 문법). Lec_verilog/.md 일정상 SystemVerilog 는 Verilog 과목 뒤에 배운다. 수업에서 다뤘으면 되돌릴 것(확인 필요 1번)"}
+      ],
+      "checked": [
+        "두 파일 모두 1줄 `timescale 1ns / 1ps",
+        "핵심 줄 주석 있음 (진입·순환·U 우선·tick 우선·경계 처리)",
+        "상태 · 신호 이름이 역할과 맞음 (msec 는 확인 필요 7번)"
+      ]
+    }
+  ],
+  "total": 94.5,
+  "needs_check": [
+    "1. typedef enum 을 수업에서 다뤘는지 정보윤이 확인 — 다뤘으면 D5 +10 (총점 96.5)",
+    "2. 합성 로그에서 watch_control_unit 래치 0개(Synth 8-327 · LDCE 없음) 확인 — 코드 읽기로는 래치가 없어 보이나 이 판(merged_v4)을 합성해 보지 않음",
+    "3. '분 일 ±1' 의 뜻: 지금은 분 전체(0~59)가 돈다(09+1→10). 사양 예시 '59+1→0' 과는 맞지만, 일의 자리만 도는 뜻(09+1→00)인지는 사양 문장만으로 정할 수 없음 — 팀 확인",
+    "4. L/R 과 U/D 가 같은 클럭에 오면 지금 자리에 ±가 반영되고 자리도 이동한다(watch_control_unit.sv:59-63, 91-94). 사양에 규칙이 없음 — 검증 에이전트로 동작 확인 필요",
+    "5. tick 과 버튼이 같은 클럭이면 버튼 입력이 버려진다(다음 클럭으로 미루지 않음, watch_datapath.v:127-137). 사양대로이나 실제 체감 여부는 검증 에이전트로 확인 필요",
+    "6. (Top 경로, 감점 규칙 없음) sw_set 이 2단 FF 동기화 없이 핀에서 바로 FSM 으로 들어간다(stopwatch_watch.v:187). 01_course_rules 4장의 '스위치는 2단 FF 동기화가 정석'과 다름",
+    "7. (Top 경로) sw_set 이 sw_mode · sw_timer 와 상관없이 들어가 스톱워치·타이머 화면에서 sw2=1 이면 시계 FSM 이 SET 상태에 머문다(stopwatch_watch.v:187). 버튼은 게이팅돼 시각은 안 바뀜. set_mode 를 쓰는 FND 점멸 쪽 영향은 정안성 담당 — 범위 밖 참고",
+    "8. 출력 이름 msec 는 1/100초 값(0~99). 판서 표기를 따른 것으로 보여 감점 안 함",
+    "9. 두 파일 머리 주석이 '시제품 설계'이다(watch_control_unit.sv:3, watch_datapath.v:3, stopwatch_watch.v:3). 이번 점수는 정보윤이 직접 쓴 초안이 아니라 이 시제품판을 평가한 것 — 과제(설계는 학생, AI 는 평가자) 제출용 세션으로 쓸지 정보윤이 정할 것"
+  ],
+  "summary": "사양·동시 입력·경계값·리셋은 규칙대로 구현됨. 감점은 수업 형식 3건(합친 always, typedef enum, case default 없음) — 총 94.5. 단, 평가 대상이 시제품 설계이라 학생 초안 점수로 쓰기 전 확인 필요"
+}

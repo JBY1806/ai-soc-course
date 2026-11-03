@@ -1,0 +1,58 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Wed Oct 21 16:07:45 2026
+# Process ID: 33664
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_2/mut/M4_no_sw2_gate
+# Command line: xsim.exe -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_2/mut/M4_no_sw2_gate/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_2/mut/M4_no_sw2_gate\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+RESULT E1 PASS
+E2 INFO first-clock U after release: min = 0 (0 = ignored, c_state was NORMAL on that edge)
+RESULT E2 PASS
+E3 INFO before reset: state 01 15:7:0.5
+RESULT E3 PASS
+RESULT E4 PASS
+RESULT E5 PASS
+RESULT E6 PASS
+E7 INFO ripple +1clk 23:59:59.0
+E7 INFO ripple +2clk 23:59:0.0
+E7 INFO ripple +3clk 23:0:0.0
+E7 INFO ripple +4clk 0:0:0.0
+RESULT E7 PASS
+E8 FAIL SET_MIN_1 U+D: up=0 down=0 min 0->0 (02 spec: up=1 down=0 min 1)
+E8 OBS SET_MIN_1 U+D = INVALID (up=0 down=0, no change)
+E8 FAIL SET_MIN_10 U+D: up=0 down=0 min 0->0 (02 spec: up=1 down=0 min 10)
+E8 OBS SET_MIN_10 U+D = INVALID (up=0 down=0, no change)
+E8 FAIL SET_HOUR U+D: up=0 down=0 hour 0->0 (02 spec: up=1 down=0 hour 1)
+E8 OBS SET_HOUR U+D = INVALID (up=0 down=0, no change)
+RESULT E8 FAIL
+RESULT E9 PASS
+E10 FAIL case 0: state 00 cursor 3 up 1 down 0 0:1 (was 0:0) exp 00 3 0 0 same
+E10 FAIL case 1: state 00 cursor 3 up 0 down 1 0:51 (was 0:1) exp 00 3 0 0 same
+E10 FAIL case 2: state 00 cursor 3 up 1 down 0 1:51 (was 0:51) exp 00 3 0 0 same
+RESULT E10 FAIL
+E11 INFO (a) min 51 -> 52 after tick+U same clock (button dropped if +1 only)
+E11 INFO (b) min 52 -> 53 after tick+D(-10) same clock
+E11 INFO (c) hour 1 -> 2 after tick+U same clock
+RESULT E11 PASS
+RESULT E12 PASS
+E13 OBS (a) SET_MIN_1 L+U -> cursor 1, 2:1 -> 2:2
+E13 OBS (b) SET_MIN_10 R+U -> cursor 0, 2:2 -> 2:12
+E13 OBS (c) SET_HOUR R+D -> cursor 1, 2:12 -> 1:12
+RESULT E13 PASS
+INFO up&down both 1 count = 0, total up pulses 54, down pulses 75
+COV transitions (bit index = {c_state, n_state}) = 1111111111111001
+COV missing transitions = 0 (of 14 listed)
+TOTAL MISMATCH = 6
+$finish called at time : 486280 ns : File "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/ai_eval/sessions/verif_2/tb_e_unit.v" Line 488
+## quit
+INFO: [Common 17-206] Exiting xsim at Wed Oct 21 16:07:48 2026...

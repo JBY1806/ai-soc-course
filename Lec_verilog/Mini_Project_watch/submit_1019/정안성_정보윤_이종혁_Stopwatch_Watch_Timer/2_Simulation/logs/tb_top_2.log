@@ -1,0 +1,90 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 03:16:32 2026
+# Process ID: 37212
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_2
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_2/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_top_2\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 com order AN0->AN1->AN2->AN3, slot width 250,000 ns (20 ms)
+              plan   : watch fnd_com for 20 ms (80 slots)
+              expect : order 1110 -> 1101 -> 1011 -> 0111, each slot exactly 250,000 ns
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[  20.251 ms] [     OK]  P1.ORDER 80 com changes in rotation order | exp=0 bad got=0 bad
+[  20.251 ms] [     OK]  P1.WIDTH 80 slots exactly 250 us | exp=0 bad got=0 bad
+[  20.251 ms] [   PASS]        P1 END  checks=2 fail=0 defect=0 (20.251 ms)
+
+==========================================================================================
+[  20.251 ms] [  BEGIN]        P2 watch HH.MM: reset 12.00, preload 12:34 -> 12.34, set-mode blink vs reference 1 s
+              plan   : watch HH.MM: reset -> PRELOAD 12:34 -> set mode 1 s
+              expect : 12.00 -> 12.34 -> cursor 0 blinks (12.3_ <-> 12.34)
+------------------------------------------------------------------------------------------
+[  20.251 ms] [  RESET]        P2                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[  20.253 ms] [     SW]        P2                 sw4..0=00010 WATCH HH.MM 12h watch 12:00,  cursor NORMAL(3)
+[  25.254 ms] [     OK] P2.P2.RST watch HH.MM after reset | exp="12.00" got="12.00"
+[  30.252 ms] [PRELOAD]        P2 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.01 -> 12:34:00.00   (wave: values jump here with no U/D tick)
+[  35.252 ms] [     OK] P2.P2.1234 watch HH.MM after preload 12:34 (all digits differ) | exp="12.34" got="12.34"
+[  55.252 ms] [     OK] P2.P2.REF watch HH.MM : FND == reference for 20.0 ms | exp=0 mismatch got=0 mismatch
+[  55.252 ms] [     OK] P2.P2.REF watch HH.MM : fnd_com one-hot | exp=0 got=0
+[  55.252 ms] [     SW]        P2             sw4..0=00110 WATCH SET HH.MM 12h watch 12:34,  cursor NORMAL(3) -> SET_MIN_1(0)
+[1055.253 ms] [     OK] P2.P2.BLINK watch HH.MM set-mode blink (cursor 0) : FND == reference for 1000.0 ms | exp=0 mismatch got=0 mismatch
+[1055.253 ms] [     OK] P2.P2.BLINK watch HH.MM set-mode blink (cursor 0) : fnd_com one-hot | exp=0 got=0
+[1055.253 ms] [     SW]        P2                 sw4..0=00010 WATCH HH.MM 12h watch 12:34,  cursor SET_MIN_1(0) -> NORMAL(3)
+[1055.254 ms] [   PASS]        P2 END  checks=6 fail=0 defect=0 (1035.003 ms)
+
+==========================================================================================
+[1055.254 ms] [  BEGIN]        P3 watch SS.CC: DP(AN2) on while msec < 50, 1 s
+              plan   : watch SS.CC for 1 s
+              expect : AN2 DP (font 7F) on in half the frames (i_disp_msec < 50)
+------------------------------------------------------------------------------------------
+[1055.254 ms] [  RESET]        P3                               rst 1 us pulse watch 12:34 -> 12:00,  cursor NORMAL(3)
+[1055.256 ms] [     SW]        P3                 sw4..0=00000 WATCH SS.cc 12h watch 12:00,  cursor NORMAL(3)
+[2065.255 ms] [     OK] P3.P3.REF watch SS.CC incl. DP slot : FND == reference for 1000.0 ms | exp=0 mismatch got=0 mismatch
+[2065.255 ms] [     OK] P3.P3.REF watch SS.CC incl. DP slot : fnd_com one-hot | exp=0 got=0
+[2065.255 ms] [     OK]  P3.P3.DP DP on in ~50 % of frames (msec<50) | exp=250 of 500 got=250 of 500
+[2065.255 ms] [   PASS]        P3 END  checks=3 fail=0 defect=0 (1010.001 ms)
+
+==========================================================================================
+[2065.255 ms] [  BEGIN]        P4 stopwatch / timer screens vs reference, 20 ms each
+              plan   : stopwatch and timer screens, 20 ms each
+              expect : stopwatch 34.56 (SS.CC) / 00.00 (HH.MM), timer 12.34 (MM.SS), timer + sw2 no blink
+------------------------------------------------------------------------------------------
+[2065.255 ms] [  RESET]        P4                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[2065.257 ms] [     SW]        P4             sw4..0=00001 STOPWATCH SS.cc 12h watch 12:00 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[2075.256 ms] [PRELOAD]        P4 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.00 -> 00:00:34.56   (wave: values jump here with no tick/button)
+[2080.256 ms] [     OK]  P4.P4.SW stopwatch SS.CC preload 00:00:34.56 (STOP) | exp="34.56" got="34.56"
+[2100.256 ms] [     OK]  P4.P4.SW stopwatch SS.CC : FND == reference for 20.0 ms | exp=0 mismatch got=0 mismatch
+[2100.256 ms] [     OK]  P4.P4.SW stopwatch SS.CC : fnd_com one-hot | exp=0 got=0
+[2100.256 ms] [     SW]        P4             sw4..0=00011 STOPWATCH HH.MM 12h stopwatch 00:00:34.56,  STOP
+[2105.257 ms] [     OK]  P4.P4.SW stopwatch HH.MM | exp="00.00" got="00.00"
+[2125.257 ms] [     OK]  P4.P4.SW stopwatch HH.MM : FND == reference for 20.0 ms | exp=0 mismatch got=0 mismatch
+[2125.257 ms] [     OK]  P4.P4.SW stopwatch HH.MM : fnd_com one-hot | exp=0 got=0
+[2125.257 ms] [     SW]        P4                 sw4..0=10000 TIMER SS.cc 12h stopwatch 00:00:34.56 -> timer 00:00.00,  STOP -> SET
+[2135.256 ms] [PRELOAD]        P4 *** TB writes the timer registers directly (NOT a button, NOT a DUT bug) ***
+              o_tm_min/sec/msec  00:00.00 -> 12:34.00   (wave: values jump here with no tick/button)
+[2140.256 ms] [     OK]  P4.P4.TM timer MM.SS preload 12:34 | exp="12.34" got="12.34"
+[2160.256 ms] [     OK]  P4.P4.TM timer MM.SS : FND == reference for 20.0 ms | exp=0 mismatch got=0 mismatch
+[2160.256 ms] [     OK]  P4.P4.TM timer MM.SS : fnd_com one-hot | exp=0 got=0
+[2160.256 ms] [     SW]        P4             sw4..0=10111 TIMER SET HH.MM 12h timer 12:34.00,  SET
+[2180.257 ms] [     OK]  P4.P4.TM timer with sw0/sw1/sw2 = 1 (no blink) : FND == reference for 20.0 ms | exp=0 mismatch got=0 mismatch
+[2180.257 ms] [     OK]  P4.P4.TM timer with sw0/sw1/sw2 = 1 (no blink) : fnd_com one-hot | exp=0 got=0
+[2180.257 ms] [   PASS]        P4 END  checks=11 fail=0 defect=0 (115.002 ms)
+[2180.257 ms] [SUMMARY] TOP2 src=orig checks=22 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 2180257150 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/top/tb_top_2_fnd_scan.sv" Line 252
+run: Time (s): cpu = 00:00:03 ; elapsed = 00:41:25 . Memory (MB): peak = 248.785 ; gain = 16.035
+exit
+INFO: xsimkernel Simulation Memory Usage: 12856 KB (Peak: 12856 KB), Simulation CPU Usage: 1415734 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 03:58:00 2026...

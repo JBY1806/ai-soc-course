@@ -1,0 +1,112 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Oct 19 23:16:38 2026
+# Process ID: 24812
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_2
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_2/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_2\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 up: 00:00:59.95 -> 00:01:00.00 (SB1)
+              plan   : RUN, PRELOAD 00:00:59.95
+              expect : 59.99 after 4 ticks -> 5th tick o_sw_sec 0, o_sw_min 1
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P1             sw4..0=00001 STOPWATCH SS.cc 12h watch 12:00 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[   0.003 ms] [    BTN]        P1                   btn_R (o_btn @   2.001 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[  20.001 ms] [PRELOAD]        P1 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.01 -> 00:00:59.95   (wave: values jump here with no tick/button)
+[  20.001 ms] [   WAIT]        P1                           4 tick(s) of 10 ms stopwatch 00:00:59.95 -> 00:00:59.99,  RUN
+[  60.001 ms] [     OK]    P1.SB1 sec carry : before boundary | exp=00:00:59.99 got=00:00:59.99
+[  60.001 ms] [   WAIT]        P1                           1 tick(s) of 10 ms stopwatch 00:00:59.99 -> 00:01:00.00,  RUN
+[  70.001 ms] [     OK]    P1.SB1 sec carry : on boundary tick | exp=00:01:00.00 got=00:01:00.00
+[  70.001 ms] [   PASS]        P1 END  checks=2 fail=0 defect=0 (70.001 ms)
+
+==========================================================================================
+[  70.001 ms] [  BEGIN]        P2 up: 00:59:59.95 -> 01:00:00.00 (SB1)
+              plan   : PRELOAD 00:59:59.95
+              expect : 00:59:59.99 -> 01:00:00.00 (o_sw_hour 1)
+------------------------------------------------------------------------------------------
+[  70.001 ms] [  RESET]        P2                               rst 1 us pulse stopwatch 00:01:00.00 -> 00:00:00.00,  RUN -> STOP
+[  70.003 ms] [     SW]        P2             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[  70.004 ms] [    BTN]        P2                   btn_R (o_btn @  72.002 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[  90.002 ms] [PRELOAD]        P2 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.01 -> 00:59:59.95   (wave: values jump here with no tick/button)
+[  90.002 ms] [   WAIT]        P2                           4 tick(s) of 10 ms stopwatch 00:59:59.95 -> 00:59:59.99,  RUN
+[ 130.002 ms] [     OK]    P2.SB1 min carry : before boundary | exp=00:59:59.99 got=00:59:59.99
+[ 130.002 ms] [   WAIT]        P2                           1 tick(s) of 10 ms stopwatch 00:59:59.99 -> 01:00:00.00,  RUN
+[ 140.002 ms] [     OK]    P2.SB1 min carry : on boundary tick | exp=01:00:00.00 got=01:00:00.00
+[ 140.002 ms] [   PASS]        P2 END  checks=2 fail=0 defect=0 (70.001 ms)
+
+==========================================================================================
+[ 140.002 ms] [  BEGIN]        P3 up: 23:59:59.95 -> 00:00:00.00 (hour TIMES=24 wrap) (SB1)
+              plan   : PRELOAD 23:59:59.95 (display_mode_sw1=1)
+              expect : 23:59:59.99 -> 00:00:00.00, FND 00.00
+------------------------------------------------------------------------------------------
+[ 140.002 ms] [  RESET]        P3                               rst 1 us pulse stopwatch 01:00:00.00 -> 00:00:00.00,  RUN -> STOP
+[ 140.004 ms] [     SW]        P3             sw4..0=00011 STOPWATCH HH.MM 12h stopwatch 00:00:00.00,  STOP
+[ 140.005 ms] [    BTN]        P3                   btn_R (o_btn @ 142.003 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 160.003 ms] [PRELOAD]        P3 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.01 -> 23:59:59.95   (wave: values jump here with no tick/button)
+[ 160.003 ms] [   WAIT]        P3                           4 tick(s) of 10 ms stopwatch 23:59:59.95 -> 23:59:59.99,  RUN
+[ 200.003 ms] [     OK]    P3.SB1 24 h wrap : before boundary | exp=23:59:59.99 got=23:59:59.99
+[ 200.003 ms] [   WAIT]        P3                           1 tick(s) of 10 ms stopwatch 23:59:59.99 -> 00:00:00.00,  RUN
+[ 210.003 ms] [     OK]    P3.SB1 24 h wrap : on boundary tick | exp=00:00:00.00 got=00:00:00.00
+[ 215.003 ms] [     OK]    P3.SB1 FND HH.MM after wrap | exp="00.00" got="00.00"
+[ 215.003 ms] [   PASS]        P3 END  checks=3 fail=0 defect=0 (75.001 ms)
+
+==========================================================================================
+[ 215.003 ms] [  BEGIN]        P4 down: STOP U -> down, RUN, 00:00:00.05 -> 00:00:00.00 -> 23:59:59.99 (SB2)
+              plan   : STOP: U -> R -> PRELOAD 00:00:00.05
+              expect : U -> o_sw_down 1, R -> RUN, 00:00:00.00 -> 23:59:59.99 -> 23:59:59.98
+------------------------------------------------------------------------------------------
+[ 215.003 ms] [  RESET]        P4                               rst 1 us pulse stopwatch 00:00:00.01 -> 00:00:00.00,  RUN -> STOP
+[ 215.005 ms] [     SW]        P4             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[ 215.006 ms] [    BTN]        P4                   btn_U (o_btn @ 217.004 ms) stopwatch 00:00:00.00,  STOP
+[ 225.006 ms] [     OK]    P4.SB6 U in STOP -> down mode | exp=1 got=1
+[ 225.006 ms] [    BTN]        P4                   btn_R (o_btn @ 227.004 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 245.004 ms] [PRELOAD]        P4 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  23:59:59.99 -> 00:00:00.05   (wave: values jump here with no tick/button)
+[ 245.004 ms] [   WAIT]        P4                           5 tick(s) of 10 ms stopwatch 00:00:00.05 -> 00:00:00.00,  RUN
+[ 295.004 ms] [     OK]    P4.SB2 borrow chain from 0 : before boundary | exp=00:00:00.00 got=00:00:00.00
+[ 295.004 ms] [   WAIT]        P4                           1 tick(s) of 10 ms stopwatch 00:00:00.00 -> 23:59:59.99,  RUN
+[ 305.004 ms] [     OK]    P4.SB2 borrow chain from 0 : on boundary tick | exp=23:59:59.99 got=23:59:59.99
+[ 305.004 ms] [   WAIT]        P4                           1 tick(s) of 10 ms stopwatch 23:59:59.99 -> 23:59:59.98,  RUN
+[ 315.004 ms] [     OK]    P4.SB2 keeps counting down | exp=23:59:59.98 got=23:59:59.98
+[ 315.004 ms] [   PASS]        P4 END  checks=4 fail=0 defect=0 (100.001 ms)
+
+==========================================================================================
+[ 315.004 ms] [  BEGIN]        P5 down RUN: U ignored; STOP -> U -> up again (SB6)
+              plan   : counting down: U -> R -> U -> R
+              expect : U ignored in RUN (o_sw_down stays 1) / after STOP U -> 0, R -> RUN, counts up again
+------------------------------------------------------------------------------------------
+[ 315.004 ms] [  RESET]        P5                               rst 1 us pulse stopwatch 23:59:59.98 -> 00:00:00.00,  RUN -> STOP
+[ 315.006 ms] [     SW]        P5             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[ 315.007 ms] [    BTN]        P5                   btn_U (o_btn @ 317.005 ms) stopwatch 00:00:00.00,  STOP
+[ 325.007 ms] [    BTN]        P5                   btn_R (o_btn @ 327.005 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 345.005 ms] [PRELOAD]        P5 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  23:59:59.99 -> 00:00:10.00   (wave: values jump here with no tick/button)
+[ 345.005 ms] [    BTN]        P5                   btn_U (o_btn @ 347.005 ms) stopwatch 00:00:10.00 -> 00:00:09.99,  RUN
+[ 355.005 ms] [     OK]    P5.SB6 U during RUN ignored (still down) | exp=1 got=1
+[ 405.005 ms] [     OK]    P5.SB6 still counting down | exp=<999 got=994
+[ 405.005 ms] [    BTN]        P5                   btn_R (o_btn @ 407.005 ms) stopwatch 00:00:09.94 -> 00:00:09.93,  RUN -> STOP
+[ 415.005 ms] [    BTN]        P5                   btn_U (o_btn @ 417.005 ms) stopwatch 00:00:09.93,  STOP
+[ 425.005 ms] [     OK]    P5.SB6 U in STOP -> up | exp=0 got=0
+[ 425.005 ms] [    BTN]        P5                   btn_R (o_btn @ 427.005 ms) stopwatch 00:00:09.93,  STOP -> RUN
+[ 485.005 ms] [     OK]    P5.SB6 counting up again | exp=>993 got=998
+[ 485.005 ms] [   PASS]        P5 END  checks=4 fail=0 defect=0 (170.001 ms)
+[ 485.005 ms] [SUMMARY] SW2 src=orig checks=15 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 485005250 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/01_stopwatch/tb_sw_2_rollover_updown.sv" Line 253
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:06:36 . Memory (MB): peak = 271.328 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 12436 KB (Peak: 12436 KB), Simulation CPU Usage: 316374 ms
+INFO: [Common 17-206] Exiting xsim at Mon Oct 19 23:23:17 2026...

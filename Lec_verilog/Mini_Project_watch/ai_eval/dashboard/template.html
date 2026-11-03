@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watch RTL 평가</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#ffffff; --line:#e3e8ef; --ink:#0f172a; --ink2:#334155; --muted:#64748b;
+  --side:#111827; --side-ink:#9ca3af; --track:#e8edf3; --chip:#f1f4f8;
+  --design:#7c3aed; --design-soft:#f3edff; --verif:#ea580c; --verif-soft:#fff3eb;
+  --pass:#15803d; --pass-soft:#e8f6ec; --fail:#b91c1c; --fail-soft:#fdecec;
+  --warn-bg:#fff8e6; --warn-line:#f5d48a; --warn-ink:#7a4b00;
+  --accent:var(--design); --accent-soft:var(--design-soft);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1117; --card:#161b22; --line:#2a313c; --ink:#e6edf3; --ink2:#c9d1d9; --muted:#8b949e;
+    --side:#010409; --side-ink:#6e7681; --track:#262d36; --chip:#1f262f;
+    --design:#a78bfa; --design-soft:#251d3a; --verif:#fb923c; --verif-soft:#33210f;
+    --pass:#4ade80; --pass-soft:#132a1b; --fail:#f87171; --fail-soft:#331616;
+    --warn-bg:#2b2410; --warn-line:#5c4a14; --warn-ink:#f2cc60;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1117; --card:#161b22; --line:#2a313c; --ink:#e6edf3; --ink2:#c9d1d9; --muted:#8b949e;
+  --side:#010409; --side-ink:#6e7681; --track:#262d36; --chip:#1f262f;
+  --design:#a78bfa; --design-soft:#251d3a; --verif:#fb923c; --verif-soft:#33210f;
+  --pass:#4ade80; --pass-soft:#132a1b; --fail:#f87171; --fail-soft:#331616;
+  --warn-bg:#2b2410; --warn-line:#5c4a14; --warn-ink:#f2cc60;
+}
+body[data-tab="verif"]{ --accent:var(--verif); --accent-soft:var(--verif-soft); }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink);
+  font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  font-size:15px; line-height:1.5; display:flex; min-height:100vh}
+.side{width:64px; background:var(--side); display:flex; flex-direction:column; align-items:center;
+  padding:20px 0; gap:18px; position:sticky; top:0; height:100vh; flex-shrink:0}
+.side button{all:unset; cursor:pointer; width:40px; height:40px; border-radius:10px;
+  display:grid; place-items:center; color:var(--side-ink)}
+.side button[aria-current="true"]{color:#fff; background:var(--accent)}
+.side button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.side .spacer{flex:1}
+.side svg{width:22px; height:22px}
+
+main{flex:1; min-width:0; padding:28px 32px 40px; max-width:1280px}
+header h1{margin:0; font-size:26px; letter-spacing:-.01em}
+header p{margin:4px 0 0; color:var(--muted); font-size:14px}
+
+.banner{margin:18px 0 0; padding:12px 16px; border:1px solid var(--warn-line); background:var(--warn-bg);
+  color:var(--warn-ink); border-radius:10px; font-size:14px}
+.banner b{font-weight:700}
+
+.tabs{display:inline-flex; margin:22px 0 18px; background:var(--card); border:1px solid var(--line);
+  border-radius:10px; padding:4px; gap:4px}
+.tabs button{all:unset; cursor:pointer; padding:8px 16px; border-radius:7px; font-weight:600;
+  color:var(--muted); font-size:14px}
+.tabs button[aria-selected="true"]{background:var(--accent); color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--accent)}
+
+.grid3{display:grid; grid-template-columns:1.1fr .9fr 1.2fr; gap:18px}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; min-width:0}
+.row{margin-top:18px}
+.cap{font-size:12px; font-weight:700; letter-spacing:.06em; color:var(--muted); text-transform:uppercase; margin:0 0 10px}
+.cap small{text-transform:none; letter-spacing:0; font-weight:600}
+
+.role h2{margin:0 0 6px; font-size:20px}
+.role p{margin:0; color:var(--ink2); font-size:14px}
+.role .who{display:inline-block; margin-bottom:10px; font-size:12px; font-weight:700; color:var(--accent);
+  background:var(--accent-soft); padding:3px 9px; border-radius:6px}
+
+.score{display:flex; align-items:center; gap:20px}
+.ring{width:118px; height:118px; flex-shrink:0; position:relative}
+.ring svg{width:100%; height:100%; transform:rotate(-90deg)}
+.ring .num{position:absolute; inset:0; display:grid; place-items:center; font-size:34px; font-weight:800; color:var(--accent)}
+.score .lbl b{display:block; font-size:17px}
+.score .lbl span{color:var(--muted); font-size:13px}
+
+.hist{display:grid; grid-template-columns:repeat(auto-fit,minmax(92px,1fr)); gap:10px}
+.hist button{all:unset; cursor:pointer; background:var(--chip); border:1.5px solid transparent; border-radius:10px;
+  padding:10px 8px; text-align:center}
+.hist button[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+.hist button:focus-visible{outline:2px solid var(--accent)}
+.hist button[disabled]{cursor:default; opacity:.55}
+.hist .t{display:block; font-size:12px; color:var(--muted)}
+.hist .v{display:block; font-size:22px; font-weight:800; margin-top:2px}
+.hist button[aria-pressed="true"] .v{color:var(--accent)}
+
+.crit{display:grid; grid-template-columns:1fr 1fr; gap:22px 40px}
+.crit .top{display:flex; justify-content:space-between; gap:10px; font-weight:600; font-size:15px}
+.crit .top .pct{color:var(--accent); font-weight:800}
+.crit .w{color:var(--muted); font-weight:600; font-size:13px}
+.bar{height:9px; background:var(--track); border-radius:6px; margin:7px 0 6px; overflow:hidden}
+.bar i{display:block; height:100%; background:var(--accent); border-radius:6px}
+.crit .basis{font-size:12.5px; color:var(--muted); margin:0}
+
+table{width:100%; border-collapse:collapse; font-size:13.5px}
+th{white-space:nowrap; text-align:left; font-size:12px; color:var(--muted); font-weight:700; padding:6px 8px; border-bottom:1px solid var(--line)}
+td{padding:8px; border-bottom:1px solid var(--line); vertical-align:top}
+td.id{font-weight:700; white-space:nowrap}
+td .obs{display:block; color:var(--muted); font-size:12.5px; margin-top:2px}
+.badge{display:inline-block; font-size:12px; font-weight:800; padding:2px 8px; border-radius:6px}
+.badge.pass{color:var(--pass); background:var(--pass-soft)}
+.badge.fail{color:var(--fail); background:var(--fail-soft)}
+.minus{color:var(--fail); font-weight:800; white-space:nowrap}
+code{font-family:Consolas,"D2Coding",monospace; font-size:12.5px}
+.empty{color:var(--muted); font-size:14px; margin:0}
+ul.chk{margin:0; padding-left:18px; font-size:13.5px; color:var(--ink2)}
+ul.chk li{margin-bottom:6px}
+
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px}
+.kpi{background:var(--chip); border-radius:10px; padding:10px 12px}
+.kpi span{display:block; font-size:12px; color:var(--muted)}
+.kpi b{font-size:20px}
+.kpi b.ok{color:var(--pass)} .kpi b.ng{color:var(--fail)}
+
+footer{margin-top:22px; color:var(--muted); font-size:12px; word-break:break-all}
+
+@media (max-width:980px){
+  .grid3{grid-template-columns:1fr 1fr} .grid3 .card:first-child{grid-column:1/-1}
+}
+@media (max-width:700px){
+  body{display:block}
+  .side{flex-direction:row; width:auto; height:auto; position:static; padding:8px 16px; justify-content:flex-start}
+  .side .spacer{display:none}
+  main{padding:18px 16px 32px}
+  .grid3,.grid2,.crit{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .table-wrap{overflow-x:auto}
+}
+</style>
+</head>
+<body data-tab="design">
+<nav class="side" aria-label="화면">
+  <button type="button" data-go="design" title="설계 평가" aria-label="설계 평가">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+  </button>
+  <button type="button" data-go="verif" title="성능 검증" aria-label="성능 검증">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l2-6 4 12 2-6h7"/></svg>
+  </button>
+  <div class="spacer"></div>
+  <button type="button" id="themeBtn" title="밝게/어둡게" aria-label="밝게 또는 어둡게 전환">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+  </button>
+</nav>
+
+<main>
+  <header>
+    <h1>Watch RTL AI Evaluation</h1>
+    <p id="sub"></p>
+  </header>
+  <div id="banner"></div>
+
+  <div class="tabs" role="tablist" aria-label="평가 종류">
+    <button type="button" role="tab" data-go="design" aria-selected="true">설계 (Design) 평가</button>
+    <button type="button" role="tab" data-go="verif" aria-selected="false">성능 (Verification) 검증</button>
+  </div>
+
+  <section class="grid3">
+    <div class="card role">
+      <p class="cap">Assigned Role</p>
+      <span class="who" id="who"></span>
+      <h2 id="role"></h2>
+      <p id="roleDesc"></p>
+    </div>
+    <div class="card">
+      <p class="cap">AI Score <small id="scoreCap"></small></p>
+      <div class="score">
+        <div class="ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--track)" stroke-width="11"/>
+            <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="11"
+              stroke-linecap="round" stroke-dasharray="0 314.16"/>
+          </svg>
+          <div class="num" id="avg">–</div>
+        </div>
+        <div class="lbl"><b id="scoreTitle"></b><span id="scoreNote"></span></div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="cap">Session History</p>
+      <div class="hist" id="hist"></div>
+    </div>
+  </section>
+
+  <section class="card row">
+    <p class="cap">Criteria Details <small>(기준설정 근거) · <span id="critSess"></span></small></p>
+    <div class="crit" id="crit"></div>
+  </section>
+
+  <section class="card row" id="simCard" hidden>
+    <p class="cap">Simulation · Edge Cases <small id="simCap"></small></p>
+    <div class="kpis" id="kpis"></div>
+    <div class="table-wrap"><table><thead><tr><th>ID</th><th>시나리오</th><th>기대</th><th>결과</th></tr></thead><tbody id="scen"></tbody></table></div>
+  </section>
+
+  <section class="grid2 row">
+    <div class="card">
+      <p class="cap">감점 내역</p>
+      <div class="table-wrap" id="ded"></div>
+    </div>
+    <div class="card">
+      <p class="cap">확인 필요</p>
+      <div id="chk"></div>
+    </div>
+  </section>
+
+  <footer id="foot"></footer>
+</main>
+
+<script>
+const DATA = /*__DATA__*/null;
+const C = 2 * Math.PI * 50;
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => (typeof n === "number" ? (Number.isInteger(n) ? n : n.toFixed(1)) : "–");
+const $ = id => document.getElementById(id);
+
+const state = { tab: "design", pick: { design: null, verif: null } };
+try { const t = localStorage.getItem("dash-tab"); if (t === "design" || t === "verif") state.tab = t; } catch (e) {}
+if (location.hash === "#verif" || location.hash === "#design") state.tab = location.hash.slice(1);
+
+function sessions(tab) { return tab === "design" ? DATA.design : DATA.verif; }
+
+function render() {
+  const tab = state.tab, list = sessions(tab), P = DATA.profile;
+  document.body.dataset.tab = tab;
+  document.querySelectorAll("[data-go]").forEach(b => {
+    const on = b.dataset.go === tab;
+    if (b.getAttribute("role") === "tab") b.setAttribute("aria-selected", on); else b.setAttribute("aria-current", on);
+  });
+
+  $("sub").textContent = P.project + " · " + P.board;
+  $("who").textContent = P.name;
+  $("role").textContent = P.role;
+  $("roleDesc").textContent = P.role_desc;
+
+  // 시험 세션 경고
+  const all = DATA.design.concat(DATA.verif);
+  const trial = all.filter(s => /시험/.test(s.label || "") || /시제품 설계/.test((s.note || "") + (s.summary || "")));
+  $("banner").innerHTML = trial.length
+    ? `<div class="banner"><b>시험 실행 포함</b> — ${trial.map(s => esc((s.type === "design" ? "설계 " : "검증 ") + (s.label || s.session + "차"))).join(", ")} 는 학생 초안이 아니라 시제품 설계을 평가한 것. 과제 점수에 넣지 않는다.</div>`
+    : "";
+
+  // 평균 점수
+  const scored = list.filter(s => typeof s.total === "number");
+  const avg = scored.length ? scored.reduce((a, s) => a + s.total, 0) / scored.length : null;
+  $("avg").textContent = avg === null ? "–" : (Math.round(avg * 10) / 10).toString().replace(/\.0$/, "");
+  $("arc").setAttribute("stroke-dasharray", `${avg === null ? 0 : (avg / 100) * C} ${C}`);
+  $("scoreTitle").textContent = tab === "design" ? "설계 평가 평균" : "검증 평가 평균";
+  $("scoreNote").textContent = `세션 ${scored.length}개 평균 (최소 ${P.sessions_required}개)`;
+  $("scoreCap").textContent = tab === "design" ? "· hw-design-evaluator" : "· hw-verification-evaluator";
+
+  // 세션 기록
+  let pick = state.pick[tab];
+  if (pick === null || !list.some(s => s.session === pick)) pick = list.length ? list[list.length - 1].session : null;
+  state.pick[tab] = pick;
+  const slots = Math.max(P.sessions_required, list.length);
+  let h = "";
+  for (let i = 0; i < slots; i++) {
+    const s = list[i];
+    if (s) {
+      h += `<button type="button" data-sess="${s.session}" aria-pressed="${s.session === pick}">
+        <span class="t">${esc(s.label || s.session + "차")}</span><span class="v">${fmt(s.total)}</span>
+        <span class="t">${esc(s.date || "")}</span></button>`;
+    } else {
+      h += `<button type="button" disabled><span class="t">${i + 1}차</span><span class="v">–</span><span class="t">대기</span></button>`;
+    }
+  }
+  $("hist").innerHTML = h;
+  $("hist").querySelectorAll("[data-sess]").forEach(b => b.onclick = () => { state.pick[tab] = +b.dataset.sess; render(); });
+
+  const cur = list.find(s => s.session === pick);
+  $("critSess").textContent = cur ? `${cur.label || cur.session + "차"} 세션` : "세션 없음";
+
+  // 기준별 막대
+  const ids = tab === "design" ? ["D1","D2","D3","D4","D5"] : ["V1","V2","V3","V4","V5"];
+  $("crit").innerHTML = ids.map(id => {
+    const r = DATA.rubric[id] || {};
+    const c = cur && (cur.criteria || []).find(x => x.id === id);
+    const sc = c ? c.score : null;
+    return `<div>
+      <div class="top"><span>${esc(id)}. ${esc(c ? c.name : r.name || "")} <span class="w">· ${esc(c ? c.weight + " %" : r.weight || "")}</span></span>
+        <span class="pct">${sc === null ? "–" : sc + "%"}</span></div>
+      <div class="bar"><i style="width:${sc === null ? 0 : sc}%"></i></div>
+      <p class="basis">근거: ${esc(r.basis || "rubric.md 에 없음")}</p></div>`;
+  }).join("");
+
+  // 감점 내역
+  const ded = cur ? (cur.criteria || []).flatMap(c => (c.deductions || []).map(d => ({ id: c.id, ...d }))) : [];
+  $("ded").innerHTML = !cur ? `<p class="empty">세션 없음</p>`
+    : ded.length ? `<table><thead><tr><th>기준</th><th>규칙 · 이유</th><th>위치</th><th>감점</th></tr></thead><tbody>${
+        ded.map(d => `<tr><td class="id">${esc(d.id)}</td><td>${esc(d.rule)}<span class="obs" style="display:block;color:var(--muted);font-size:12.5px">${esc(d.why || "")}</span></td><td><code>${esc(d.where || "")}</code></td><td class="minus">${esc(d.points)}</td></tr>`).join("")
+      }</tbody></table>`
+    : `<p class="empty">감점 없음 — 모든 기준 100점</p>`;
+
+  // 확인 필요
+  const nc = cur ? (cur.needs_check || []) : [];
+  $("chk").innerHTML = nc.length ? `<ul class="chk">${nc.map(x => `<li>${esc(String(x).replace(/^\d+\.\s*/, ""))}</li>`).join("")}</ul>` : `<p class="empty">없음</p>`;
+
+  // 검증 탭: 시뮬레이션 결과
+  const sim = tab === "verif" && cur;
+  $("simCard").hidden = !sim;
+  if (sim) {
+    const sc = (cur.scenarios || []);
+    const main = sc.filter(s => s.id !== "M");
+    const pass = main.filter(s => s.result === "PASS").length;
+    const mm = cur.sim ? cur.sim.total_mismatch : null;
+    $("simCap").textContent = cur.sim && cur.sim.tool ? "· " + cur.sim.tool : "";
+    $("kpis").innerHTML = `
+      <div class="kpi"><span>엣지 케이스</span><b>${main.length}개</b></div>
+      <div class="kpi"><span>PASS</span><b class="${pass === main.length ? "ok" : "ng"}">${pass} / ${main.length}</b></div>
+      <div class="kpi"><span>TOTAL MISMATCH</span><b class="${mm === 0 ? "ok" : "ng"}">${mm ?? "–"}</b></div>
+      <div class="kpi"><span>시뮬 시간</span><b style="font-size:13px;font-weight:600">${esc(cur.sim ? cur.sim.sim_time || "" : "")}</b></div>`;
+    $("scen").innerHTML = sc.map(s => `<tr><td class="id">${esc(s.id === "M" ? "TB 점검" : s.id)}</td>
+      <td>${esc(s.desc)}${s.observed ? `<span class="obs">관찰: ${esc(s.observed)}</span>` : ""}</td>
+      <td>${esc(s.expected)}</td>
+      <td><span class="badge ${s.result === "PASS" ? "pass" : "fail"}">${esc(s.result)}</span></td></tr>`).join("");
+  }
+
+  $("foot").innerHTML = cur
+    ? `평가 대상: ${(cur.targets || []).map(t => `<code>${esc(t)}</code>`).join(" · ")}<br>결과 파일: <code>${esc(cur._file)}</code> · 생성 ${esc(DATA.generated)}`
+    : `생성 ${esc(DATA.generated)}`;
+}
+
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+  state.tab = b.dataset.go;
+  try { localStorage.setItem("dash-tab", state.tab); } catch (e) {}
+  render();
+}));
+$("themeBtn").addEventListener("click", () => {
+  const root = document.documentElement;
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+});
+render();
+</script>
+</body>
+</html>

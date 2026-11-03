@@ -1,0 +1,130 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 03:17:02 2026
+# Process ID: 35024
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_1
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_1/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_1\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 reset -> 0, STOP, LED
+              plan   : reset
+              expect : STOP, o_sw_run_stop 0, o_sw_* 0, led 000A, FND 00.00
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P1             sw4..0=00001 STOPWATCH SS.cc 12h watch 12:00 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[   0.003 ms] [     OK]    P1.SC1 reset -> 00:00:00.00 STOP | exp=0 STOP got=00:00:00.00 run=0
+[   0.003 ms] [     OK]    P1.SC6 LED stopwatch SS.CC (led1, led3) | exp=000a got=000a
+[   5.003 ms] [     OK]    P1.SC7 FND SS.CC | exp="00.00" got="00.00"
+[   5.003 ms] [   PASS]        P1 END  checks=3 fail=0 defect=0 (5.003 ms)
+
+==========================================================================================
+[   5.003 ms] [  BEGIN]        P2 RUN window exactly 1.000 s (U_STOPWATCH_CONTROL_UNIT.o_sw_run_stop) -> count 99..100 (SC3, SB3)
+              plan   : R -> exactly 1.000 s later R
+              expect : STOP -> RUN -> STOP, RUN window 1000.000 ms +-20 us, 99..100 ticks -> 1.00 s
+------------------------------------------------------------------------------------------
+[   5.003 ms] [  RESET]        P2                               rst 1 us pulse stopwatch 00:00:00.00,  STOP
+[   5.005 ms] [     SW]        P2             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[   5.006 ms] [    BTN]        P2                   btn_R (o_btn @   7.004 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[  15.006 ms] [     OK]    P2.SC2 R -> RUN | exp=1 got=1
+[1005.129 ms] [    BTN]        P2                   btn_R (o_btn @1007.004 ms) stopwatch 00:00:00.99 -> 00:00:01.00,  RUN -> STOP
+[1015.129 ms] [   INFO]    P2.SC3 RUN window (o_sw_run_stop high) = 1000.000000 ms, count = 100 (00:00:01.00)
+[1015.129 ms] [     OK]    P2.SC3 RUN window length | exp=1000.000000 ms +-20us got=1000.000000 ms
+[1015.129 ms] [     OK]    P2.SC3 count after 1.000 s RUN | exp=99..100 got=100
+[1015.129 ms] [     OK]    P2.SC2 2nd R -> STOP | exp=0 got=0
+[1015.129 ms] [   PASS]        P2 END  checks=4 fail=0 defect=0 (1010.126 ms)
+
+==========================================================================================
+[1015.129 ms] [  BEGIN]        P3 STOP holds value for 200 ms
+              plan   : run 120 ms, R, wait 200 ms
+              expect : value does not change while STOP
+------------------------------------------------------------------------------------------
+[1015.129 ms] [  RESET]        P3                               rst 1 us pulse stopwatch 00:00:01.00 -> 00:00:00.00,  STOP
+[1015.131 ms] [     SW]        P3             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[1015.132 ms] [    BTN]        P3                   btn_R (o_btn @1017.130 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[1145.132 ms] [    BTN]        P3                   btn_R (o_btn @1147.130 ms) stopwatch 00:00:00.12 -> 00:00:00.13,  RUN -> STOP
+[1355.132 ms] [     OK]    P3.SC2 value held in STOP | exp=13 got=13
+[1355.132 ms] [   PASS]        P3 END  checks=1 fail=0 defect=0 (340.003 ms)
+
+==========================================================================================
+[1355.132 ms] [  BEGIN]        P4 STOP: L -> 0 and lap released (SC4)
+              plan   : STOP: D (lap) -> L
+              expect : stays STOP, o_sw_lap 0->1, L clear pulse -> o_sw_* 0 and o_sw_lap 0, FND 00.00
+------------------------------------------------------------------------------------------
+[1355.132 ms] [  RESET]        P4                               rst 1 us pulse stopwatch 00:00:00.13 -> 00:00:00.00,  STOP
+[1355.134 ms] [     SW]        P4             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[1355.135 ms] [    BTN]        P4                   btn_R (o_btn @1357.133 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[1515.135 ms] [    BTN]        P4                   btn_R (o_btn @1517.133 ms) stopwatch 00:00:00.15 -> 00:00:00.16,  RUN -> STOP
+[1525.135 ms] [    BTN]        P4                   btn_D (o_btn @1527.133 ms) stopwatch 00:00:00.16,  STOP -> STOP LAP
+[1535.135 ms] [     OK]    P4.SC4 lap on before clear | exp=1 got=1
+[1535.135 ms] [     OK]    P4.SC6 led7 = lap | exp=1 got=1
+[1535.135 ms] [    BTN]        P4                   btn_L (o_btn @1537.133 ms) stopwatch 00:00:00.16 -> 00:00:00.00,  STOP LAP -> STOP
+[1545.135 ms] [     OK]    P4.SC4 L in STOP -> 0, lap off | exp=0 lap=0 got=0 lap=0
+[1550.135 ms] [     OK]    P4.SC4 FND after clear | exp="00.00" got="00.00"
+[1550.135 ms] [   PASS]        P4 END  checks=4 fail=0 defect=0 (195.003 ms)
+
+==========================================================================================
+[1550.135 ms] [  BEGIN]        P5 RUN: L ignored (value kept, keeps counting), U ignored (direction kept) (SB5, SB6)
+              plan   : RUN: L, then U
+              expect : stays RUN, no o_sw_clear pulse, o_sw_down stays 0, o_sw_msec keeps counting
+------------------------------------------------------------------------------------------
+[1550.135 ms] [  RESET]        P5                               rst 1 us pulse stopwatch 00:00:00.00,  STOP
+[1550.137 ms] [     SW]        P5             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[1550.138 ms] [    BTN]        P5                   btn_R (o_btn @1552.136 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[1860.138 ms] [    BTN]        P5                   btn_L (o_btn @1862.136 ms) stopwatch 00:00:00.30 -> 00:00:00.31,  RUN
+[1870.138 ms] [     OK]    P5.SB5 L during RUN ignored: not cleared, still RUN | exp=>30 RUN got=31 run=1
+[1870.138 ms] [    BTN]        P5                   btn_U (o_btn @1872.136 ms) stopwatch 00:00:00.31 -> 00:00:00.32,  RUN
+[1880.138 ms] [     OK]    P5.SB6 U during RUN ignored: direction unchanged | exp=0 got=0
+[1930.138 ms] [     OK]    P5.SB6 still counting up after U | exp=>32 got=37
+[1930.138 ms] [   PASS]        P5 END  checks=3 fail=0 defect=0 (380.003 ms)
+
+==========================================================================================
+[1930.138 ms] [  BEGIN]        P6 STOP: R and L pressed at the same instant -> both ignored, STOP and value kept (SB7)
+              plan   : STOP: R and L at the same instant
+              expect : both o_btn in the same clock -> w_btn_multi -> no w_sw_btn_R / L -> still STOP, value kept
+------------------------------------------------------------------------------------------
+[1930.138 ms] [  RESET]        P6                               rst 1 us pulse stopwatch 00:00:00.37 -> 00:00:00.00,  RUN -> STOP
+[1930.140 ms] [     SW]        P6             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[1930.141 ms] [    BTN]        P6                   btn_R (o_btn @1932.139 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[2190.141 ms] [    BTN]        P6                   btn_R (o_btn @2192.139 ms) stopwatch 00:00:00.25 -> 00:00:00.26,  RUN -> STOP
+[2200.141 ms] [     OK]    P6.SB7 STOP with a value before R+L | exp=>0 STOP got=26 run=0
+[2200.141 ms] [    BTN]        P6   btn_R+btn_L same time (o_btn @2202.139 ms) stopwatch 00:00:00.26,  STOP
+[2210.141 ms] [     OK]    P6.SB7 R and L debounced pulses in the same clock | exp={D,U,L,R}=0011 got=00000000000000000000000000000011
+[2210.141 ms] [     OK]    P6.SB7 R+L same clock in STOP -> both ignored (10/18) | exp=STOP count=26 got=run=0 count=26
+[2210.141 ms] [   PASS]        P6 END  checks=3 fail=0 defect=0 (280.003 ms)
+
+==========================================================================================
+[2210.141 ms] [  BEGIN]        P7 background: stopwatch keeps running on watch screen, watch buttons not routed (SC5)
+              plan   : RUN, go to watch screen (mode_sw0=0), press R L U D
+              expect : w_sw_btn_* stay 0 -> still RUN, value increases, led 8009
+------------------------------------------------------------------------------------------
+[2210.141 ms] [  RESET]        P7                               rst 1 us pulse stopwatch 00:00:00.26 -> 00:00:00.00,  STOP
+[2210.143 ms] [     SW]        P7             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[2210.144 ms] [    BTN]        P7                   btn_R (o_btn @2212.142 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[2220.144 ms] [     SW]        P7                 sw4..0=00000 WATCH SS.cc 12h stopwatch 00:00:00.00 -> watch 12:00,  RUN -> cursor NORMAL(3)
+[2220.145 ms] [     OK]    P7.SC6 LED on watch screen | exp=8009 got=8009
+[2220.145 ms] [    BTN]        P7                   btn_R (o_btn @2222.142 ms) watch 12:00,  cursor NORMAL(3)
+[2230.145 ms] [    BTN]        P7                   btn_L (o_btn @2232.142 ms) watch 12:00,  cursor NORMAL(3)
+[2240.145 ms] [    BTN]        P7                   btn_U (o_btn @2242.142 ms) watch 12:00,  cursor NORMAL(3)
+[2250.145 ms] [    BTN]        P7                   btn_D (o_btn @2252.142 ms) watch 12:00,  cursor NORMAL(3)
+[2260.145 ms] [     OK]    P7.SC5 watch-screen R/L/U/D do not reach stopwatch | exp=RUN lap=0 mode=0 got=run=1 lap=0 mode=0
+[2260.145 ms] [     OK]    P7.SC5 stopwatch counted in background (40 ms of presses) | exp=>=3 got=4
+[2260.145 ms] [     OK]    P7.SC5 watch not changed by buttons in NORMAL | exp=12:00 got=12:00:00.05
+[2260.145 ms] [     SW]        P7             sw4..0=00001 STOPWATCH SS.cc 12h watch 12:00 -> stopwatch 00:00:00.04,  cursor NORMAL(3) -> RUN
+[2290.146 ms] [     OK]    P7.SC5 back on stopwatch screen, still running (30 ms later) | exp=>4 got=7
+[2290.146 ms] [   PASS]        P7 END  checks=5 fail=0 defect=0 (80.005 ms)
+[2290.146 ms] [SUMMARY] SW1 src=orig checks=23 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 2290146010 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/01_stopwatch/tb_sw_1_run_stop_clear.sv" Line 252
+run: Time (s): cpu = 00:00:03 ; elapsed = 00:44:33 . Memory (MB): peak = 239.371 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 12936 KB (Peak: 12936 KB), Simulation CPU Usage: 1554984 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 04:01:38 2026...

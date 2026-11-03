@@ -1,0 +1,77 @@
+{
+  "type": "verification",
+  "session": 2,
+  "date": "2026-10-21",
+  "label": "2차",
+  "targets": [
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_control_unit.sv",
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_datapath.v"
+  ],
+  "reference_only": [
+    "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\stopwatch_watch.v (E14 Top 실행용, 점수 밖)"
+  ],
+  "note": "원본 경로에 한글이 있어 src 21개를 세션 폴더 src_copy 에 복사해 실행(md5 21개 일치, src_copy\\md5_original.txt). 설계 파일은 수정하지 않음. 설계 평가 세션 2 와 같은 대상.",
+  "scenarios": [
+    {"id": "E1", "desc": "리셋값 + 리셋 해제와 같은 순간 U, 이어서 D·L·R·4개 동시 (sw2=0)", "expected": "12:00:00.00, NORMAL, cursor 3, up/down 펄스 0 (02:21-23)", "result": "PASS", "class": null},
+    {"id": "E2", "desc": "sw2=1 인 채 리셋 해제, 해제 직후 첫 클럭 U, 다음 U", "expected": "해제 1클럭 뒤 SET_MIN_1·cursor 0, 다음 U 는 +1 (02:22). 첫 클럭 U 는 02 에 규칙 없어 INFO", "result": "PASS", "class": null,
+     "observed": "첫 클럭 U 는 무시됨(min 0, 그 에지의 c_state = NORMAL). Top 에서는 디바운스 2 ms 때문에 생기지 않음(E14a)"},
+    {"id": "E3", "desc": "설정 중(SET_HOUR, 15:07:00.05) negedge+2 ns 에 비동기 리셋, sw2=1 인 채 해제", "expected": "다음 posedge 전에 NORMAL·cursor 3·12:00:00.00, 해제 뒤 SET_MIN_1 (01:9, 02:21-22)", "result": "PASS", "class": null},
+    {"id": "E4", "desc": "분 일 경계: 00-1, 59+1, 09+1, 10-1", "expected": "59, 00, 10, 09 (시 12 그대로, 02:25)", "result": "PASS", "class": null},
+    {"id": "E5", "desc": "분 십 경계: 00-10, 50+10, 55+10, 05-10", "expected": "50, 00, 05, 55 (시 그대로, 02:25 '그 칸만 돈다')", "result": "PASS", "class": null},
+    {"id": "E6", "desc": "시 경계: 12 +11, 23+1, 0-1", "expected": "23, 00, 23 (분 55 그대로, 02:21·25)", "result": "PASS", "class": null},
+    {"id": "E7", "desc": "자정: NORMAL 23:59:00.00 에서 tick 5,999개 → 23:59:59.99, tick 1개 더", "expected": "00:00:00.00 (02:21)", "result": "PASS", "class": null,
+     "observed": "리플: +1클럭 23:59:59.00, +2 23:59:00.00, +3 23:00:00.00, +4 00:00:00.00 (중간값 3클럭 = 30 ns, 02 에 규칙 없음)"},
+    {"id": "E8", "desc": "U+D 같은 클럭 (모듈 단독): SET_MIN_1 · SET_MIN_10 · SET_HOUR", "expected": "02:27 'U 와 D 같은 클럭 → U': up=1 down=0, 분 +1 / 분 +10 / 시 +1", "result": "FAIL", "class": "사양 불명확",
+     "observed": "세 상태 모두 up=0 down=0, 시각 그대로 = 무효. 코드 watch_control_unit.sv:9 주석 'U + D 동시: 무효', 88-91줄 o_wt_up = U & ~D, o_wt_down = D & ~U (10/18 팀 결정). Top 에서도 무효(E14b, w_btn_multi). 02 사양판(U 우선)으로 바꾼 사본 M2 는 E8 포함 TOTAL MISMATCH 0 → 실패 원인은 이 규칙 하나뿐"},
+    {"id": "E9", "desc": "L 3번 · R 3번 순환 + L+R 같은 클럭 3번 (세 상태)", "expected": "cursor 1,2,0 / 2,1,0 / L 우선 1,2,0, 시각 그대로 (02:24, 02:27)", "result": "PASS", "class": null},
+    {"id": "E10", "desc": "sw2 내림 + 버튼 같은 클럭 6가지(세 상태 × U/D, 세 상태 × L/R) + 매번 재진입", "expected": "NORMAL·cursor 3·up/down 0·시각 그대로, 다시 올리면 SET_MIN_1 (02:27, 02:22)", "result": "PASS", "class": null},
+    {"id": "E11", "desc": "tick(자리 넘김) + 버튼 같은 클럭 · 같은 카운터: (a) 분 cursor 0 U (b) 분 cursor 1 D(-10) (c) 시 cursor 2 U. TB 가 w_tick_min/w_tick_hour = 1 과 up/down = 1 이 같은 클럭임을 먼저 확인", "expected": "tick 만 반영, 버튼은 다음 클럭으로 미뤄지지 않음 (02:28): 분 0→1, 1→2, 시 0→1", "result": "PASS", "class": null,
+     "observed": "(a) 분 0→1 (+2 아님) (b) 분 1→2 (51/52 아님) (c) 시 0→1 (+2 아님), 10클럭 뒤에도 그대로 = 버튼은 버려지고 미뤄지지 않음 (watch_datapath.v:127-137)"},
+    {"id": "E12", "desc": "다른 카운터 tick(10 ms) + U 같은 클럭, 세 자리 U/D 가 초·1/100초를 안 건드림, 설정 중 tick 100개", "expected": "1/100초 +1 과 분 +1 둘 다, 초·1/100초 그대로, 초 +1 (02:28 같은 카운터일 때만 tick 우선, 02:26, 02:21)", "result": "PASS", "class": null},
+    {"id": "E13", "desc": "자리 이동 + ± 같은 클럭 (모듈 단독): SET_MIN_1 L+U, SET_MIN_10 R+U, SET_HOUR R+D", "expected": "02 에 규칙 없음. 해석(02:23-25): ±는 누른 순간의 자리(이동 전)에 한 번, 자리는 L/R 대로 → cursor 1·분+1 / cursor 0·분+10 / cursor 1·시-1", "result": "PASS", "class": null,
+     "observed": "1:01→1:02 cursor 1 / 1:02→1:12 cursor 0 / 1:12→0:12 cursor 1 = 이동 전 자리에 반영 후 이동. Top 에서는 w_btn_multi 가 두 버튼을 다 버림(stopwatch_watch.v:165-166, 코드 읽기 — 시뮬 안 함)"},
+    {"id": "E14", "desc": "Top 실제 파라미터(100 MHz, 10 ms tick, 4 kHz 디바운서 8칸): (a) 리셋 해제와 같은 순간 U (d) L→cursor 1, U→분+10 (e) sw2 내림 뒤 U 무시 (f) tick 주기 · 초.1/100초 = tick 수. (b) U+D · (c) L+R 동시 누름은 Top w_btn_multi 동작이라 INFO", "expected": "(a) 펄스 1개, 12:01, 누름→펄스 1.75~2.25 ms (d) cursor 1, 12:11 (e) NORMAL, 분 그대로 (f) 10,000,000 ns", "result": "PASS", "class": null,
+     "observed": "(a) 누름 100 ns → wt_up 2,000,105 ns (지연 2,000,005 ns) (b) w_btn_multi 1펄스, wt_up 0 · wt_down 0, 12:01 그대로 (02 는 U) (c) w_btn_multi 1펄스, cursor 0 그대로 (02 는 L) (f) 10,000,105 → 20,000,105 ns, 주기 10,000,000 ns. 시뮬 36,000,160 ns, 실행 11초"},
+    {"id": "M", "desc": "TB 자체 점검 (점수와 무관): 세션 폴더 사본에 한 줄 bug 를 하나씩 넣고 단위 TB 재실행", "expected": "bug 8개 모두 검출, 02 사양판(M2)은 통과", "result": "PASS", "class": null,
+     "observed": "M1 버튼이 tick 이김→E11, M3 R 우선→E9, M4 sw2 게이팅 없음→E10, M5 내림 돌기 없음→E4·E5·E6·E7·E11, M6 진입 SET_HOUR→12개, M7 컨트롤 유닛 동기 리셋→E3, M8 올림 경계 > →E4·E5·E6, M9 시 리셋값 0→E1~E7 (각 사본에서 E8 은 원래대로 FAIL). M2(U 우선 = 02 사양판) → TOTAL MISMATCH 0"}
+  ],
+  "sim": {
+    "tool": "xsim 2022.2 (xelab -debug typical)",
+    "tb": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\tb_e_unit.v",
+    "tb_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\tb_e14_top.v",
+    "total_mismatch": 3,
+    "total_mismatch_note": "3 = E8 U+D 세 상태 (사양 불명확). 나머지 0",
+    "total_mismatch_top": 0,
+    "log": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\unit_run.log",
+    "log_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\top_run.log",
+    "log_mutation": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\mutation.log",
+    "sim_time": "단위 485,260 ns ($finish), Top 36,000,160 ns (실행 약 11초)"
+  },
+  "criteria": [
+    {"id": "V1", "name": "시나리오 커버리지", "weight": 25, "score": 100, "deductions": [],
+     "evidence": "unit_run.log 'COV transitions = 1111111111111001', 'COV missing transitions = 0 (of 14 listed)': 상태 4개, 비자기 전이 10개(NORMAL->SET_MIN_1, L 3, R 3, 각 SET->NORMAL 3) + 유지 4개 모두 지나감. 금지 전이 NORMAL->SET_HOUR/SET_MIN_10 은 0. 설정 중 비동기 리셋(SET_HOUR->NORMAL)은 E3 에서 따로 확인"},
+    {"id": "V2", "name": "경계값", "weight": 20, "score": 100, "deductions": [],
+     "evidence": "D3 경계값 6개 모두 TB 자동 비교: 분 0-1 · 59+1 (E4), 분 십 55+10 · 0-10 (E5), 시 23+1 · 0-1 (E6). 그 밖에 자정 23:59:59.99→00:00:00.00 (E7), 09+1 · 10-1 (E4), 50+10 · 05-10 (E5)"},
+    {"id": "V3", "name": "엣지 케이스 · 동시 입력", "weight": 25, "score": 80,
+     "deductions": [
+       {"rule": "FAIL 1개당 -20", "points": -20, "where": "E8 (tb_e_unit.v:244-270 / watch_control_unit.sv:9, 88-91)",
+        "why": "U+D 같은 클럭에서 02:27 'U' 기대와 달리 무효(up 0 · down 0). 분류 = 사양 불명확(10/18 팀 결정이 02 에 반영 안 됨). 감점 규칙은 FAIL 수만 보므로 분류와 무관하게 적용"}
+     ],
+     "evidence": "E1~E14 14개 모두 실행(실행 못 한 것 0), FAIL 1(E8), 나머지 13 PASS"},
+    {"id": "V4", "name": "실제 시간 조건", "weight": 15, "score": 100, "deductions": [],
+     "evidence": "E14 가 Top 을 실제 파라미터로 실행: tick 주기 10,000,000 ns, 누름→펄스 2,000,005 ns. 단위 TB 는 파라미터를 바꾸지 않고 tick 입력만 TB 가 넣음"},
+    {"id": "V5", "name": "자동 판정", "weight": 15, "score": 100, "deductions": [],
+     "evidence": "E1~E14 모두 if (x !== exp) + err 카운트, 두 TB 모두 'TOTAL MISMATCH = n' 출력. 규칙 없는 부분(E2 첫 클럭, E8 실제 동작, E13 반영 자리, E14b·c Top 동시 누름)은 INFO/OBS 로 출력하되 각 시나리오에 사양 근거 자동 비교가 있음"}
+  ],
+  "total": 95.0,
+  "needs_check": [
+    "1. E8 U+D (사양 불명확): 02_target_spec.md:27 은 'U', 코드는 '무효'(watch_control_unit.sv:9, 88-91, 10/18 팀 결정). 시뮬로 무효 확인(세 상태 모두 up 0 · down 0 · 시각 그대로, Top 도 같음). 팀 결정이 맞으면 02 를 고친 뒤 E8 기대값을 '무효'로 바꿔(사양 근거 생김) 다시 매기면 V3 100 → 총점 100.0",
+    "2. L+R 동시 (Top 경로, 점수 밖): 모듈 단독은 02 대로 L 우선(E9 PASS). Top 은 w_btn_multi 가 둘 다 버려 cursor 그대로(E14c). 1번과 같이 02 를 고칠지 정보윤이 정할 것",
+    "3. E13 L/R + U/D 같은 클럭 (02 에 규칙 없음): 모듈 단독에서는 이동 전 자리에 ± 가 들어가고 자리도 옮겨진다(1:01→1:02 cursor 1 등). Top 에서는 w_btn_multi 로 막혀 보드에서는 생기지 않는다(코드 읽기, 시뮬 안 함). 02 에 규칙을 넣을지 결정 필요",
+    "4. E11 tick+버튼 같은 클럭: 버튼은 버려지고 미뤄지지 않는다(분 0→1, 1→2, 시 0→1, 10클럭 뒤에도 그대로). 02:28 '그때는 tick 만 반영' 대로. 분 카운터에 tick 이 들어오는 건 1분에 1클럭(10 ns)이라 버튼 펄스와 겹칠 확률은 매우 낮다(계산, 측정 아님)",
+    "5. E2 리셋 해제 첫 클럭 버튼: sw2=1 인 채 리셋을 풀면 첫 클럭은 NORMAL 이라 그 클럭 버튼은 무시된다. 02 에 규칙 없음. Top 에서는 디바운스 2 ms 뒤에야 펄스가 나와 생기지 않음(E14a 2,000,105 ns 에 반영)",
+    "6. E7 자리 넘김 리플: 23:59:59.99 → 00:00:00.00 사이에 23:59:59.00 · 23:59:00.00 · 23:00:00.00 이 1클럭(10 ns)씩 보인다(watch_datapath.v:129-131 o_tick 레지스터). 02 에 규칙 없음, FND 표시 영향은 확인 안 함",
+    "7. 이번에 시뮬하지 않은 Top 경로: set_sw2 동기화 없음(설계 평가 확인 필요 7), 스톱워치·타이머 화면에서 sw2=1 일 때 시계 FSM 이 SET 에 머무는 것(설계 평가 확인 필요 8)"
+  ],
+  "summary": "엣지 케이스 14개(단위 13 + Top 실제 파라미터 1) xsim 실행, FAIL 1(E8 U+D = 사양 불명확, 코드는 10/18 팀 결정대로 무효), 상태·전이 커버리지 100%, 경계값 6개 모두 통과, bug 사본 8개 모두 검출 — 총 95.0. 02 를 '무효'로 고치면 100.0"
+}

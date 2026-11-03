@@ -1,0 +1,114 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Tue Oct 20 04:03:13 2026
+# Process ID: 14972
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_3
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_3/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_sw_3\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 RUN: D -> display frozen, internal keeps counting, led7 (SB4)
+              plan   : RUN 200 ms, D, wait 100 ms
+              expect : o_sw_lap 1, led7 1, o_sw_* frozen 100 ms, internal i_cnt_msec keeps counting
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P1             sw4..0=00001 STOPWATCH SS.cc 12h watch 12:00 -> stopwatch 00:00:00.00,  cursor NORMAL(3) -> STOP
+[   0.003 ms] [    BTN]        P1                   btn_R (o_btn @   2.001 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 210.003 ms] [    BTN]        P1                   btn_D (o_btn @ 212.001 ms) stopwatch 00:00:00.20,  RUN -> RUN LAP
+[ 220.003 ms] [     OK]    P1.SB4 lap active, led7 on | exp=1 1 got=1 1
+[ 320.003 ms] [     OK]    P1.SB4 display frozen for 100 ms | exp=00:00:00.20 got=00:00:00.20
+[ 320.003 ms] [     OK]    P1.SB4 internal counter kept running | exp=>=30 got=31
+[ 320.003 ms] [   PASS]        P1 END  checks=3 fail=0 defect=0 (320.003 ms)
+
+==========================================================================================
+[ 320.003 ms] [  BEGIN]        P2 D again -> live display (SB4)
+              plan   : D again
+              expect : o_sw_lap 0, o_sw_* = i_cnt_* (live)
+------------------------------------------------------------------------------------------
+[ 320.003 ms] [  RESET]        P2                               rst 1 us pulse stopwatch 00:00:00.20 -> 00:00:00.00,  RUN LAP -> STOP
+[ 320.005 ms] [     SW]        P2             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[ 320.006 ms] [    BTN]        P2                   btn_R (o_btn @ 322.004 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 430.006 ms] [    BTN]        P2                   btn_D (o_btn @ 432.004 ms) stopwatch 00:00:00.10,  RUN -> RUN LAP
+[ 490.006 ms] [    BTN]        P2                   btn_D (o_btn @ 492.004 ms) stopwatch 00:00:00.10 -> 00:00:00.17,  RUN LAP -> RUN
+[ 500.006 ms] [     OK]    P2.SB4 lap off, led7 off | exp=0 0 got=0 0
+[ 500.006 ms] [     OK]    P2.SB4 display == internal counter | exp=00:00:00.17 got=00:00:00.17
+[ 500.006 ms] [   PASS]        P2 END  checks=2 fail=0 defect=0 (180.003 ms)
+
+==========================================================================================
+[ 500.006 ms] [  BEGIN]        P3 lap during RUN: L ignored (lap kept) -> STOP -> L -> lap off + 0 (SB5, SC4)
+              plan   : lap + RUN: L -> R -> L
+              expect : L in RUN: no clear, lap kept / R -> STOP, L: clear -> o_sw_lap 0, value 0
+------------------------------------------------------------------------------------------
+[ 500.006 ms] [  RESET]        P3                               rst 1 us pulse stopwatch 00:00:00.17 -> 00:00:00.00,  RUN -> STOP
+[ 500.008 ms] [     SW]        P3             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[ 500.009 ms] [    BTN]        P3                   btn_R (o_btn @ 502.007 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 610.009 ms] [    BTN]        P3                   btn_D (o_btn @ 612.007 ms) stopwatch 00:00:00.10,  RUN -> RUN LAP
+[ 620.009 ms] [    BTN]        P3                   btn_L (o_btn @ 622.007 ms) stopwatch 00:00:00.10,  RUN LAP
+[ 630.009 ms] [     OK]    P3.SB5 L during RUN: lap kept, display frozen | exp=lap 00:00:00.10 got=lap=1 00:00:00.10
+[ 630.009 ms] [     OK]    P3.SB5 L during RUN: internal not cleared | exp=>0 RUN got=12 run=1
+[ 630.009 ms] [    BTN]        P3                   btn_R (o_btn @ 632.007 ms) stopwatch 00:00:00.10,  RUN LAP -> STOP LAP
+[ 640.009 ms] [    BTN]        P3                   btn_L (o_btn @ 642.007 ms) stopwatch 00:00:00.10 -> 00:00:00.00,  STOP LAP -> STOP
+[ 650.009 ms] [     OK]    P3.SC4 STOP + L -> lap off, 0 | exp=lap=0 00:00:00.00 got=lap=0 00:00:00.00
+[ 650.009 ms] [   PASS]        P3 END  checks=3 fail=0 defect=0 (150.003 ms)
+
+==========================================================================================
+[ 650.009 ms] [  BEGIN]        P4 lap in STOP, then RUN: display stays at lap value (SB4)
+              plan   : STOP: D -> R
+              expect : lap in STOP, after R (RUN) o_sw_* stays frozen, only i_cnt_* counts
+------------------------------------------------------------------------------------------
+[ 650.009 ms] [  RESET]        P4                               rst 1 us pulse stopwatch 00:00:00.00,  STOP
+[ 650.011 ms] [     SW]        P4             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[ 650.012 ms] [    BTN]        P4                   btn_R (o_btn @ 652.010 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 780.012 ms] [    BTN]        P4                   btn_R (o_btn @ 782.010 ms) stopwatch 00:00:00.12 -> 00:00:00.13,  RUN -> STOP
+[ 790.012 ms] [    BTN]        P4                   btn_D (o_btn @ 792.010 ms) stopwatch 00:00:00.13,  STOP -> STOP LAP
+[ 800.012 ms] [     OK]    P4.SB4 lap in STOP holds current value | exp=00:00:00.13 got=00:00:00.13
+[ 800.012 ms] [    BTN]        P4                   btn_R (o_btn @ 802.010 ms) stopwatch 00:00:00.13,  STOP LAP -> RUN LAP
+[ 910.012 ms] [     OK]    P4.SB4 RUN after lap: display frozen, internal moves | exp=00:00:00.13 got=disp 00:00:00.13 raw 00:00:00.23
+[ 910.012 ms] [   PASS]        P4 END  checks=2 fail=0 defect=0 (260.003 ms)
+
+==========================================================================================
+[ 910.012 ms] [  BEGIN]        P5 preload 00:00:59.98 while RUN, lap right away -> saved 59.98, internal passes 1:00 (SB4)
+              plan   : RUN, PRELOAD 00:00:59.98, D right away
+              expect : lap value 59.98 saved, internal i_cnt_min passes to 1
+------------------------------------------------------------------------------------------
+[ 910.012 ms] [  RESET]        P5                               rst 1 us pulse stopwatch 00:00:00.13 -> 00:00:00.00,  RUN LAP -> STOP
+[ 910.014 ms] [     SW]        P5             sw4..0=00001 STOPWATCH SS.cc 12h stopwatch 00:00:00.00,  STOP
+[ 910.015 ms] [    BTN]        P5                   btn_R (o_btn @ 912.013 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[ 930.013 ms] [PRELOAD]        P5 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.01 -> 00:00:59.98   (wave: values jump here with no tick/button)
+[ 930.013 ms] [    BTN]        P5                   btn_D (o_btn @ 932.013 ms) stopwatch 00:00:59.98,  RUN -> RUN LAP
+[ 990.013 ms] [     OK]    P5.SB4 lap saved 59.98 | exp=00:00:59.98 got=00:00:59.98
+[ 990.013 ms] [     OK]    P5.SB4 internal passed 1:00 | exp=00:01:xx got=00:01:00.04
+[ 990.013 ms] [   PASS]        P5 END  checks=2 fail=0 defect=0 (80.001 ms)
+
+==========================================================================================
+[ 990.013 ms] [  BEGIN]        P6 FND during lap: SS.CC shows lap value, sw2=1 does not blink on stopwatch screen (SC7)
+              plan   : lap, set_sw2=1, FND SS.CC and HH.MM 200 ms
+              expect : FND = lap value, no blink on stopwatch screen even with sw2=1
+------------------------------------------------------------------------------------------
+[ 990.013 ms] [  RESET]        P6                               rst 1 us pulse stopwatch 00:00:59.98 -> 00:00:00.00,  RUN LAP -> STOP
+[ 990.015 ms] [     SW]        P6         sw4..0=00101 STOPWATCH SET SS.cc 12h stopwatch 00:00:00.00,  STOP
+[ 990.016 ms] [    BTN]        P6                   btn_R (o_btn @ 992.014 ms) stopwatch 00:00:00.00,  STOP -> RUN
+[1010.014 ms] [PRELOAD]        P6 *** TB writes the stopwatch counters directly (NOT a button, NOT a DUT bug) ***
+              U_STOPWATCH_DATAPATH count  00:00:00.01 -> 00:00:12.34   (wave: values jump here with no tick/button)
+[1010.014 ms] [    BTN]        P6                   btn_D (o_btn @1012.014 ms) stopwatch 00:00:12.34,  RUN -> RUN LAP
+[1025.014 ms] [     OK]    P6.SC7 FND SS.CC = lap value | exp="12.34" got="12.34"
+[1025.014 ms] [     SW]        P6         sw4..0=00111 STOPWATCH SET HH.MM 12h stopwatch 00:00:12.34,  RUN LAP
+[1225.015 ms] [     OK]    P6.SC7 HH.MM with sw2=1 on stopwatch screen == reference (no blink) 200 ms | exp=0 mismatch got=0
+[1230.015 ms] [     OK]    P6.SC7 HH.MM (00h 00m), no blank digit | exp="00.00" got="00.00"
+[1230.015 ms] [   PASS]        P6 END  checks=3 fail=0 defect=0 (240.002 ms)
+[1230.015 ms] [SUMMARY] SW3 src=orig checks=15 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 1230015110 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/01_stopwatch/tb_sw_3_lap.sv" Line 251
+run: Time (s): cpu = 00:00:02 ; elapsed = 05:11:21 . Memory (MB): peak = 253.125 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 12616 KB (Peak: 12616 KB), Simulation CPU Usage: 780796 ms
+INFO: [Common 17-206] Exiting xsim at Tue Oct 20 09:14:45 2026...

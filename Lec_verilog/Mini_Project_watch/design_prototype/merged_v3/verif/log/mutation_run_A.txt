@@ -1,0 +1,12 @@
+M10 랩 중 msec 고정 안 됨              unit[lap:CAUGHT sw_dp:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M09 다운 돌기 값 틀림                   unit[sw_dp:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M08 정지 중에도 셈                     unit[sw_dp:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M07 RUN 에서 정지 불가                 unit[sw_cu:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M11 타이머 상한 경계 틀림                 unit[timer:CAUGHT] directed[CAUGHT] sv[missed]
+M12 타이머 초 빌림 값 틀림                unit[timer:missed] directed[CAUGHT] sv[CAUGHT]
+M13 알람 끄기 L 만                    unit[timer:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M14 0 에서도 시작                     unit[timer:CAUGHT] directed[CAUGHT] sv[CAUGHT]
+M05 분 십의 자리 +10 무시               unit[watch_cnt:CAUGHT watch_dp:CAUGHT] directed[CAUGHT(timeout/compile)] sv[missed]
+M15 12시간 표시 0시 -> 0              unit[hour1224:CAUGHT] directed[CAUGHT] sv[missed]
+- 잡힘: 단위 9/10, 지시형 10/10, SV 랜덤 7/10, 셋 중 하나라도 10/10
+- 소요 9 분

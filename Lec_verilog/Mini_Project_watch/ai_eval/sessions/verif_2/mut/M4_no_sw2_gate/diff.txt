@@ -1,0 +1,4 @@
+89c89
+<         if ((c_state != NORMAL) && (i_set_sw2 == 1'b1)) begin
+---
+>         if (c_state != NORMAL) begin

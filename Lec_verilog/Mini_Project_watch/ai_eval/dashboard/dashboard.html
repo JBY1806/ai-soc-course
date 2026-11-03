@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watch RTL 평가</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#ffffff; --line:#e3e8ef; --ink:#0f172a; --ink2:#334155; --muted:#64748b;
+  --side:#111827; --side-ink:#9ca3af; --track:#e8edf3; --chip:#f1f4f8;
+  --design:#7c3aed; --design-soft:#f3edff; --verif:#ea580c; --verif-soft:#fff3eb;
+  --pass:#15803d; --pass-soft:#e8f6ec; --fail:#b91c1c; --fail-soft:#fdecec;
+  --warn-bg:#fff8e6; --warn-line:#f5d48a; --warn-ink:#7a4b00;
+  --accent:var(--design); --accent-soft:var(--design-soft);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1117; --card:#161b22; --line:#2a313c; --ink:#e6edf3; --ink2:#c9d1d9; --muted:#8b949e;
+    --side:#010409; --side-ink:#6e7681; --track:#262d36; --chip:#1f262f;
+    --design:#a78bfa; --design-soft:#251d3a; --verif:#fb923c; --verif-soft:#33210f;
+    --pass:#4ade80; --pass-soft:#132a1b; --fail:#f87171; --fail-soft:#331616;
+    --warn-bg:#2b2410; --warn-line:#5c4a14; --warn-ink:#f2cc60;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1117; --card:#161b22; --line:#2a313c; --ink:#e6edf3; --ink2:#c9d1d9; --muted:#8b949e;
+  --side:#010409; --side-ink:#6e7681; --track:#262d36; --chip:#1f262f;
+  --design:#a78bfa; --design-soft:#251d3a; --verif:#fb923c; --verif-soft:#33210f;
+  --pass:#4ade80; --pass-soft:#132a1b; --fail:#f87171; --fail-soft:#331616;
+  --warn-bg:#2b2410; --warn-line:#5c4a14; --warn-ink:#f2cc60;
+}
+body[data-tab="verif"]{ --accent:var(--verif); --accent-soft:var(--verif-soft); }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink);
+  font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  font-size:15px; line-height:1.5; display:flex; min-height:100vh}
+.side{width:64px; background:var(--side); display:flex; flex-direction:column; align-items:center;
+  padding:20px 0; gap:18px; position:sticky; top:0; height:100vh; flex-shrink:0}
+.side button{all:unset; cursor:pointer; width:40px; height:40px; border-radius:10px;
+  display:grid; place-items:center; color:var(--side-ink)}
+.side button[aria-current="true"]{color:#fff; background:var(--accent)}
+.side button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.side .spacer{flex:1}
+.side svg{width:22px; height:22px}
+
+main{flex:1; min-width:0; padding:28px 32px 40px; max-width:1280px}
+header h1{margin:0; font-size:26px; letter-spacing:-.01em}
+header p{margin:4px 0 0; color:var(--muted); font-size:14px}
+
+.banner{margin:18px 0 0; padding:12px 16px; border:1px solid var(--warn-line); background:var(--warn-bg);
+  color:var(--warn-ink); border-radius:10px; font-size:14px}
+.banner b{font-weight:700}
+
+.tabs{display:inline-flex; margin:22px 0 18px; background:var(--card); border:1px solid var(--line);
+  border-radius:10px; padding:4px; gap:4px}
+.tabs button{all:unset; cursor:pointer; padding:8px 16px; border-radius:7px; font-weight:600;
+  color:var(--muted); font-size:14px}
+.tabs button[aria-selected="true"]{background:var(--accent); color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--accent)}
+
+.grid3{display:grid; grid-template-columns:1.1fr .9fr 1.2fr; gap:18px}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; min-width:0}
+.row{margin-top:18px}
+.cap{font-size:12px; font-weight:700; letter-spacing:.06em; color:var(--muted); text-transform:uppercase; margin:0 0 10px}
+.cap small{text-transform:none; letter-spacing:0; font-weight:600}
+
+.role h2{margin:0 0 6px; font-size:20px}
+.role p{margin:0; color:var(--ink2); font-size:14px}
+.role .who{display:inline-block; margin-bottom:10px; font-size:12px; font-weight:700; color:var(--accent);
+  background:var(--accent-soft); padding:3px 9px; border-radius:6px}
+
+.score{display:flex; align-items:center; gap:20px}
+.ring{width:118px; height:118px; flex-shrink:0; position:relative}
+.ring svg{width:100%; height:100%; transform:rotate(-90deg)}
+.ring .num{position:absolute; inset:0; display:grid; place-items:center; font-size:34px; font-weight:800; color:var(--accent)}
+.score .lbl b{display:block; font-size:17px}
+.score .lbl span{color:var(--muted); font-size:13px}
+
+.hist{display:grid; grid-template-columns:repeat(auto-fit,minmax(92px,1fr)); gap:10px}
+.hist button{all:unset; cursor:pointer; background:var(--chip); border:1.5px solid transparent; border-radius:10px;
+  padding:10px 8px; text-align:center}
+.hist button[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+.hist button:focus-visible{outline:2px solid var(--accent)}
+.hist button[disabled]{cursor:default; opacity:.55}
+.hist .t{display:block; font-size:12px; color:var(--muted)}
+.hist .v{display:block; font-size:22px; font-weight:800; margin-top:2px}
+.hist button[aria-pressed="true"] .v{color:var(--accent)}
+
+.crit{display:grid; grid-template-columns:1fr 1fr; gap:22px 40px}
+.crit .top{display:flex; justify-content:space-between; gap:10px; font-weight:600; font-size:15px}
+.crit .top .pct{color:var(--accent); font-weight:800}
+.crit .w{color:var(--muted); font-weight:600; font-size:13px}
+.bar{height:9px; background:var(--track); border-radius:6px; margin:7px 0 6px; overflow:hidden}
+.bar i{display:block; height:100%; background:var(--accent); border-radius:6px}
+.crit .basis{font-size:12.5px; color:var(--muted); margin:0}
+
+table{width:100%; border-collapse:collapse; font-size:13.5px}
+th{white-space:nowrap; text-align:left; font-size:12px; color:var(--muted); font-weight:700; padding:6px 8px; border-bottom:1px solid var(--line)}
+td{padding:8px; border-bottom:1px solid var(--line); vertical-align:top}
+td.id{font-weight:700; white-space:nowrap}
+td .obs{display:block; color:var(--muted); font-size:12.5px; margin-top:2px}
+.badge{display:inline-block; font-size:12px; font-weight:800; padding:2px 8px; border-radius:6px}
+.badge.pass{color:var(--pass); background:var(--pass-soft)}
+.badge.fail{color:var(--fail); background:var(--fail-soft)}
+.minus{color:var(--fail); font-weight:800; white-space:nowrap}
+code{font-family:Consolas,"D2Coding",monospace; font-size:12.5px}
+.empty{color:var(--muted); font-size:14px; margin:0}
+ul.chk{margin:0; padding-left:18px; font-size:13.5px; color:var(--ink2)}
+ul.chk li{margin-bottom:6px}
+
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px}
+.kpi{background:var(--chip); border-radius:10px; padding:10px 12px}
+.kpi span{display:block; font-size:12px; color:var(--muted)}
+.kpi b{font-size:20px}
+.kpi b.ok{color:var(--pass)} .kpi b.ng{color:var(--fail)}
+
+footer{margin-top:22px; color:var(--muted); font-size:12px; word-break:break-all}
+
+@media (max-width:980px){
+  .grid3{grid-template-columns:1fr 1fr} .grid3 .card:first-child{grid-column:1/-1}
+}
+@media (max-width:700px){
+  body{display:block}
+  .side{flex-direction:row; width:auto; height:auto; position:static; padding:8px 16px; justify-content:flex-start}
+  .side .spacer{display:none}
+  main{padding:18px 16px 32px}
+  .grid3,.grid2,.crit{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .table-wrap{overflow-x:auto}
+}
+</style>
+</head>
+<body data-tab="design">
+<nav class="side" aria-label="화면">
+  <button type="button" data-go="design" title="설계 평가" aria-label="설계 평가">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+  </button>
+  <button type="button" data-go="verif" title="성능 검증" aria-label="성능 검증">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l2-6 4 12 2-6h7"/></svg>
+  </button>
+  <div class="spacer"></div>
+  <button type="button" id="themeBtn" title="밝게/어둡게" aria-label="밝게 또는 어둡게 전환">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+  </button>
+</nav>
+
+<main>
+  <header>
+    <h1>Watch RTL AI Evaluation</h1>
+    <p id="sub"></p>
+  </header>
+  <div id="banner"></div>
+
+  <div class="tabs" role="tablist" aria-label="평가 종류">
+    <button type="button" role="tab" data-go="design" aria-selected="true">설계 (Design) 평가</button>
+    <button type="button" role="tab" data-go="verif" aria-selected="false">성능 (Verification) 검증</button>
+  </div>
+
+  <section class="grid3">
+    <div class="card role">
+      <p class="cap">Assigned Role</p>
+      <span class="who" id="who"></span>
+      <h2 id="role"></h2>
+      <p id="roleDesc"></p>
+    </div>
+    <div class="card">
+      <p class="cap">AI Score <small id="scoreCap"></small></p>
+      <div class="score">
+        <div class="ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--track)" stroke-width="11"/>
+            <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="11"
+              stroke-linecap="round" stroke-dasharray="0 314.16"/>
+          </svg>
+          <div class="num" id="avg">–</div>
+        </div>
+        <div class="lbl"><b id="scoreTitle"></b><span id="scoreNote"></span></div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="cap">Session History</p>
+      <div class="hist" id="hist"></div>
+    </div>
+  </section>
+
+  <section class="card row">
+    <p class="cap">Criteria Details <small>(기준설정 근거) · <span id="critSess"></span></small></p>
+    <div class="crit" id="crit"></div>
+  </section>
+
+  <section class="card row" id="simCard" hidden>
+    <p class="cap">Simulation · Edge Cases <small id="simCap"></small></p>
+    <div class="kpis" id="kpis"></div>
+    <div class="table-wrap"><table><thead><tr><th>ID</th><th>시나리오</th><th>기대</th><th>결과</th></tr></thead><tbody id="scen"></tbody></table></div>
+  </section>
+
+  <section class="grid2 row">
+    <div class="card">
+      <p class="cap">감점 내역</p>
+      <div class="table-wrap" id="ded"></div>
+    </div>
+    <div class="card">
+      <p class="cap">확인 필요</p>
+      <div id="chk"></div>
+    </div>
+  </section>
+
+  <footer id="foot"></footer>
+</main>
+
+<script>
+const DATA = {"profile": {"project": "Stopwatch · Watch 미니프로젝트 (팀 BEST_Stop_watch_project)", "board": "Basys-3 · xc7a35tcpg236-1 · 100 MHz · Vivado 2022.2 xsim", "name": "정보윤", "role": "시계 상태 머신 · 시계 데이터패스 설계", "role_desc": "watch_control_unit (설정 FSM 4상태, 자리 이동, ±1/±10) · watch_datapath (12:00 시작, 100 Hz tick, tick 우선)", "sessions_required": 3}, "rubric": {"D1": {"name": "사양 일치", "weight": "30 %", "basis": "02_target_spec.md 의 시계 사양(상태 4개, 진입 = 분 일, L/R 순환, ±1/±10, 초 설정 없음, 12:00 시작)이 설계 목표 자체", "rule": "사양과 다른 동작 1개당 −20. 사양에 없는 동작을 추가했으면 −5 (보고서에 적었으면 0)"}, "D2": {"name": "래치 · 다중 구동 없음", "weight": "15 %", "basis": "수업 HW4-2 에서 기본값 누락으로 래치 2개를 실제로 겪음. 래치는 보드에서 예측 못 할 동작", "rule": "조합 always 에 기본값 없는 출력 1개당 −15, case default 없음 −10, 같은 신호를 두 always 에서 구동 −30"}, "D3": {"name": "동시 입력 · 경계값 규칙", "weight": "20 %", "basis": "버튼 · tick 이 같은 클럭에 올 수 있다(SV 랜덤 검증에서 실제로 나옴). 59 → 0, 0 − 1, 23 → 0 은 bug 가 가장 많이 숨는 곳", "rule": "02 의 동시 입력 규칙(U+D, sw2 내림+버튼, L+R, tick+버튼) 중 코드로 보장 안 되는 것 1개당 −15, 경계값(분 0−1·59+1, 분 십 55+10·0−10, 시 0−1·23+1) 처리 틀림 1개당 −15"}, "D4": {"name": "클럭 · 리셋 규칙", "weight": "15 %", "basis": "01_course_rules.md 3장: 클럭은 100 MHz 하나, 카운터는 tick enable, 비동기 positive 리셋", "rule": "파생 클럭 사용 −30, 리셋 없는 상태 레지스터 1개당 −15, 리셋값이 사양(12:00:00.00, NORMAL)과 다름 −20"}, "D5": {"name": "수업 규칙 · 가독성", "weight": "20 %", "basis": "수업 기본은 3블록 FSM, 배운 문법만, 이름이 역할을 드러냄 → 발표 · 리뷰에서 설명 가능해야 함", "rule": "3블록 분리 안 함 −10, 안 배운 문법(task · function 등) 1종당 −10, `timescale 누락 −10, 상태 · 신호 이름이 역할과 다름 −5씩, 핵심 줄 주석 없음 −5"}, "V1": {"name": "시나리오 커버리지", "weight": "25 %", "basis": "FSM 은 모든 상태 · 전이를 지나야 \"봤다\"고 할 수 있다", "rule": "안 지나간 상태 1개당 −15, 안 지나간 전이 1개당 −5"}, "V2": {"name": "경계값", "weight": "20 %", "basis": "59 → 0, 23 → 0, 자정은 시계에서 가장 흔한 bug 자리", "rule": "D3 경계값 목록 중 TB 가 확인 안 한 것 1개당 −10"}, "V3": {"name": "엣지 케이스 · 동시 입력", "weight": "25 %", "basis": "AI 가 찾은 엣지 케이스를 실제로 돌려 통과해야 함(과제 4쪽 \"AI 가 식별한 엣지 케이스\")", "rule": "에이전트가 만든 엣지 케이스 중 FAIL 1개당 −20, 실행 못 한 것 1개당 −10"}, "V4": {"name": "실제 시간 조건", "weight": "15 %", "basis": "김창형 교수님 · 팀 규칙: tick 을 올리지 않는다. 디바운스 2 ms, tick 10 ms 가 실제 값이어야 보드와 같다", "rule": "Top 시뮬이 축소 파라미터만 있음 −30, 실제 파라미터 시나리오가 1개 이상 있으면 0"}, "V5": {"name": "자동 판정", "weight": "15 %", "basis": "사람이 파형을 눈으로만 보면 놓친다. err 카운트 + TOTAL MISMATCH 방식", "rule": "자동 비교 없는 시나리오 1개당 −10, TOTAL MISMATCH 출력 없음 −20"}}, "design": [{"type": "design", "session": 1, "date": "2026-10-16", "label": "1차 (시험)", "targets": ["C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_control_unit.sv", "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_datapath.v"], "criteria": [{"id": "D1", "name": "사양 일치", "weight": 30, "score": 100, "deductions": [], "checked": ["상태 4개 NORMAL·SET_HOUR·SET_MIN_10·SET_MIN_1 (watch_control_unit.sv:24)", "진입 = SET_MIN_1, cursor 0 (watch_control_unit.sv:51, 78)", "L 순환 SET_MIN_1→SET_MIN_10→SET_HOUR→SET_MIN_1 (watch_control_unit.sv:82, 71, 60)", "R 순환 반대 방향 (watch_control_unit.sv:84, 62, 73)", "cursor 0 분±1 · 1 분±10 · 2 시±1, 3 = NORMAL (watch_datapath.v:29-33, watch_control_unit.sv:42-49)", "설정은 그 칸만 돌고 o_tick 안 냄 = 올림·내림 없음 (watch_datapath.v:136-152)", "초·1/100초 설정 없음 (watch_datapath.v:46-48, 61-63)", "리셋 12:00:00.00 (watch_datapath.v:41, 56, 71, 86)", "100 Hz tick 항상 흐름 (watch_datapath.v:36)"]}, {"id": "D2", "name": "래치 · 다중 구동 없음", "weight": 15, "score": 90, "deductions": [{"rule": "case default 없음", "points": -10, "where": "watch_control_unit.sv:45-87", "why": "case (c_state) 에 default 가 없다. 첫 줄 기본값(40-44줄)이 모든 출력에 있고 2비트 4가지 값을 모두 다뤄 래치가 생길 여지는 없어 보이지만, 감점 규칙이 default 유무 자체를 본다"}], "checked": ["조합 always 기본값 n_state·set_mode·cursor·o_up·o_down 5개 모두 있음 (watch_control_unit.sv:40-44)", "watch_datapath 는 조합 always 없이 assign 만 사용", "같은 신호를 두 always 에서 구동하는 곳 없음"]}, {"id": "D3", "name": "동시 입력 · 경계값 규칙", "weight": 20, "score": 100, "deductions": [], "checked": ["U+D 같은 클럭 → U (watch_control_unit.sv:92-93, watch_datapath.v:140-146)", "sw2 내림 + 버튼 → NORMAL, 버튼 무시 (watch_control_unit.sv:57-58, 68-69, 79-80, 91)", "L+R 같은 클럭 → L (watch_control_unit.sv:59-62, 70-73, 81-84 if/else if 순서)", "tick+버튼 같은 카운터 → tick 만 (watch_datapath.v:127-137)", "분 59+1→0, 0-1→59 / 분 십 55+10→5, 0-10→50 / 시 23+1→0, 0-1→23 (watch_datapath.v:141-151, 비교·덧셈이 32비트 TIMES 와 섞여 넘침 없음 — 코드 읽기로 계산, 시뮬 실행은 안 함)"]}, {"id": "D4", "name": "클럭 · 리셋 규칙", "weight": 15, "score": 100, "deductions": [], "checked": ["clk 하나만 사용, 카운터는 if (i_tick) enable (watch_datapath.v:127)", "비동기 positive 리셋 (watch_control_unit.sv:30, watch_datapath.v:122)", "리셋값 NORMAL · 12:00:00.00 · o_tick 0 (watch_control_unit.sv:32, watch_datapath.v:124-125)"]}, {"id": "D5", "name": "수업 규칙 · 가독성", "weight": 20, "score": 80, "deductions": [{"rule": "3블록 분리 안 함", "points": -10, "where": "watch_control_unit.sv:38-95", "why": "Next State CL 과 Output CL 이 always @(*) 하나에 합쳐져 있다(주석도 'next state / output CL'). 수업 기본은 분리형"}, {"rule": "안 배운 문법 1종", "points": -10, "where": "watch_control_unit.sv:24, 27", "why": "typedef enum logic (SystemVerilog 문법). Lec_verilog/.md 일정상 SystemVerilog 는 Verilog 과목 뒤에 배운다. 수업에서 다뤘으면 되돌릴 것(확인 필요 1번)"}], "checked": ["두 파일 모두 1줄 `timescale 1ns / 1ps", "핵심 줄 주석 있음 (진입·순환·U 우선·tick 우선·경계 처리)", "상태 · 신호 이름이 역할과 맞음 (msec 는 확인 필요 7번)"]}], "total": 94.5, "needs_check": ["1. typedef enum 을 수업에서 다뤘는지 정보윤이 확인 — 다뤘으면 D5 +10 (총점 96.5)", "2. 합성 로그에서 watch_control_unit 래치 0개(Synth 8-327 · LDCE 없음) 확인 — 코드 읽기로는 래치가 없어 보이나 이 판(merged_v4)을 합성해 보지 않음", "3. '분 일 ±1' 의 뜻: 지금은 분 전체(0~59)가 돈다(09+1→10). 사양 예시 '59+1→0' 과는 맞지만, 일의 자리만 도는 뜻(09+1→00)인지는 사양 문장만으로 정할 수 없음 — 팀 확인", "4. L/R 과 U/D 가 같은 클럭에 오면 지금 자리에 ±가 반영되고 자리도 이동한다(watch_control_unit.sv:59-63, 91-94). 사양에 규칙이 없음 — 검증 에이전트로 동작 확인 필요", "5. tick 과 버튼이 같은 클럭이면 버튼 입력이 버려진다(다음 클럭으로 미루지 않음, watch_datapath.v:127-137). 사양대로이나 실제 체감 여부는 검증 에이전트로 확인 필요", "6. (Top 경로, 감점 규칙 없음) sw_set 이 2단 FF 동기화 없이 핀에서 바로 FSM 으로 들어간다(stopwatch_watch.v:187). 01_course_rules 4장의 '스위치는 2단 FF 동기화가 정석'과 다름", "7. (Top 경로) sw_set 이 sw_mode · sw_timer 와 상관없이 들어가 스톱워치·타이머 화면에서 sw2=1 이면 시계 FSM 이 SET 상태에 머문다(stopwatch_watch.v:187). 버튼은 게이팅돼 시각은 안 바뀜. set_mode 를 쓰는 FND 점멸 쪽 영향은 정안성 담당 — 범위 밖 참고", "8. 출력 이름 msec 는 1/100초 값(0~99). 판서 표기를 따른 것으로 보여 감점 안 함", "9. 두 파일 머리 주석이 '시제품 설계'이다(watch_control_unit.sv:3, watch_datapath.v:3, stopwatch_watch.v:3). 이번 점수는 정보윤이 직접 쓴 초안이 아니라 이 시제품판을 평가한 것 — 과제(설계는 학생, AI 는 평가자) 제출용 세션으로 쓸지 정보윤이 정할 것"], "summary": "사양·동시 입력·경계값·리셋은 규칙대로 구현됨. 감점은 수업 형식 3건(합친 always, typedef enum, case default 없음) — 총 94.5. 단, 평가 대상이 시제품 설계이라 학생 초안 점수로 쓰기 전 확인 필요", "_file": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\scores\\design_session_1.json"}, {"type": "design", "session": 2, "date": "2026-10-21", "label": "2차", "targets": ["C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_control_unit.sv", "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_datapath.v"], "reference_only": ["C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\stopwatch_watch.v"], "criteria": [{"id": "D1", "name": "사양 일치", "weight": 30, "score": 100, "deductions": [], "checked": ["상태 4개 NORMAL·SET_HOUR·SET_MIN_10·SET_MIN_1 (watch_control_unit.sv:24)", "진입 = SET_MIN_1 (cursor 0, 분 일) (watch_control_unit.sv:48-49, 76)", "L 순환 SET_MIN_1→SET_MIN_10→SET_HOUR→SET_MIN_1 (watch_control_unit.sv:79-80, 68-69, 57-58)", "R 순환 반대 방향 SET_HOUR→SET_MIN_10→SET_MIN_1→SET_HOUR (watch_control_unit.sv:59-60, 70-71, 81-82)", "cursor 0 분±1 · 1 분±10 · 2 시±1 · 3 = NORMAL (watch_control_unit.sv:41, 47, 54, 65, 76 / watch_datapath.v:29-33)", "설정은 그 칸만 돌고 o_tick 을 내지 않음 = 올림·내림 없음 (watch_datapath.v:136-152)", "초·1/100초 설정 없음 (watch_datapath.v:46-48, 61-63)", "리셋 12:00:00.00, 내부 0~23 (watch_datapath.v:41, 56, 71, 84-86)", "100 Hz tick 항상 흐름 (watch_datapath.v:36, stopwatch_watch.v:226 w_tick_10ms = 시계 전용 tick)", "U+D 동시 규칙은 사양 '동시 입력 규칙' 항목이라 D3 에서만 감점(이중 감점 안 함)"]}, {"id": "D2", "name": "래치 · 다중 구동 없음", "weight": 15, "score": 90, "deductions": [{"rule": "case default 없음", "points": -10, "where": "watch_control_unit.sv:44-85", "why": "case (c_state) 에 default 가 없다. 첫 줄 기본값(40-43줄)이 출력 4개 모두에 있고 2비트 4가지 값을 다 다뤄 래치가 생길 여지는 없어 보이지만, 감점 규칙은 default 유무 자체를 본다"}], "checked": ["조합 always 첫 줄 기본값 n_state·o_wt_cursor·o_wt_up·o_wt_down 4개 모두 있음 (watch_control_unit.sv:40-43)", "watch_datapath 는 조합 always 없이 assign 만 사용 (watch_datapath.v:29-36, 119-120)", "같은 신호를 두 always 에서 구동하는 곳 없음 (counter_reg·o_tick 은 watch_datapath.v:122 always 하나에서만)"]}, {"id": "D3", "name": "동시 입력 · 경계값 규칙", "weight": 20, "score": 85, "deductions": [{"rule": "동시 입력 규칙 코드로 보장 안 됨 (U+D)", "points": -15, "where": "watch_control_unit.sv:88-91", "why": "02_target_spec.md 는 'U 와 D 같은 클럭 → U'. 코드는 o_wt_up = U & ~D, o_wt_down = D & ~U 라 둘 다 0(무효). 머리 주석(9줄)에도 '무효'로 적혀 있어 의도된 변경으로 보이나, 평가 기준 문서(02)와 다르다 — 확인 필요 1번"}], "checked": ["sw2 내림 + 버튼 → NORMAL, 자리 이동·± 모두 무시: 각 SET 상태에서 i_set_sw2 == 0 을 먼저 검사(watch_control_unit.sv:55-56, 66-67, 77-78), ± 펄스는 i_set_sw2 == 1 일 때만(89)", "L+R 같은 클럭 → L: if / else if 순서 (watch_control_unit.sv:57-60, 68-71, 79-82) — 모듈 단위에서는 보장. Top 은 둘 다 버림(확인 필요 2번)", "tick + 설정 버튼 같은 클럭·같은 카운터 → tick 만 반영 (watch_datapath.v:127-137, 설정은 else 쪽 140-152)", "분 59+1→0 (141-142), 분 0-1→59 (147-148)", "분 십 55+10→5 (141-142), 0-10→50 (147-148)", "시 23+1→0, 0-1→23 (같은 식, TIMES = 24, watch_datapath.v:84)", "경계 계산: counter_reg + w_step 과 TIMES(32비트 parameter) 비교라 6비트 넘침 없음 — 코드 읽기로 계산, 이번 세션에서 시뮬 실행은 안 함"]}, {"id": "D4", "name": "클럭 · 리셋 규칙", "weight": 15, "score": 100, "deductions": [], "checked": ["두 모듈 모두 i_clk 하나만 클럭으로 사용, 카운터는 if (i_tick) enable (watch_datapath.v:122, 127)", "Top 에서 i_clk = clk(100 MHz), i_tick_10ms = 1클럭 펄스 w_tick_10ms (stopwatch_watch.v:43, 211, 224-226)", "비동기 positive 리셋 (watch_control_unit.sv:30-32, watch_datapath.v:122-125)", "리셋값 NORMAL (watch_control_unit.sv:32), 12:00:00.00 · o_tick 0 (watch_datapath.v:41, 56, 71, 86, 124-125)"]}, {"id": "D5", "name": "수업 규칙 · 가독성", "weight": 20, "score": 80, "deductions": [{"rule": "3블록 분리 안 함", "points": -10, "where": "watch_control_unit.sv:38-93", "why": "Next State CL 과 Output CL 이 always @(*) 하나에 합쳐져 있다(주석도 'next state / output CL'). 수업 기본은 분리형"}, {"rule": "안 배운 문법 1종", "points": -10, "where": "watch_control_unit.sv:24, 27", "why": "typedef enum logic (SystemVerilog 문법, 파일 확장자도 .sv). Lec_verilog/.md 일정상 SystemVerilog 는 Verilog 과목 뒤에 배운다 — 확인 필요 3번"}], "checked": ["두 파일 모두 1줄 `timescale 1ns / 1ps", "핵심 줄 주석 있음: 진입(49), 순환(58, 82), U+D 무효(88), tick 우선(128), 경계 돌기(138-139)", "포트 이름 i_/o_ + wt_ 접두어로 역할이 드러남, 상태 이름·CUR_* 상수가 FND 자리와 일치(25)", "$clog2 는 4일차 수업에서 배움 — 감점 없음"]}], "total": 91.5, "needs_check": ["1. U+D 동시 규칙: 02_target_spec.md(10/16 기준)는 'U 우선', 코드와 Top 은 '무효'(watch_control_unit.sv:9, 88-91 / stopwatch_watch.v:162-166, 10/18 팀 결정 주석). 팀 결정이 맞으면 02 를 고친 뒤 다시 매기면 D3 +15 → 총점 94.5", "2. L+R 동시 규칙(Top 경로, 이번 점수 밖): 모듈은 L 우선이지만 Top 의 w_btn_multi 가 두 버튼을 모두 버려 보드에서는 아무 일도 안 일어난다(stopwatch_watch.v:165-166, 173-174). 02 는 'L'. 1번과 같이 02 를 고칠지 정보윤이 정할 것", "3. typedef enum 을 수업에서 다뤘는지 정보윤 확인 — 다뤘으면 D5 +10 → 총점 +2.0", "4. 합성 로그로 watch_control_unit 래치 0개(Synth 8-327 · LDCE 없음) 확인 — 이번 세션은 코드 읽기만 했고 이 제출판을 합성하지 않음", "5. (규칙 없음, 검증 에이전트로 확인 필요) 모듈 단위에서 L/R 과 U/D 가 같은 클럭이면 지금 자리에 ± 가 들어가고 자리도 옮겨진다(watch_control_unit.sv:57-60, 89-91). Top 의 w_btn_multi 로 보드에서는 막혀 있음", "6. (검증 에이전트로 확인 필요) tick 과 버튼이 같은 클럭이면 버튼은 버려지고 다음 클럭으로 미뤄지지 않는다(watch_datapath.v:127-137). 사양대로이나 실제 시뮬로 확인 필요", "7. (Top 경로, 감점 규칙 없음) set_sw2 가 2단 FF 동기화 없이 핀에서 바로 FSM 으로 들어간다(stopwatch_watch.v:217). 01_course_rules 4장 '스위치는 2단 FF 동기화가 정석'과 다름", "8. (Top 경로) set_sw2 가 화면 선택과 상관없이 들어가 스톱워치·타이머 화면에서도 sw2 = 1 이면 시계 FSM 이 SET 상태에 머문다(stopwatch_watch.v:217). 버튼은 w_sel_wt 로 게이팅(173-176), FND 점멸은 i_sel_wt 로 막혀(295) 화면·시각 영향은 없어 보임", "9. 출력 이름 o_wt_msec 는 1/100초 값(0~99). 판서 표기를 따른 것으로 보여 감점 안 함", "10. 세션 1(94.5) 대상은 design_prototype\\merged_v4 판이라 같은 대상의 점수 변화가 아니다. 컨트롤 유닛 기준 바뀐 점은 포트 이름(i_/o_), set_mode 출력 삭제, U+D 규칙(U 우선 → 무효) — −3.0 은 U+D 규칙 변경에서 나옴", "11. Lec_verilog/.md 기록상 이 두 모듈은 10/15 시제품 설계에서 이어진 판이고, 세션 1 대상의 머리 주석 '시제품 설계'이 제출판에서는 빠져 있다(watch_control_unit.sv:3). 과제(설계는 학생, AI 는 평가자) 점수로 쓸 때 이 출처를 어떻게 밝힐지 정보윤이 정할 것"], "summary": "사양·경계값·클럭·리셋은 규칙대로. 감점은 U+D 동시 입력이 02 사양(U 우선)과 다른 무효 처리(-15), case default 없음(-10), 합친 always(-10), typedef enum(-10) — 총 91.5. U+D 는 10/18 팀 결정이라 02 갱신 여부 확인 필요", "_file": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\scores\\design_session_2.json"}], "verif": [{"type": "verification", "session": 1, "date": "2026-10-16", "label": "1차 (시험)", "targets": ["C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_control_unit.sv", "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\design_prototype\\merged_v4\\src\\watch_datapath.v"], "note": "평가 대상은 학생 초안이 아니라 시제품 설계(두 파일 3번째 줄 주석). 도구 시험 실행.", "scenarios": [{"id": "E1", "desc": "리셋값 + 리셋 해제 직후 U·D·L·R (sw2=0)", "expected": "12:00:00.00, NORMAL, cursor 3, 버튼 무시", "result": "PASS", "class": null}, {"id": "E2", "desc": "sw2=1 인 채 리셋 해제, 해제 직후 첫 클럭 U, 다음 U", "expected": "해제 뒤 SET_MIN_1·cursor 0, 두 번째 U 는 +1 (첫 클럭 U 는 사양에 규칙 없어 관찰)", "result": "PASS", "class": null, "observed": "첫 클럭 U 는 무시됨(그 클럭 c_state = NORMAL). 사양 불명확 항목이며 Top 에서는 디바운스 2 ms 때문에 생기지 않음(E15a)"}, {"id": "E3", "desc": "분 일 0-1, 59+1", "expected": "12:59, 12:00 (시 그대로)", "result": "PASS", "class": null}, {"id": "E4", "desc": "분 일 09+1, 10-1", "expected": "10, 09 (사양 예시 '분 59 +1 -> 0' = 분 카운터 0~59 전체가 돈다)", "result": "PASS", "class": null}, {"id": "E5", "desc": "분 십 0-10, 55+10, 05-10", "expected": "50, 05, 55 (시 그대로)", "result": "PASS", "class": null}, {"id": "E6", "desc": "시 23+1, 0-1", "expected": "00, 23 (분 그대로)", "result": "PASS", "class": null}, {"id": "E7", "desc": "자정 23:59:59.99 + tick", "expected": "00:00:00.00", "result": "PASS", "class": null}, {"id": "E8", "desc": "U+D 같은 클럭 (SET_MIN_1, SET_HOUR)", "expected": "U: o_up 1·o_down 0, 12:01, 13:01", "result": "PASS", "class": null}, {"id": "E9", "desc": "L 3번·R 3번 순환 + L+R 같은 클럭 (세 상태)", "expected": "cursor 1,2,0 / 2,1,0 / L 우선 1,2,0, 시각 그대로", "result": "PASS", "class": null}, {"id": "E10", "desc": "sw2 내림 + 버튼 같은 클럭 (세 상태) + 재진입", "expected": "NORMAL·cursor 3·시각 그대로, 다시 올리면 SET_MIN_1", "result": "PASS", "class": null}, {"id": "E11", "desc": "tick(자리 넘김) + 버튼 같은 클럭·같은 카운터: 분 일 D, 분 십 U, 시 U", "expected": "tick 만: 12:06, 12:07, 13:00", "result": "PASS", "class": null}, {"id": "E12", "desc": "1/100초 tick + U 같은 클럭(다른 카운터), 설정 버튼이 초·1/100초 안 건드림, 설정 중 흐름", "expected": "msec 11·min 1 둘 다 반영, sec·msec 그대로, 100 tick 뒤 sec 1", "result": "PASS", "class": null}, {"id": "E13", "desc": "설정 중(SET_HOUR, 15:07) 클럭 에지 사이 비동기 리셋, sw2=1 인 채 해제", "expected": "다음 posedge 전에 NORMAL·12:00:00.00, 해제 뒤 SET_MIN_1", "result": "PASS", "class": null}, {"id": "E14", "desc": "자리 이동(L/R) + U/D 같은 클럭", "expected": "자리는 L/R 대로, 한 칸에 한 번만 반영, 올림 없음 (어느 칸인지는 사양에 규칙 없어 관찰)", "result": "PASS", "class": null, "observed": "이동 전(현재) 자리에 반영 후 자리 이동: SET_MIN_1 12:05 L+U -> 12:06·cursor 1, SET_HOUR R+D -> 11시·cursor 1. 사양 불명확"}, {"id": "E15", "desc": "Top 실제 파라미터: 리셋 해제 직후 U, U+D 동시, L+R 동시, tick 주기", "expected": "디바운스 약 2 ms 뒤 펄스 1개 12:01, U 우선 12:02, L 우선 cursor 1, tick 10,000,000 ns", "result": "PASS", "class": null}, {"id": "M", "desc": "TB 자체 점검: 세션 폴더의 설계 사본에 bug 8개를 하나씩 넣고 같은 TB 실행 (점수 산정과 무관)", "expected": "8개 모두 FAIL 로 잡힘", "result": "PASS", "class": null, "observed": "M1 버튼 우선→E11, M2 D 우선→E8, M3 R 우선→E9, M4 sw2 게이팅 없음→E10, M5 일의 자리만 돌기→E3·E4, M6 내림 돌기 없음→E3·E5·E6·E7·E11, M7 진입 SET_HOUR→13개, M8 동기 리셋→E13"}], "sim": {"tool": "xsim 2022.2", "tb": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\tb_e_unit.v", "tb_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\tb_e15_top.v", "total_mismatch": 0, "total_mismatch_top": 0, "log": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\unit_run.log", "log_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\top_run.log", "log_mutation": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_1\\mutation.log", "sim_time": "단위 244,120 ns ($finish), Top 30,001,000 ns (실행 약 5초)"}, "criteria": [{"id": "V1", "name": "시나리오 커버리지", "weight": 25, "score": 100, "deductions": [], "evidence": "unit_run.log 'COV transitions = 1111111111111001', 'COV missing transitions = 0 (of 14 listed)': 상태 4개 모두, 비자기 전이 10개(NORMAL->SET_MIN_1, L 3개, R 3개, 각 상태->NORMAL 3개) + 유지 4개 지나감. 금지 전이 NORMAL->SET_HOUR/SET_MIN_10 은 0. 설정 중 비동기 리셋(SET_HOUR->NORMAL) 은 E13 에서 따로 확인"}, {"id": "V2", "name": "경계값", "weight": 20, "score": 100, "deductions": [], "evidence": "D3 경계값 6개 모두 TB 비교: 분 0-1 · 59+1 (E3), 분 십 55+10 · 0-10 (E5), 시 23+1 · 0-1 (E6). 추가로 자정(E7), 05-10(E5), 09+1(E4)"}, {"id": "V3", "name": "엣지 케이스 · 동시 입력", "weight": 25, "score": 100, "deductions": [], "evidence": "E1~E15 15개 모두 실행, FAIL 0, 실행 못 한 것 0"}, {"id": "V4", "name": "실제 시간 조건", "weight": 15, "score": 100, "deductions": [], "evidence": "E15 가 Top 을 실제 파라미터(100 MHz, tick_gen F_COUNT 1,000,000, 4 kHz 디바운스)로 실행: tick 주기 10,000,000 ns, 누름->펄스 2,000,005 ns. 단위 TB 는 파라미터를 바꾸지 않고 tick 입력만 TB 가 넣음"}, {"id": "V5", "name": "자동 판정", "weight": 15, "score": 100, "deductions": [], "evidence": "모든 시나리오가 if (x !== exp) 비교 + err 카운트, 두 TB 모두 'TOTAL MISMATCH = 0' 출력. E2 첫 클럭·E14 반영 자리는 사양 규칙이 없어 INFO 로 출력하되 같은 시나리오 안에 사양 근거 자동 비교가 있음"}], "total": 100.0, "needs_check": ["1. E14 (사양 불명확): L/R 과 U/D 가 같은 클럭이면 이동 전 자리에 반영되고 자리가 옮겨간다(watch_control_unit.sv:91-94 의 o_up/o_down 이 c_state 기준 cursor(56, 67, 78줄)와 같은 클럭에 데이터패스로 감). 02_target_spec 에 규칙 추가 여부를 팀이 정할 것", "2. E2 (사양 불명확): sw2=1 인 채 리셋을 풀면 첫 클럭은 NORMAL 이라 그 클럭의 버튼은 무시된다(watch_control_unit.sv:46-53, 91). Top 에서는 디바운스 2 ms 때문에 실제로 생기지 않음(E15a)", "3. E11: tick 과 같은 클럭에 온 버튼은 다음 클럭으로 미뤄지지 않고 버려진다(watch_datapath.v:127-137). 사양 문장('tick 만 반영')대로. 분 카운터에 tick 이 오는 것은 1분에 1클럭(10 ns)뿐이라 체감 빈도는 낮다(계산, 측정 아님)", "4. 자리 넘김이 리플 방식이라 59->00 때 1/100초·초·분·시가 1클럭씩 늦게 바뀐다(watch_datapath.v:129-131 o_tick 레지스터). 이번 TB 는 4클럭 기다린 뒤 비교해 이 30 ns 중간값을 판정하지 않았다 — 사양에 규칙 없음, 표시상 영향은 확인 안 함", "5. 이번 점수는 시제품 설계 대상이다. 학생 초안으로 세션을 다시 돌려야 과제(설계는 학생, AI 는 평가자) 기준 점수가 된다"], "summary": "엣지 케이스 15개(단위 14 + Top 실제 파라미터 1) xsim 실행 FAIL 0, 상태·전이 커버리지 100%, bug 사본 8개 모두 검출 — 총 100.0. 사양 불명확 2건(L/R+U/D 동시, 리셋 해제 첫 클럭 버튼)은 관찰 기록", "_file": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\scores\\verif_session_1.json"}, {"type": "verification", "session": 2, "date": "2026-10-21", "label": "2차", "targets": ["C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_control_unit.sv", "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\watch_datapath.v"], "reference_only": ["C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\submit_1019\\정안성_정보윤_이종혁_Stopwatch_Watch_Timer\\3_Code\\src\\stopwatch_watch.v (E14 Top 실행용, 점수 밖)"], "note": "원본 경로에 한글이 있어 src 21개를 세션 폴더 src_copy 에 복사해 실행(md5 21개 일치, src_copy\\md5_original.txt). 설계 파일은 수정하지 않음. 설계 평가 세션 2 와 같은 대상.", "scenarios": [{"id": "E1", "desc": "리셋값 + 리셋 해제와 같은 순간 U, 이어서 D·L·R·4개 동시 (sw2=0)", "expected": "12:00:00.00, NORMAL, cursor 3, up/down 펄스 0 (02:21-23)", "result": "PASS", "class": null}, {"id": "E2", "desc": "sw2=1 인 채 리셋 해제, 해제 직후 첫 클럭 U, 다음 U", "expected": "해제 1클럭 뒤 SET_MIN_1·cursor 0, 다음 U 는 +1 (02:22). 첫 클럭 U 는 02 에 규칙 없어 INFO", "result": "PASS", "class": null, "observed": "첫 클럭 U 는 무시됨(min 0, 그 에지의 c_state = NORMAL). Top 에서는 디바운스 2 ms 때문에 생기지 않음(E14a)"}, {"id": "E3", "desc": "설정 중(SET_HOUR, 15:07:00.05) negedge+2 ns 에 비동기 리셋, sw2=1 인 채 해제", "expected": "다음 posedge 전에 NORMAL·cursor 3·12:00:00.00, 해제 뒤 SET_MIN_1 (01:9, 02:21-22)", "result": "PASS", "class": null}, {"id": "E4", "desc": "분 일 경계: 00-1, 59+1, 09+1, 10-1", "expected": "59, 00, 10, 09 (시 12 그대로, 02:25)", "result": "PASS", "class": null}, {"id": "E5", "desc": "분 십 경계: 00-10, 50+10, 55+10, 05-10", "expected": "50, 00, 05, 55 (시 그대로, 02:25 '그 칸만 돈다')", "result": "PASS", "class": null}, {"id": "E6", "desc": "시 경계: 12 +11, 23+1, 0-1", "expected": "23, 00, 23 (분 55 그대로, 02:21·25)", "result": "PASS", "class": null}, {"id": "E7", "desc": "자정: NORMAL 23:59:00.00 에서 tick 5,999개 → 23:59:59.99, tick 1개 더", "expected": "00:00:00.00 (02:21)", "result": "PASS", "class": null, "observed": "리플: +1클럭 23:59:59.00, +2 23:59:00.00, +3 23:00:00.00, +4 00:00:00.00 (중간값 3클럭 = 30 ns, 02 에 규칙 없음)"}, {"id": "E8", "desc": "U+D 같은 클럭 (모듈 단독): SET_MIN_1 · SET_MIN_10 · SET_HOUR", "expected": "02:27 'U 와 D 같은 클럭 → U': up=1 down=0, 분 +1 / 분 +10 / 시 +1", "result": "FAIL", "class": "사양 불명확", "observed": "세 상태 모두 up=0 down=0, 시각 그대로 = 무효. 코드 watch_control_unit.sv:9 주석 'U + D 동시: 무효', 88-91줄 o_wt_up = U & ~D, o_wt_down = D & ~U (10/18 팀 결정). Top 에서도 무효(E14b, w_btn_multi). 02 사양판(U 우선)으로 바꾼 사본 M2 는 E8 포함 TOTAL MISMATCH 0 → 실패 원인은 이 규칙 하나뿐"}, {"id": "E9", "desc": "L 3번 · R 3번 순환 + L+R 같은 클럭 3번 (세 상태)", "expected": "cursor 1,2,0 / 2,1,0 / L 우선 1,2,0, 시각 그대로 (02:24, 02:27)", "result": "PASS", "class": null}, {"id": "E10", "desc": "sw2 내림 + 버튼 같은 클럭 6가지(세 상태 × U/D, 세 상태 × L/R) + 매번 재진입", "expected": "NORMAL·cursor 3·up/down 0·시각 그대로, 다시 올리면 SET_MIN_1 (02:27, 02:22)", "result": "PASS", "class": null}, {"id": "E11", "desc": "tick(자리 넘김) + 버튼 같은 클럭 · 같은 카운터: (a) 분 cursor 0 U (b) 분 cursor 1 D(-10) (c) 시 cursor 2 U. TB 가 w_tick_min/w_tick_hour = 1 과 up/down = 1 이 같은 클럭임을 먼저 확인", "expected": "tick 만 반영, 버튼은 다음 클럭으로 미뤄지지 않음 (02:28): 분 0→1, 1→2, 시 0→1", "result": "PASS", "class": null, "observed": "(a) 분 0→1 (+2 아님) (b) 분 1→2 (51/52 아님) (c) 시 0→1 (+2 아님), 10클럭 뒤에도 그대로 = 버튼은 버려지고 미뤄지지 않음 (watch_datapath.v:127-137)"}, {"id": "E12", "desc": "다른 카운터 tick(10 ms) + U 같은 클럭, 세 자리 U/D 가 초·1/100초를 안 건드림, 설정 중 tick 100개", "expected": "1/100초 +1 과 분 +1 둘 다, 초·1/100초 그대로, 초 +1 (02:28 같은 카운터일 때만 tick 우선, 02:26, 02:21)", "result": "PASS", "class": null}, {"id": "E13", "desc": "자리 이동 + ± 같은 클럭 (모듈 단독): SET_MIN_1 L+U, SET_MIN_10 R+U, SET_HOUR R+D", "expected": "02 에 규칙 없음. 해석(02:23-25): ±는 누른 순간의 자리(이동 전)에 한 번, 자리는 L/R 대로 → cursor 1·분+1 / cursor 0·분+10 / cursor 1·시-1", "result": "PASS", "class": null, "observed": "1:01→1:02 cursor 1 / 1:02→1:12 cursor 0 / 1:12→0:12 cursor 1 = 이동 전 자리에 반영 후 이동. Top 에서는 w_btn_multi 가 두 버튼을 다 버림(stopwatch_watch.v:165-166, 코드 읽기 — 시뮬 안 함)"}, {"id": "E14", "desc": "Top 실제 파라미터(100 MHz, 10 ms tick, 4 kHz 디바운서 8칸): (a) 리셋 해제와 같은 순간 U (d) L→cursor 1, U→분+10 (e) sw2 내림 뒤 U 무시 (f) tick 주기 · 초.1/100초 = tick 수. (b) U+D · (c) L+R 동시 누름은 Top w_btn_multi 동작이라 INFO", "expected": "(a) 펄스 1개, 12:01, 누름→펄스 1.75~2.25 ms (d) cursor 1, 12:11 (e) NORMAL, 분 그대로 (f) 10,000,000 ns", "result": "PASS", "class": null, "observed": "(a) 누름 100 ns → wt_up 2,000,105 ns (지연 2,000,005 ns) (b) w_btn_multi 1펄스, wt_up 0 · wt_down 0, 12:01 그대로 (02 는 U) (c) w_btn_multi 1펄스, cursor 0 그대로 (02 는 L) (f) 10,000,105 → 20,000,105 ns, 주기 10,000,000 ns. 시뮬 36,000,160 ns, 실행 11초"}, {"id": "M", "desc": "TB 자체 점검 (점수와 무관): 세션 폴더 사본에 한 줄 bug 를 하나씩 넣고 단위 TB 재실행", "expected": "bug 8개 모두 검출, 02 사양판(M2)은 통과", "result": "PASS", "class": null, "observed": "M1 버튼이 tick 이김→E11, M3 R 우선→E9, M4 sw2 게이팅 없음→E10, M5 내림 돌기 없음→E4·E5·E6·E7·E11, M6 진입 SET_HOUR→12개, M7 컨트롤 유닛 동기 리셋→E3, M8 올림 경계 > →E4·E5·E6, M9 시 리셋값 0→E1~E7 (각 사본에서 E8 은 원래대로 FAIL). M2(U 우선 = 02 사양판) → TOTAL MISMATCH 0"}], "sim": {"tool": "xsim 2022.2 (xelab -debug typical)", "tb": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\tb_e_unit.v", "tb_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\tb_e14_top.v", "total_mismatch": 3, "total_mismatch_note": "3 = E8 U+D 세 상태 (사양 불명확). 나머지 0", "total_mismatch_top": 0, "log": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\unit_run.log", "log_top": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\top_run.log", "log_mutation": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\sessions\\verif_2\\mutation.log", "sim_time": "단위 485,260 ns ($finish), Top 36,000,160 ns (실행 약 11초)"}, "criteria": [{"id": "V1", "name": "시나리오 커버리지", "weight": 25, "score": 100, "deductions": [], "evidence": "unit_run.log 'COV transitions = 1111111111111001', 'COV missing transitions = 0 (of 14 listed)': 상태 4개, 비자기 전이 10개(NORMAL->SET_MIN_1, L 3, R 3, 각 SET->NORMAL 3) + 유지 4개 모두 지나감. 금지 전이 NORMAL->SET_HOUR/SET_MIN_10 은 0. 설정 중 비동기 리셋(SET_HOUR->NORMAL)은 E3 에서 따로 확인"}, {"id": "V2", "name": "경계값", "weight": 20, "score": 100, "deductions": [], "evidence": "D3 경계값 6개 모두 TB 자동 비교: 분 0-1 · 59+1 (E4), 분 십 55+10 · 0-10 (E5), 시 23+1 · 0-1 (E6). 그 밖에 자정 23:59:59.99→00:00:00.00 (E7), 09+1 · 10-1 (E4), 50+10 · 05-10 (E5)"}, {"id": "V3", "name": "엣지 케이스 · 동시 입력", "weight": 25, "score": 80, "deductions": [{"rule": "FAIL 1개당 -20", "points": -20, "where": "E8 (tb_e_unit.v:244-270 / watch_control_unit.sv:9, 88-91)", "why": "U+D 같은 클럭에서 02:27 'U' 기대와 달리 무효(up 0 · down 0). 분류 = 사양 불명확(10/18 팀 결정이 02 에 반영 안 됨). 감점 규칙은 FAIL 수만 보므로 분류와 무관하게 적용"}], "evidence": "E1~E14 14개 모두 실행(실행 못 한 것 0), FAIL 1(E8), 나머지 13 PASS"}, {"id": "V4", "name": "실제 시간 조건", "weight": 15, "score": 100, "deductions": [], "evidence": "E14 가 Top 을 실제 파라미터로 실행: tick 주기 10,000,000 ns, 누름→펄스 2,000,005 ns. 단위 TB 는 파라미터를 바꾸지 않고 tick 입력만 TB 가 넣음"}, {"id": "V5", "name": "자동 판정", "weight": 15, "score": 100, "deductions": [], "evidence": "E1~E14 모두 if (x !== exp) + err 카운트, 두 TB 모두 'TOTAL MISMATCH = n' 출력. 규칙 없는 부분(E2 첫 클럭, E8 실제 동작, E13 반영 자리, E14b·c Top 동시 누름)은 INFO/OBS 로 출력하되 각 시나리오에 사양 근거 자동 비교가 있음"}], "total": 95.0, "needs_check": ["1. E8 U+D (사양 불명확): 02_target_spec.md:27 은 'U', 코드는 '무효'(watch_control_unit.sv:9, 88-91, 10/18 팀 결정). 시뮬로 무효 확인(세 상태 모두 up 0 · down 0 · 시각 그대로, Top 도 같음). 팀 결정이 맞으면 02 를 고친 뒤 E8 기대값을 '무효'로 바꿔(사양 근거 생김) 다시 매기면 V3 100 → 총점 100.0", "2. L+R 동시 (Top 경로, 점수 밖): 모듈 단독은 02 대로 L 우선(E9 PASS). Top 은 w_btn_multi 가 둘 다 버려 cursor 그대로(E14c). 1번과 같이 02 를 고칠지 정보윤이 정할 것", "3. E13 L/R + U/D 같은 클럭 (02 에 규칙 없음): 모듈 단독에서는 이동 전 자리에 ± 가 들어가고 자리도 옮겨진다(1:01→1:02 cursor 1 등). Top 에서는 w_btn_multi 로 막혀 보드에서는 생기지 않는다(코드 읽기, 시뮬 안 함). 02 에 규칙을 넣을지 결정 필요", "4. E11 tick+버튼 같은 클럭: 버튼은 버려지고 미뤄지지 않는다(분 0→1, 1→2, 시 0→1, 10클럭 뒤에도 그대로). 02:28 '그때는 tick 만 반영' 대로. 분 카운터에 tick 이 들어오는 건 1분에 1클럭(10 ns)이라 버튼 펄스와 겹칠 확률은 매우 낮다(계산, 측정 아님)", "5. E2 리셋 해제 첫 클럭 버튼: sw2=1 인 채 리셋을 풀면 첫 클럭은 NORMAL 이라 그 클럭 버튼은 무시된다. 02 에 규칙 없음. Top 에서는 디바운스 2 ms 뒤에야 펄스가 나와 생기지 않음(E14a 2,000,105 ns 에 반영)", "6. E7 자리 넘김 리플: 23:59:59.99 → 00:00:00.00 사이에 23:59:59.00 · 23:59:00.00 · 23:00:00.00 이 1클럭(10 ns)씩 보인다(watch_datapath.v:129-131 o_tick 레지스터). 02 에 규칙 없음, FND 표시 영향은 확인 안 함", "7. 이번에 시뮬하지 않은 Top 경로: set_sw2 동기화 없음(설계 평가 확인 필요 7), 스톱워치·타이머 화면에서 sw2=1 일 때 시계 FSM 이 SET 에 머무는 것(설계 평가 확인 필요 8)"], "summary": "엣지 케이스 14개(단위 13 + Top 실제 파라미터 1) xsim 실행, FAIL 1(E8 U+D = 사양 불명확, 코드는 10/18 팀 결정대로 무효), 상태·전이 커버리지 100%, 경계값 6개 모두 통과, bug 사본 8개 모두 검출 — 총 95.0. 02 를 '무효'로 고치면 100.0", "_file": "C:\\Users\\LG\\Developer\\Lec_verilog\\Mini_Project_watch\\ai_eval\\scores\\verif_session_2.json"}], "generated": "2026-10-21 16:10"};
+const C = 2 * Math.PI * 50;
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => (typeof n === "number" ? (Number.isInteger(n) ? n : n.toFixed(1)) : "–");
+const $ = id => document.getElementById(id);
+
+const state = { tab: "design", pick: { design: null, verif: null } };
+try { const t = localStorage.getItem("dash-tab"); if (t === "design" || t === "verif") state.tab = t; } catch (e) {}
+if (location.hash === "#verif" || location.hash === "#design") state.tab = location.hash.slice(1);
+
+function sessions(tab) { return tab === "design" ? DATA.design : DATA.verif; }
+
+function render() {
+  const tab = state.tab, list = sessions(tab), P = DATA.profile;
+  document.body.dataset.tab = tab;
+  document.querySelectorAll("[data-go]").forEach(b => {
+    const on = b.dataset.go === tab;
+    if (b.getAttribute("role") === "tab") b.setAttribute("aria-selected", on); else b.setAttribute("aria-current", on);
+  });
+
+  $("sub").textContent = P.project + " · " + P.board;
+  $("who").textContent = P.name;
+  $("role").textContent = P.role;
+  $("roleDesc").textContent = P.role_desc;
+
+  // 시험 세션 경고
+  const all = DATA.design.concat(DATA.verif);
+  const trial = all.filter(s => /시험/.test(s.label || "") || /시제품 설계/.test((s.note || "") + (s.summary || "")));
+  $("banner").innerHTML = trial.length
+    ? `<div class="banner"><b>시험 실행 포함</b> — ${trial.map(s => esc((s.type === "design" ? "설계 " : "검증 ") + (s.label || s.session + "차"))).join(", ")} 는 학생 초안이 아니라 시제품 설계을 평가한 것. 과제 점수에 넣지 않는다.</div>`
+    : "";
+
+  // 평균 점수
+  const scored = list.filter(s => typeof s.total === "number");
+  const avg = scored.length ? scored.reduce((a, s) => a + s.total, 0) / scored.length : null;
+  $("avg").textContent = avg === null ? "–" : (Math.round(avg * 10) / 10).toString().replace(/\.0$/, "");
+  $("arc").setAttribute("stroke-dasharray", `${avg === null ? 0 : (avg / 100) * C} ${C}`);
+  $("scoreTitle").textContent = tab === "design" ? "설계 평가 평균" : "검증 평가 평균";
+  $("scoreNote").textContent = `세션 ${scored.length}개 평균 (최소 ${P.sessions_required}개)`;
+  $("scoreCap").textContent = tab === "design" ? "· hw-design-evaluator" : "· hw-verification-evaluator";
+
+  // 세션 기록
+  let pick = state.pick[tab];
+  if (pick === null || !list.some(s => s.session === pick)) pick = list.length ? list[list.length - 1].session : null;
+  state.pick[tab] = pick;
+  const slots = Math.max(P.sessions_required, list.length);
+  let h = "";
+  for (let i = 0; i < slots; i++) {
+    const s = list[i];
+    if (s) {
+      h += `<button type="button" data-sess="${s.session}" aria-pressed="${s.session === pick}">
+        <span class="t">${esc(s.label || s.session + "차")}</span><span class="v">${fmt(s.total)}</span>
+        <span class="t">${esc(s.date || "")}</span></button>`;
+    } else {
+      h += `<button type="button" disabled><span class="t">${i + 1}차</span><span class="v">–</span><span class="t">대기</span></button>`;
+    }
+  }
+  $("hist").innerHTML = h;
+  $("hist").querySelectorAll("[data-sess]").forEach(b => b.onclick = () => { state.pick[tab] = +b.dataset.sess; render(); });
+
+  const cur = list.find(s => s.session === pick);
+  $("critSess").textContent = cur ? `${cur.label || cur.session + "차"} 세션` : "세션 없음";
+
+  // 기준별 막대
+  const ids = tab === "design" ? ["D1","D2","D3","D4","D5"] : ["V1","V2","V3","V4","V5"];
+  $("crit").innerHTML = ids.map(id => {
+    const r = DATA.rubric[id] || {};
+    const c = cur && (cur.criteria || []).find(x => x.id === id);
+    const sc = c ? c.score : null;
+    return `<div>
+      <div class="top"><span>${esc(id)}. ${esc(c ? c.name : r.name || "")} <span class="w">· ${esc(c ? c.weight + " %" : r.weight || "")}</span></span>
+        <span class="pct">${sc === null ? "–" : sc + "%"}</span></div>
+      <div class="bar"><i style="width:${sc === null ? 0 : sc}%"></i></div>
+      <p class="basis">근거: ${esc(r.basis || "rubric.md 에 없음")}</p></div>`;
+  }).join("");
+
+  // 감점 내역
+  const ded = cur ? (cur.criteria || []).flatMap(c => (c.deductions || []).map(d => ({ id: c.id, ...d }))) : [];
+  $("ded").innerHTML = !cur ? `<p class="empty">세션 없음</p>`
+    : ded.length ? `<table><thead><tr><th>기준</th><th>규칙 · 이유</th><th>위치</th><th>감점</th></tr></thead><tbody>${
+        ded.map(d => `<tr><td class="id">${esc(d.id)}</td><td>${esc(d.rule)}<span class="obs" style="display:block;color:var(--muted);font-size:12.5px">${esc(d.why || "")}</span></td><td><code>${esc(d.where || "")}</code></td><td class="minus">${esc(d.points)}</td></tr>`).join("")
+      }</tbody></table>`
+    : `<p class="empty">감점 없음 — 모든 기준 100점</p>`;
+
+  // 확인 필요
+  const nc = cur ? (cur.needs_check || []) : [];
+  $("chk").innerHTML = nc.length ? `<ul class="chk">${nc.map(x => `<li>${esc(String(x).replace(/^\d+\.\s*/, ""))}</li>`).join("")}</ul>` : `<p class="empty">없음</p>`;
+
+  // 검증 탭: 시뮬레이션 결과
+  const sim = tab === "verif" && cur;
+  $("simCard").hidden = !sim;
+  if (sim) {
+    const sc = (cur.scenarios || []);
+    const main = sc.filter(s => s.id !== "M");
+    const pass = main.filter(s => s.result === "PASS").length;
+    const mm = cur.sim ? cur.sim.total_mismatch : null;
+    $("simCap").textContent = cur.sim && cur.sim.tool ? "· " + cur.sim.tool : "";
+    $("kpis").innerHTML = `
+      <div class="kpi"><span>엣지 케이스</span><b>${main.length}개</b></div>
+      <div class="kpi"><span>PASS</span><b class="${pass === main.length ? "ok" : "ng"}">${pass} / ${main.length}</b></div>
+      <div class="kpi"><span>TOTAL MISMATCH</span><b class="${mm === 0 ? "ok" : "ng"}">${mm ?? "–"}</b></div>
+      <div class="kpi"><span>시뮬 시간</span><b style="font-size:13px;font-weight:600">${esc(cur.sim ? cur.sim.sim_time || "" : "")}</b></div>`;
+    $("scen").innerHTML = sc.map(s => `<tr><td class="id">${esc(s.id === "M" ? "TB 점검" : s.id)}</td>
+      <td>${esc(s.desc)}${s.observed ? `<span class="obs">관찰: ${esc(s.observed)}</span>` : ""}</td>
+      <td>${esc(s.expected)}</td>
+      <td><span class="badge ${s.result === "PASS" ? "pass" : "fail"}">${esc(s.result)}</span></td></tr>`).join("");
+  }
+
+  $("foot").innerHTML = cur
+    ? `평가 대상: ${(cur.targets || []).map(t => `<code>${esc(t)}</code>`).join(" · ")}<br>결과 파일: <code>${esc(cur._file)}</code> · 생성 ${esc(DATA.generated)}`
+    : `생성 ${esc(DATA.generated)}`;
+}
+
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+  state.tab = b.dataset.go;
+  try { localStorage.setItem("dash-tab", state.tab); } catch (e) {}
+  render();
+}));
+$("themeBtn").addEventListener("click", () => {
+  const root = document.documentElement;
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+});
+render();
+</script>
+</body>
+</html>

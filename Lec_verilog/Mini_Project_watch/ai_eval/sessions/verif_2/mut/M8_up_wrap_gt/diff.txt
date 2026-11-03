@@ -1,0 +1,4 @@
+141c141
+<                     if (counter_reg + w_step >= TIMES) begin
+---
+>                     if (counter_reg + w_step > TIMES) begin

@@ -1,0 +1,345 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Oct 19 22:50:28 2026
+# Process ID: 40288
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_4
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_4/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/submit_1019/logs/tb_wt_4\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/snap/xsim_script.tcl
+# xsim {snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+==========================================================================================
+[   0.000 ms] [  BEGIN]        P1 {D,U,L,R}=0000  none  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press none at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[   0.000 ms] [  RESET]        P1                               rst 1 us pulse watch 12:00,  cursor NORMAL(3)
+[   0.002 ms] [     SW]        P1             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor NORMAL(3) -> SET_MIN_1(0)
+[   0.003 ms] [    BTN]        P1                   btn_L (o_btn @   2.001 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[  10.003 ms] [     OK] P1.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[  20.001 ms] [PRELOAD]        P1 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[  20.001 ms] [    BTN]        P1                none (nothing pressed, 10 ms) watch 12:30,  cursor SET_MIN_10(1)
+[  30.001 ms] [     OK]  P1.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[  30.001 ms] [     OK]  P1.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[  30.001 ms] [     OK] P1.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[  30.001 ms] [     OK] P1.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[  30.001 ms] [   PASS]        P1 END  checks=5 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[  30.001 ms] [  BEGIN]        P2 {D,U,L,R}=0001  R  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_1(0), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[  30.001 ms] [  RESET]        P2                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[  30.003 ms] [     SW]        P2             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[  30.004 ms] [    BTN]        P2                   btn_L (o_btn @  32.002 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[  40.004 ms] [     OK] P2.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[  50.002 ms] [PRELOAD]        P2 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[  50.002 ms] [    BTN]        P2             R same time (o_btn @  52.002 ms) watch 12:30,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[  60.002 ms] [     OK]  P2.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=0001 got=0001
+[  60.002 ms] [     OK]  P2.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[  60.002 ms] [     OK]  P2.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[  60.002 ms] [     OK] P2.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=0 got=cursor=0
+[  60.002 ms] [     OK] P2.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[  60.002 ms] [   PASS]        P2 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[  60.002 ms] [  BEGIN]        P3 {D,U,L,R}=0010  L  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press L at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_HOUR(2), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[  60.002 ms] [  RESET]        P3                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_1(0)
+[  60.004 ms] [     SW]        P3             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[  60.005 ms] [    BTN]        P3                   btn_L (o_btn @  62.003 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[  70.005 ms] [     OK] P3.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[  80.003 ms] [PRELOAD]        P3 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[  80.003 ms] [    BTN]        P3             L same time (o_btn @  82.003 ms) watch 12:30,  cursor SET_MIN_10(1) -> SET_HOUR(2)
+[  90.003 ms] [     OK]  P3.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=0010 got=0010
+[  90.003 ms] [     OK]  P3.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[  90.003 ms] [     OK]  P3.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[  90.003 ms] [     OK] P3.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=2 got=cursor=2
+[  90.003 ms] [     OK] P3.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[  90.003 ms] [   PASS]        P3 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[  90.003 ms] [  BEGIN]        P4 {D,U,L,R}=0011  R+L  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R+L at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[  90.003 ms] [  RESET]        P4                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_HOUR(2) -> SET_MIN_1(0)
+[  90.005 ms] [     SW]        P4             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[  90.006 ms] [    BTN]        P4                   btn_L (o_btn @  92.004 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 100.006 ms] [     OK] P4.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 110.004 ms] [PRELOAD]        P4 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 110.004 ms] [    BTN]        P4           R+L same time (o_btn @ 112.004 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 120.004 ms] [     OK]  P4.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=0011 got=0011
+[ 120.004 ms] [     OK]  P4.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 120.004 ms] [     OK]  P4.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 120.004 ms] [     OK] P4.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 120.004 ms] [     OK] P4.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 120.004 ms] [   PASS]        P4 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 120.004 ms] [  BEGIN]        P5 {D,U,L,R}=0100  U  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press U at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:40, o_wt_up x1, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 120.004 ms] [  RESET]        P5                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 120.006 ms] [     SW]        P5             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 120.007 ms] [    BTN]        P5                   btn_L (o_btn @ 122.005 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 130.007 ms] [     OK] P5.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 140.005 ms] [PRELOAD]        P5 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 140.005 ms] [    BTN]        P5             U same time (o_btn @ 142.005 ms) watch 12:30 -> 12:40,  cursor SET_MIN_10(1)
+[ 150.005 ms] [     OK]  P5.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=0100 got=0100
+[ 150.005 ms] [     OK]  P5.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=1 got=1
+[ 150.005 ms] [     OK]  P5.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 150.005 ms] [     OK] P5.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 150.005 ms] [     OK] P5.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:40 got=12:40
+[ 150.005 ms] [   PASS]        P5 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 150.005 ms] [  BEGIN]        P6 {D,U,L,R}=0101  R+U  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R+U at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 150.005 ms] [  RESET]        P6                               rst 1 us pulse watch 12:40 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 150.007 ms] [     SW]        P6             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 150.008 ms] [    BTN]        P6                   btn_L (o_btn @ 152.006 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 160.008 ms] [     OK] P6.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 170.006 ms] [PRELOAD]        P6 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 170.006 ms] [    BTN]        P6           R+U same time (o_btn @ 172.006 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 180.006 ms] [     OK]  P6.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=0101 got=0101
+[ 180.006 ms] [     OK]  P6.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 180.006 ms] [     OK]  P6.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 180.006 ms] [     OK] P6.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 180.006 ms] [     OK] P6.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 180.006 ms] [   PASS]        P6 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 180.006 ms] [  BEGIN]        P7 {D,U,L,R}=0110  L+U  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press L+U at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 180.006 ms] [  RESET]        P7                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 180.008 ms] [     SW]        P7             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 180.009 ms] [    BTN]        P7                   btn_L (o_btn @ 182.007 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 190.009 ms] [     OK] P7.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 200.007 ms] [PRELOAD]        P7 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 200.007 ms] [    BTN]        P7           L+U same time (o_btn @ 202.007 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 210.007 ms] [     OK]  P7.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=0110 got=0110
+[ 210.007 ms] [     OK]  P7.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 210.007 ms] [     OK]  P7.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 210.007 ms] [     OK] P7.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 210.007 ms] [     OK] P7.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 210.007 ms] [   PASS]        P7 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 210.007 ms] [  BEGIN]        P8 {D,U,L,R}=0111  R+L+U  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R+L+U at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 210.007 ms] [  RESET]        P8                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 210.009 ms] [     SW]        P8             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 210.010 ms] [    BTN]        P8                   btn_L (o_btn @ 212.008 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 220.010 ms] [     OK] P8.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 230.008 ms] [PRELOAD]        P8 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 230.008 ms] [    BTN]        P8         R+L+U same time (o_btn @ 232.008 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 240.008 ms] [     OK]  P8.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=0111 got=0111
+[ 240.008 ms] [     OK]  P8.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 240.008 ms] [     OK]  P8.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 240.008 ms] [     OK] P8.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 240.008 ms] [     OK] P8.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 240.008 ms] [   PASS]        P8 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 240.008 ms] [  BEGIN]        P9 {D,U,L,R}=1000  D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:20, o_wt_up x0, o_wt_down x1
+------------------------------------------------------------------------------------------
+[ 240.008 ms] [  RESET]        P9                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 240.010 ms] [     SW]        P9             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 240.011 ms] [    BTN]        P9                   btn_L (o_btn @ 242.009 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 250.011 ms] [     OK] P9.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 260.009 ms] [PRELOAD]        P9 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 260.009 ms] [    BTN]        P9             D same time (o_btn @ 262.009 ms) watch 12:30 -> 12:20,  cursor SET_MIN_10(1)
+[ 270.009 ms] [     OK]  P9.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1000 got=1000
+[ 270.009 ms] [     OK]  P9.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 270.009 ms] [     OK]  P9.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=1 got=1
+[ 270.009 ms] [     OK] P9.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 270.009 ms] [     OK] P9.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:20 got=12:20
+[ 270.009 ms] [   PASS]        P9 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 270.009 ms] [  BEGIN]       P10 {D,U,L,R}=1001  R+D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R+D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 270.009 ms] [  RESET]       P10                               rst 1 us pulse watch 12:20 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 270.011 ms] [     SW]       P10             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 270.012 ms] [    BTN]       P10                   btn_L (o_btn @ 272.010 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 280.012 ms] [     OK] P10.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 290.010 ms] [PRELOAD]       P10 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 290.011 ms] [    BTN]       P10           R+D same time (o_btn @ 292.010 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 300.011 ms] [     OK] P10.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1001 got=1001
+[ 300.011 ms] [     OK] P10.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 300.011 ms] [     OK] P10.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 300.011 ms] [     OK] P10.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 300.011 ms] [     OK] P10.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 300.011 ms] [   PASS]       P10 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 300.011 ms] [  BEGIN]       P11 {D,U,L,R}=1010  L+D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press L+D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 300.011 ms] [  RESET]       P11                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 300.013 ms] [     SW]       P11             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 300.014 ms] [    BTN]       P11                   btn_L (o_btn @ 302.012 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 310.014 ms] [     OK] P11.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 320.012 ms] [PRELOAD]       P11 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 320.012 ms] [    BTN]       P11           L+D same time (o_btn @ 322.012 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 330.012 ms] [     OK] P11.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1010 got=1010
+[ 330.012 ms] [     OK] P11.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 330.012 ms] [     OK] P11.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 330.012 ms] [     OK] P11.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 330.012 ms] [     OK] P11.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 330.012 ms] [   PASS]       P11 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 330.012 ms] [  BEGIN]       P12 {D,U,L,R}=1011  R+L+D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R+L+D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 330.012 ms] [  RESET]       P12                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 330.014 ms] [     SW]       P12             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 330.015 ms] [    BTN]       P12                   btn_L (o_btn @ 332.013 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 340.015 ms] [     OK] P12.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 350.013 ms] [PRELOAD]       P12 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 350.013 ms] [    BTN]       P12         R+L+D same time (o_btn @ 352.013 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 360.013 ms] [     OK] P12.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1011 got=1011
+[ 360.013 ms] [     OK] P12.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 360.013 ms] [     OK] P12.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 360.013 ms] [     OK] P12.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 360.013 ms] [     OK] P12.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 360.013 ms] [   PASS]       P12 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 360.013 ms] [  BEGIN]       P13 {D,U,L,R}=1100  U+D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press U+D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 360.013 ms] [  RESET]       P13                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 360.015 ms] [     SW]       P13             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 360.016 ms] [    BTN]       P13                   btn_L (o_btn @ 362.014 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 370.016 ms] [     OK] P13.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 380.014 ms] [PRELOAD]       P13 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 380.014 ms] [    BTN]       P13           U+D same time (o_btn @ 382.014 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 390.014 ms] [     OK] P13.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1100 got=1100
+[ 390.014 ms] [     OK] P13.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 390.014 ms] [     OK] P13.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 390.014 ms] [     OK] P13.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 390.014 ms] [     OK] P13.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 390.014 ms] [   PASS]       P13 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 390.014 ms] [  BEGIN]       P14 {D,U,L,R}=1101  R+U+D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R+U+D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 390.014 ms] [  RESET]       P14                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 390.016 ms] [     SW]       P14             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 390.017 ms] [    BTN]       P14                   btn_L (o_btn @ 392.015 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 400.017 ms] [     OK] P14.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 410.015 ms] [PRELOAD]       P14 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 410.015 ms] [    BTN]       P14         R+U+D same time (o_btn @ 412.015 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 420.015 ms] [     OK] P14.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1101 got=1101
+[ 420.015 ms] [     OK] P14.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 420.015 ms] [     OK] P14.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 420.015 ms] [     OK] P14.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 420.015 ms] [     OK] P14.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 420.015 ms] [   PASS]       P14 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 420.015 ms] [  BEGIN]       P15 {D,U,L,R}=1110  L+U+D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press L+U+D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 420.015 ms] [  RESET]       P15                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 420.017 ms] [     SW]       P15             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 420.018 ms] [    BTN]       P15                   btn_L (o_btn @ 422.016 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 430.018 ms] [     OK] P15.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 440.016 ms] [PRELOAD]       P15 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 440.016 ms] [    BTN]       P15         L+U+D same time (o_btn @ 442.016 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 450.016 ms] [     OK] P15.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1110 got=1110
+[ 450.016 ms] [     OK] P15.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 450.016 ms] [     OK] P15.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 450.016 ms] [     OK] P15.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 450.016 ms] [     OK] P15.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 450.016 ms] [   PASS]       P15 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[ 450.016 ms] [  BEGIN]       P16 {D,U,L,R}=1111  R+L+U+D  (start cursor 1)
+              plan   : reset -> sw2=1 -> cursor 1 -> PRELOAD 12:30 -> press R+L+U+D at the same instant
+              expect : cursor SET_MIN_10(1) -> SET_MIN_10(1), 12:30 -> 12:30, o_wt_up x0, o_wt_down x0
+------------------------------------------------------------------------------------------
+[ 450.016 ms] [  RESET]       P16                               rst 1 us pulse watch 12:30 -> 12:00,  cursor SET_MIN_10(1) -> SET_MIN_1(0)
+[ 450.018 ms] [     SW]       P16             sw4..0=00110 WATCH SET HH.MM 12h watch 12:00,  cursor SET_MIN_1(0)
+[ 450.019 ms] [    BTN]       P16                   btn_L (o_btn @ 452.017 ms) watch 12:00,  cursor SET_MIN_1(0) -> SET_MIN_10(1)
+[ 460.019 ms] [     OK] P16.BP.SETUP cursor at start position | exp=cursor=1 got=cursor=1
+[ 470.017 ms] [PRELOAD]       P16 *** TB writes the watch counters directly (NOT a button, NOT a DUT bug) ***
+              o_wt_hour/min/sec/msec  12:00:00.02 -> 12:30:00.00   (wave: values jump here with no U/D tick)
+[ 470.017 ms] [    BTN]       P16       R+L+U+D same time (o_btn @ 472.017 ms) watch 12:30,  cursor SET_MIN_10(1)
+[ 480.017 ms] [     OK] P16.BP.PV all pressed buttons give o_btn in the same clock | exp={D,U,L,R}=1111 got=1111
+[ 480.017 ms] [     OK] P16.BP.UP o_wt_up pulses (U alone; any 2+ buttons ignored) | exp=0 got=0
+[ 480.017 ms] [     OK] P16.BP.DN o_wt_down pulses (D alone; any 2+ buttons ignored) | exp=0 got=0
+[ 480.017 ms] [     OK] P16.BP.CUR cursor (2+ buttons in the same clock -> unchanged) | exp=cursor=1 got=cursor=1
+[ 480.017 ms] [     OK] P16.BP.VAL value (one button only; 2+ -> unchanged) | exp=12:30 got=12:30
+[ 480.017 ms] [   PASS]       P16 END  checks=6 fail=0 defect=0 (30.001 ms)
+
+==========================================================================================
+[TABLE] start cursor 1 (SET_MIN_10(1)), start 12:30.  {D,U,L,R} | pressed | exp cursor / HH:MM / up,down | got ... | result
+  P 1 0000 |    none | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P 2 0001 |       R |  SET_MIN_1(0) 12:30 up0,dn0 |  SET_MIN_1(0) 12:30 up0,dn0 | PASS
+  P 3 0010 |       L |   SET_HOUR(2) 12:30 up0,dn0 |   SET_HOUR(2) 12:30 up0,dn0 | PASS
+  P 4 0011 |     R+L | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P 5 0100 |       U | SET_MIN_10(1) 12:40 up1,dn0 | SET_MIN_10(1) 12:40 up1,dn0 | PASS
+  P 6 0101 |     R+U | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P 7 0110 |     L+U | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P 8 0111 |   R+L+U | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P 9 1000 |       D | SET_MIN_10(1) 12:20 up0,dn1 | SET_MIN_10(1) 12:20 up0,dn1 | PASS
+  P10 1001 |     R+D | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P11 1010 |     L+D | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P12 1011 |   R+L+D | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P13 1100 |     U+D | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P14 1101 |   R+U+D | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P15 1110 |   L+U+D | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+  P16 1111 | R+L+U+D | SET_MIN_10(1) 12:30 up0,dn0 | SET_MIN_10(1) 12:30 up0,dn0 | PASS
+==========================================================================================
+[ 480.017 ms] [SUMMARY] WT4 src=orig checks=95 fail=0 defect=0 limit=0 first_bad=- => PASS
+$finish called at time : 480016810 ns : File "C:/work/BEST_Stop_watch_project/verification_v2/tb/03_watch/tb_wt_4_btn_priority.sv" Line 257
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:06:21 . Memory (MB): peak = 239.750 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 13384 KB (Peak: 13384 KB), Simulation CPU Usage: 292655 ms
+INFO: [Common 17-206] Exiting xsim at Mon Oct 19 22:56:51 2026...

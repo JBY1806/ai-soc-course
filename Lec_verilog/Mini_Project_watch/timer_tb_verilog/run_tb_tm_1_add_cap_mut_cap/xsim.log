@@ -1,0 +1,36 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Oct 17 18:37:02 2026
+# Process ID: 55228
+# Current directory: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/timer_tb_verilog/run_tb_tm_1_add_cap_mut_cap
+# Command line: xsim.exe -log xsim.log -mode tcl -source {xsim.dir/tb_tm_1_add_cap_snap/xsim_script.tcl}
+# Log file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/timer_tb_verilog/run_tb_tm_1_add_cap_mut_cap/xsim.log
+# Journal file: C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/timer_tb_verilog/run_tb_tm_1_add_cap_mut_cap\xsim.jou
+# Running On: DESKTOP-5C3QTIF, OS: Windows, CPU Frequency: 2995 MHz, CPU Physical cores: 14, Host memory: 33885 MB
+#-----------------------------------------------------------
+source xsim.dir/tb_tm_1_add_cap_snap/xsim_script.tcl
+# xsim {tb_tm_1_add_cap_snap} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+[1 ns] P1 timer screen: disp_mode=1, LED led5 only, FND 00.00
+[5003010 ns] P2 L at 00:00 does not start
+[15006010 ns] P3 U x6 -> 01:00 (sec carry into min)
+[80009010 ns] P4 R +1 min, D +10 min, U +10 s
+[110012010 ns] P5 cap: D x5 -> 50:00, R x9 -> 59:00, U x5 -> 59:50, U -> 59:59
+[310015010 ns] FAIL P5 TB1 59:50 + U exp 59:59.00 got 60:0.0
+[315015010 ns] FAIL P5 TB1 FND exp 59.59 got 82 c0 c0 c0
+[315015010 ns] P6 at 59:59: U / R / D each -> 59:59
+[525018010 ns] FAIL P6 TB1 59:59 + U exp 59:59.00 got 60:10.0
+[535018010 ns] FAIL P6 TB1 59:59 + R exp 59:59.00 got 61:10.0
+[545018010 ns] FAIL P6 TB1 59:59 + D exp 59:59.00 got 7:10.0
+[545018010 ns] P7 52:10 + D (+10 min = 62:10) -> 59:59
+[635021010 ns] FAIL P7 TB1 52:10 + D exp 59:59.00 got 62:10.0
+[645021010 ns] FAIL P7 TB1 59:59 + R exp 59:59.00 got 63:10.0
+[645021010 ns] TM1 checks = 21, TOTAL MISMATCH = 7
+$finish called at time : 645021010 ns : File "C:/Users/LG/Developer/Lec_verilog/Mini_Project_watch/timer_tb_verilog/tb_tm_1_add_cap.v" Line 237
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:01:19 . Memory (MB): peak = 239.371 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 10992 KB (Peak: 10992 KB), Simulation CPU Usage: 77937 ms
+INFO: [Common 17-206] Exiting xsim at Sat Oct 17 18:38:23 2026...

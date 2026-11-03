@@ -1,0 +1,63 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+| Date         : Thu Oct 15 03:59:46 2026
+| Host         : DESKTOP-5C3QTIF running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file util_hier_synth.rpt
+| Design       : stopwatch_watch
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Synthesized
+------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++----------------------------+---------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+|          Instance          |                 Module                | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++----------------------------+---------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+| stopwatch_watch            |                                 (top) |        291 |        291 |       0 |    0 | 189 |      0 |      0 |          0 |
+|   (stopwatch_watch)        |                                 (top) |         18 |         18 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   U_BD_D                   |                          btn_debounce |         10 |         10 |       0 |    0 |  17 |      0 |      0 |          0 |
+|   U_BD_L                   |                       btn_debounce__2 |         10 |         10 |       0 |    0 |  17 |      0 |      0 |          0 |
+|   U_BD_R                   |                       btn_debounce__1 |         10 |         10 |       0 |    0 |  17 |      0 |      0 |          0 |
+|   U_BD_U                   |                       btn_debounce__3 |         10 |         10 |       0 |    0 |  17 |      0 |      0 |          0 |
+|   U_FND_CNTL               |                        fnd_controller |         80 |         80 |       0 |    0 |  20 |      0 |      0 |          0 |
+|     (U_FND_CNTL)           |                        fnd_controller |         20 |         20 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_BCD                  |                                   bcd |          4 |          4 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_CLK_DIV_800HZ        |                         clk_div_800hz |         20 |         20 |       0 |    0 |  17 |      0 |      0 |          0 |
+|     U_COUNTER_8            |                             counter_8 |          2 |          2 |       0 |    0 |   3 |      0 |      0 |          0 |
+|     U_DECODER_2x4          |                           decoder_2x4 |          2 |          2 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_DOT_COMP             |                        dot_comparator |          1 |          1 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_HOUR_DIGIT_SPLITTER  |        digit_splitter__parameterized1 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MIN_DIGIT_SPLITTER   |        digit_splitter__parameterized0 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MIN_HOUR_MUX_8x1     |                               mux_8x1 |          7 |          7 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MSEC_DIGIT_SPLITTER  |                        digit_splitter |          6 |          6 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MSEC_SEC_MUX_8x1     |                            mux_8x1__1 |          7 |          7 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_MUX_DISPLAY_MODE     |                               mux_2x1 |          2 |          2 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_SEC_DIGIT_SPLITTER   |     digit_splitter__parameterized0__1 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   U_HOUR_12_24             |                            hour_12_24 |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   U_STOPWATCH_CONTROL_UNIT |                          control_unit |          3 |          3 |       0 |    0 |   3 |      0 |      0 |          0 |
+|   U_STOPWATCH_DATAPATH     |                    stopwatch_datapath |         80 |         80 |       0 |    0 |  48 |      0 |      0 |          0 |
+|     U_HOUR_COUNTER         |          tick_counter__parameterized1 |          6 |          6 |       0 |    0 |   5 |      0 |      0 |          0 |
+|     U_MIN_COUNTER          |          tick_counter__parameterized0 |         13 |         13 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_MSEC_COUNTER         |                          tick_counter |         17 |         17 |       0 |    0 |   8 |      0 |      0 |          0 |
+|     U_SEC_COUNTER          |       tick_counter__parameterized0__1 |         13 |         13 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_TICK_GEN_100HZ       |                     tick_gen_100hz__1 |         31 |         31 |       0 |    0 |  21 |      0 |      0 |          0 |
+|   U_WATCH_CONTROL_UNIT     |                    watch_control_unit |          4 |          4 |       0 |    0 |   2 |      0 |      0 |          0 |
+|   U_WATCH_DATAPATH         |                        watch_datapath |         63 |         63 |       0 |    0 |  48 |      0 |      0 |          0 |
+|     (U_WATCH_DATAPATH)     |                        watch_datapath |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|     U_HOUR_COUNTER         |    watch_tick_counter__parameterized1 |          5 |          5 |       0 |    0 |   5 |      0 |      0 |          0 |
+|     U_MIN_COUNTER          |    watch_tick_counter__parameterized0 |         11 |         11 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_MSEC_COUNTER         |                    watch_tick_counter |          8 |          8 |       0 |    0 |   8 |      0 |      0 |          0 |
+|     U_SEC_COUNTER          | watch_tick_counter__parameterized0__1 |         11 |         11 |       0 |    0 |   7 |      0 |      0 |          0 |
+|     U_TICK_GEN_100HZ       |                        tick_gen_100hz |         25 |         25 |       0 |    0 |  21 |      0 |      0 |          0 |
++----------------------------+---------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+
+

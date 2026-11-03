@@ -1,0 +1,6 @@
+M03 sw_set=0 보다 L 우선(분 일 자리)     unit[watch_cu:CAUGHT] directed[missed] sv[missed]
+M02 U+D 동시에 둘 다 1                unit[watch_cu:CAUGHT] directed[missed] sv[missed]
+M04 tick 과 버튼 동시면 버튼 우선          unit[watch_cnt:CAUGHT watch_dp:missed] directed[missed] sv[CAUGHT]
+M01 설정 진입을 시 자리로                 unit[watch_cu:CAUGHT] directed[CAUGHT(timeout/compile)] sv[CAUGHT]
+M06 +step 돌기 경계(>=) 틀림           unit[watch_cnt:CAUGHT watch_dp:CAUGHT] directed[CAUGHT] sv[missed]
+M05 분 십의 자리 +10 무시               unit[watch_cnt:CAUGHT watch_dp:CAUGHT] directed[CAUGHT(timeout/compile)] sv[missed]
