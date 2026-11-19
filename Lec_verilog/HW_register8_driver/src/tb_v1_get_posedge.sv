@@ -1,0 +1,220 @@
+`timescale 1ns / 1ps
+
+interface reg_interface (
+    input clk
+);
+    logic       reset;
+    logic [7:0] d;
+    logic [7:0] q;
+endinterface
+
+// seq item
+class transaction;
+    bit            reset;
+    rand bit [7:0] d;
+    logic    [7:0] q;
+
+    function debug_print(string name);
+        $display("%t : [%s] reset = %d, d = %d, q = %d", $time, name, reset, d,
+                 q);
+    endfunction
+endclass
+
+class generator;
+    transaction tr;
+    mailbox #(transaction) gen2drv_mbox;
+    event gen_next_evt;
+
+    // build configuration
+    function new(mailbox#(transaction) gen2drv_mbox, event gen_next_evt);
+        this.gen2drv_mbox = gen2drv_mbox;
+        this.gen_next_evt = gen_next_evt;
+    endfunction
+
+    task run(int run_count);
+        repeat (run_count) begin
+            tr = new;
+            tr.randomize();
+            gen2drv_mbox.put(tr);  // to driver
+            tr.debug_print("GEN");
+            @(gen_next_evt);  //from scoreboard
+        end
+    endtask
+
+endclass
+
+class driver;
+    transaction            tr;
+    mailbox #(transaction) gen2drv_mbox;
+    event                  mon_next_evt;
+    virtual reg_interface  reg_vif;
+
+    function new(mailbox#(transaction) gen2drv_mbox, event mon_next_evt,
+                 virtual reg_interface reg_vif);
+        this.gen2drv_mbox = gen2drv_mbox;
+        this.mon_next_evt = mon_next_evt;
+        this.reg_vif      = reg_vif;
+    endfunction  //new()
+
+    task preset();
+        reg_vif.reset = 1;
+        @(posedge reg_vif.clk);
+        @(posedge reg_vif.clk);
+    endtask
+
+    task run();
+        forever begin
+            // 1, drive 2 cycle
+            gen2drv_mbox.get(tr);
+            tr.debug_print("DRV - GET");
+            @(posedge reg_vif.clk);
+            // 2, drive 1cycle
+            //gen2drv_mbox.get(tr);
+            //tr.debug_print("DRV - GET");
+            #1;
+            tr.debug_print("DRV - AFTER POSEDGE");
+            reg_vif.reset = 0;
+            reg_vif.d = tr.d;
+            ->mon_next_evt;
+        end
+    endtask  //run 
+endclass
+
+class monitor;
+    transaction tr;
+    mailbox #(transaction) mon2scb_mbox;
+    event mon_next_evt;
+    virtual reg_interface reg_vif;
+
+    function new(mailbox#(transaction) mon2scb_mbox, event mon_next_evt,
+                 virtual reg_interface reg_vif);
+        this.mon2scb_mbox = mon2scb_mbox;
+        this.mon_next_evt = mon_next_evt;
+        this.reg_vif = reg_vif;
+    endfunction
+
+    task run();
+        forever begin
+            tr = new;
+            @(mon_next_evt);
+            tr.debug_print("MON");
+            @(posedge reg_vif.clk);
+            tr.d = reg_vif.d;
+            tr.q = reg_vif.q;
+            tr.debug_print("MON - AFTER POSEDGE");
+            mon2scb_mbox.put(tr);
+        end
+    endtask
+
+endclass
+
+class scoreboard;
+    transaction tr;
+    mailbox #(transaction) mon2scb_mbox;
+    event gen_next_evt;
+
+    // for pass/fail
+    logic [7:0] expected_d;
+    bit first_flag = 1;
+    int pass_cnt = 0, fail_cnt = 0;
+
+    // build configuration
+    function new(mailbox#(transaction) mon2scb_mbox, event gen_next_evt);
+        this.mon2scb_mbox = mon2scb_mbox;
+        this.gen_next_evt = gen_next_evt;
+    endfunction  //new()
+
+    task run;
+        forever begin
+            // get mail box
+            mon2scb_mbox.get(tr);
+            tr.debug_print("SCB");
+
+            if (first_flag) begin
+                first_flag = 0;
+            end else begin
+                // pass/fail decition
+                if (expected_d === tr.q) begin
+                    $display("pass");
+                    pass_cnt++;
+                end else begin
+                    $display("fail");
+                    fail_cnt++;
+                end
+            end
+            // store expected_d = tr.d;
+            expected_d = tr.d;  // store d every time (first one too) -> compare with next q
+            // event generate
+            ->gen_next_evt;
+        end
+    endtask
+
+endclass  //scoreboard
+
+class environment;
+    generator gen;
+    driver drv;
+    monitor mon;
+    scoreboard scb;
+    mailbox #(transaction) gen2drv_mbox;
+    mailbox #(transaction) mon2scb_mbox;
+    event gen_next_evt;
+    event mon_next_evt;
+
+    function new(virtual reg_interface reg_vif);
+        gen2drv_mbox = new;
+        mon2scb_mbox = new;
+        gen = new(gen2drv_mbox, gen_next_evt);
+        drv = new(gen2drv_mbox, mon_next_evt, reg_vif);
+        mon = new(mon2scb_mbox, mon_next_evt, reg_vif);
+        scb = new(mon2scb_mbox, gen_next_evt);
+        ;
+
+    endfunction
+
+    task run(int run_count);
+        drv.preset();
+        fork
+            gen.run(run_count);
+            drv.run();
+            mon.run();
+            scb.run();
+        join_any
+        #10;
+        // pass/fail count display
+        $display("**************************************************");
+        $display("********** register 8bit verification test  ******");
+        $display("**************************************************");
+        $display("******************total test = %3d ***************", run_count);
+        $display("*************** 1st pass/fail skiped ***************", run_count);
+        $display("***************** pass_cnt = %3d  ****************", scb.pass_cnt);
+        $display("***************** fail_cnt = %3d  ****************", scb.fail_cnt);
+        $display("**************************************************");
+        $display("end register 8bit verification program");
+
+    endtask
+
+endclass  //environment
+
+module tb_register_8_sv_verification ();
+
+    logic clk;
+    reg_interface reg_if (clk);
+    environment env;
+    register_8 dut (
+        .clk(clk),
+        .reset(reg_if.reset),
+        .d(reg_if.d),
+        .q(reg_if.q)
+    );
+
+    always #5 clk = ~clk;
+
+    initial begin
+        clk = 0;
+        env = new(reg_if);
+        env.run(20);
+        $finish;
+    end
+
+endmodule

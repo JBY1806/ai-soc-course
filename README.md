@@ -1,6 +1,6 @@
 # AI 시스템반도체 설계 (2기) 작업 저장소
 
-서울기술교육센터(대한상공회의소) **AI 시스템반도체 설계 2기** 과정(2026-09-01 ~ 2027-03-31, 7개월 980시간)의 학습·실습 기록입니다.
+서울기술교육센터(대한상공회의소) **AI 시스템반도체 설계 2기** 과정(2026-09 시작)의 학습·실습 기록입니다.
 직접 작성한 코드(.py · .ipynb · .v · .xdc)와 과제 결과물을 올립니다. 교수님 수업 자료, 데이터셋, 모델 파일은 올리지 않습니다. 팀 프로젝트는 팀 저장소 사본을 함께 두고, 폴더마다 README 에 내 담당 부분을 적었습니다.
 
 > 이 문서는 저장소 **목차**입니다.
@@ -33,7 +33,22 @@
 | [`Lec_verilog/Mini_Project_watch/`](Lec_verilog/Mini_Project_watch/) | **미니 프로젝트(3인) — 스톱워치 · 시계 · 타이머** (10/13 ~ 10/19): 제출본 · 발표 · 타이머 검증 · tick 구조 비교. 개요는 [`README.md`](Lec_verilog/Mini_Project_watch/README.md) |
 | [`Lec_verilog/BEST_Stop_watch_project/`](Lec_verilog/BEST_Stop_watch_project/) | **팀 프로젝트(4인) — WTS + SR04 + DHT11 + UART 통합** (10/20 ~ 11/02): 팀 저장소 사본 + 내 담당(UART sender · 트러블슈팅 v2 · v3 · 시연). 개요는 [`README.md`](Lec_verilog/BEST_Stop_watch_project/README.md), 원본 [kimsacademy1234-max/BEST_Stop_watch_project](https://github.com/kimsacademy1234-max/BEST_Stop_watch_project) |
 | [`Lec_verilog/UART_sender/`](Lec_verilog/UART_sender/) · [`팀프로젝트2_자료/`](Lec_verilog/팀프로젝트2_자료/) | UART sender 설계 설명 · 캡처 · 파형 해설, 팀 프로젝트 2 공유 문서 |
+| [`HW7_uart_loopback/`](Lec_verilog/HW7_uart_loopback/) · [`HW8_fifo/`](Lec_verilog/HW8_fifo/) · [`HW9_uart_fifo_ascii/`](Lec_verilog/HW9_uart_fifo_ascii/) | UART 송수신 (9600bps, 16배 오버샘플링), FIFO, ASCII 디코더와 응답 송신. 폴더마다 `제출/` 에 최종 보고서 PDF |
 | [`work/26_AI_CAMP_2/`](work/26_AI_CAMP_2/) | Vivado 프로젝트 소스(.v · .xdc · .xpr). 생성물(.runs · .sim 등)은 제외. 보드: Digilent Basys3 (Artix-7 XC7A35T) |
+
+## 2과목 — SystemVerilog 검증 과제 (11월)
+
+클래스 기반 Testbench (transaction · generator · driver · monitor · scoreboard) 로 설계를 검증한 과제입니다. 폴더마다 `src/` = 설계와 TB 소스, `캡처/` = 파형 · 콘솔 · RTL 화면, `제출/` = 최종 보고서 PDF. `_bad` 가 붙은 파일은 TB 가 버그를 잡는지 보려고 일부러 결함을 넣은 사본입니다.
+
+| 경로 | 검증 대상 |
+|---|---|
+| [`HW_sv_adder/`](Lec_verilog/HW_sv_adder/) | 가산기 |
+| [`HW_register8_driver/`](Lec_verilog/HW_register8_driver/) | 8비트 레지스터, driver 대기 순서 비교 |
+| [`HW_counter256/`](Lec_verilog/HW_counter256/) | 256 카운터, hold 와 clear 동작 |
+| [`HW_ram_sv/`](Lec_verilog/HW_ram_sv/) | RAM 쓰기 · 읽기 |
+| [`HW_fifo_sv/`](Lec_verilog/HW_fifo_sv/) | FIFO full · empty · reset, 커버리지 |
+| [`HW_fork_join/`](Lec_verilog/HW_fork_join/) | fork-join · join_any · join_none · disable fork 동작 비교 |
+| [`HW_uart_sv/`](Lec_verilog/HW_uart_sv/) | UART 송신 |
 
 ## 올리지 않는 것
 
